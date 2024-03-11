@@ -5,7 +5,7 @@ namespace App\Livewire\Admin\Dashboard;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 
 class Dashboard extends Component
 {
