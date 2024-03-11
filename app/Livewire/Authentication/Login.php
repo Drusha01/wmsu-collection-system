@@ -56,7 +56,7 @@ class Login extends Component
                         title             									: 'Welcome back officer!',
                         showConfirmButton 									: 'true',
                         timer             									: '1500',
-                        link              									: 'admin/dashboard'
+                        link              									: 'officer/dashboard'
                     );
                 }elseif($user_details->name == 'collector'){
                     $this->dispatch('swal:redirect',
@@ -65,7 +65,7 @@ class Login extends Component
                         title             									: 'Welcome back collector!',
                         showConfirmButton 									: 'true',
                         timer             									: '1500',
-                        link              									: 'admin/dashboard'
+                        link              									: 'collector/dashboard'
                     );
                 }
             }else{

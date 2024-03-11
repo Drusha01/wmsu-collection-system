@@ -56,8 +56,12 @@ Route::get('/', function () {})->middleware(CheckRoles::class);
 
 Route::middleware(isOfficer::class)->group(function () {
     Route::prefix('officer')->group(function () {
-        
-        
+        Route::get('/dashboard', Dashboard::class)->name('officer-dashboard');
+        Route::get('/payments', Payments::class)->name('officer-payments');
+        Route::get('/paymentrecords', PaymentRecords::class)->name('officer-paymentrecords');
+        Route::get('/students', Students::class)->name('officer-students');
+        Route::get('/fees', Fees::class)->name('officer-fees');
+        Route::get('/usermanagement', UserManagement::class)->name('officer-usermanagement');
     });
 });
 
@@ -82,6 +86,10 @@ Route::middleware(AccountisAdmin::class)->group(function () {
 
 Route::middleware(isCollector::class)->group(function () {
     Route::prefix('collector')->group(function () {
-                
+        Route::get('/dashboard', Dashboard::class)->name('collector-dashboard');
+        Route::get('/payments', Payments::class)->name('collector-payments');
+        Route::get('/paymentrecords', PaymentRecords::class)->name('collector-paymentrecords');
+        Route::get('/students', Students::class)->name('collector-students');
+        Route::get('/usermanagement', UserManagement::class)->name('collector-usermanagement');
     });
 });
