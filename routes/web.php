@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 // middle ware
 use App\Http\Middleware\CheckRoles;
-use App\Http\Middleware\AccountisAdmin;
+use App\Http\Middleware\isAdmin;
 use App\Http\Middleware\isOfficer;
 use App\Http\Middleware\isCollector;
 use App\Http\Middleware\Logout;
@@ -66,7 +66,7 @@ Route::middleware(isOfficer::class)->group(function () {
 });
 
 
-Route::middleware(AccountisAdmin::class)->group(function () {
+Route::middleware(isAdmin::class)->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('admin-dashboard');
         Route::get('/payments', Payments::class)->name('admin-payments');

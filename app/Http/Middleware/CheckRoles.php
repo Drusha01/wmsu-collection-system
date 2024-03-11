@@ -17,7 +17,6 @@ class CheckRoles
     public function handle(Request $request, Closure $next): Response
     {
         $session = $request->session()->all();
-        
         if(isset($session['id']) && $user_details = DB::table('users as u')
             ->select(
                 'u.id',
@@ -28,11 +27,11 @@ class CheckRoles
             ->get()
             ->first()){
             if ($user_details->role_name == 'officer') {
-                return redirect()->route('officer.home');
+                return redirect()->route('officer-dashboard');
             }else if ($user_details->role_name == 'admin') {
-                return redirect()->route('admin.home');
+                return redirect()->route('admin-dashboard');
             }elseif($user_details->role_name == 'collector'){
-                return redirect()->route('collector.home');
+                return redirect()->route('collector-dashboard');
             }
         }else{
             return redirect('/login');

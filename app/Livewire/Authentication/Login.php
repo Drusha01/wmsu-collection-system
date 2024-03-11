@@ -35,11 +35,7 @@ class Login extends Component
                 ->first();
             if( $user_details && password_verify($this->password,$user_details->password)){
                 $request->session()->regenerate();
-
                 $request->session()->put('id', $user_details->id);
-                
-                //append it to session
-            
                 if( $user_details->name == 'admin'){
                     $this->dispatch('swal:redirect',
                         position         									: 'center',
@@ -81,6 +77,5 @@ class Login extends Component
         }else{
             return redirect('/admin/dashboard');
         }
-        
     }
 }
