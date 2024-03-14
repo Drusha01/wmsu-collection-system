@@ -17,10 +17,11 @@ return new class extends Migration
             student_code VARCHAR(100) UNIQUE,
             first_name VARCHAR(255)  NOT NULL,
             middle_name VARCHAR(255) ,
-            email VARCHAR(100) UNIQUE,
             last_name VARCHAR(255) NOT NULL,
+            email VARCHAR(100) UNIQUE,
             college_id INT,
             department_id INT,
+            is_active BOOL DEFAULT 1,
 
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

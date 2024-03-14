@@ -12,10 +12,11 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
         <script src="{{url('/sweetalert2-11.10.1')}}/dist/sweetalert2.all.min.js"></script>
         <link href="{{url('/sweetalert2-11.10.1')}}/dist/sweetalert2.min.css" rel="stylesheet">
+     
 
         <!-- Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
     <body class="bg-gray-50 dark:bg-gray-900 min-h-screen m-0 flex flex-col">
         <div class="antiantialiased">
@@ -140,7 +141,12 @@
                     window.close();
                 });
             });
+            window.addEventListener('openModal', function(modal_id){
+                $('#'+modal_id.detail).click();
+            }); 
+            window.addEventListener('closeModal', function(modal_id){
+                $('#'+modal_id.detail).click();
+            }); 
         </script>
-        </div>
     </body>
 </html>

@@ -17,6 +17,7 @@ class CollegeSeeders extends Seeder
             1,
             "CCS",
             "College Of Computing Studies",
+            1,
             NOW(),
             NOW()
         );');
@@ -24,6 +25,7 @@ class CollegeSeeders extends Seeder
             2,
             "COE",
             "College Of Engineering",
+            1,
             NOW(),
             NOW()
         );');

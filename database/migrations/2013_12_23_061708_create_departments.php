@@ -17,6 +17,7 @@ return new class extends Migration
             college_id INT,
             code VARCHAR(100) UNIQUE,
             name VARCHAR(255) NOT NULL,
+            is_active BOOL DEFAULT 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
