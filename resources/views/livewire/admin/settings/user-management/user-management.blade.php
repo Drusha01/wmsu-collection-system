@@ -41,6 +41,9 @@
                                 </div>
                             </form>
                         </div>
+                        
+                        <button  type="button" data-modal-target="activateUserModal" data-modal-toggle="activateUserModal" id="activateUserModaltoggler" style="display:none;" ></button>
+                        <button  type="button" data-modal-target="deleteUserModal" data-modal-toggle="deleteUserModal" id="deleteUserModaltoggler" style="display:none;" ></button>
                         <button  type="button" data-modal-target="editUserModal" data-modal-toggle="editUserModal" id="editUserModaltoggler" style="display:none;" ></button>
                         <button  type="button" data-modal-target="addUserModal" data-modal-toggle="addUserModal" id="addUserModaltoggler" style="display:none;" ></button>
                         <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
@@ -92,12 +95,21 @@
                                                     </svg>
                                                     Edit
                                                 </button>
-                                                <button type="button" class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                                @if($value->is_active)
+                                                <button type="button" wire:click="editUser({{$value->id}},'deleteUserModaltoggler')" class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                                     </svg>
                                                     Delete
                                                 </button>
+                                                @else 
+                                                <button type="button" wire:click="editUser({{$value->id}},'activateUserModaltoggler')"  class="flex items-center text-yellow-700 hover:text-white border border-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-yellow-500 dark:text-yellow-500 dark:hover:text-white dark:hover:bg-yellow-600 dark:focus:ring-yellow-900">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                    </svg>
+                                                    Activate
+                                                </button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -245,7 +257,7 @@
                                         </button>
                                     </div>
                                     <!-- Modal body -->
-                                    <form class="p-7 md:p-5" wire:submit.prevent="saveAddUser('editUserModal')">
+                                    <form class="p-7 md:p-5" wire:submit.prevent="saveEditUser({{$user['id']}},'editUserModal')">
                                         <div class="grid gap-5 mb-12 grid-cols-2">
                                             <div class="col-span-6">
                                                 <label for="snumber"  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
@@ -274,7 +286,7 @@
                                             <div class="col-span-6">
                                                 <label for="email"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                                                <input type="text" wire:model.defer="user.username" 
+                                                <input type="text" disabled wire:model.defer="user.username" 
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -296,7 +308,6 @@
                                                 <label for="colleges"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College</label>
                                                 <select id="colleges" required wire:model.defer="user.college_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option >Select College</option>
                                                     @foreach($colleges as $key =>$value)
                                                         @if($user['college_id'] == $value->id)
                                                             <option selected value="{{$value->id}}">{{$value->name}}</option>
@@ -312,7 +323,6 @@
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
                                                 <select id="position" required wire:model.defer="user.position_id" 
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option >Select Position</option>
                                                    @foreach($positions as $key =>$value)
                                                         @if($user['position_id'] == $value->id)
                                                             <option selected value="{{$value->id}}">{{$value->name}}</option>
@@ -343,6 +353,87 @@
                                             <button type="submit"
                                                 class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
                                                 Save User
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div wire:ignore.self id="deleteUserModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <div class="relative p-4 w-full max-w-xl max-h-full">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <!-- Modal header -->
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Delete User
+                                        </h3>
+                                        <button type="button"
+                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                            data-modal-toggle="deleteUserModal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <form class="p-7 md:p-5" wire:submit.prevent="saveDeleteUser({{$user['id']}},'deleteUserModal')">
+                                        <div class="grid gap-5 mb-12 grid-cols-2">
+                                            <p>Are you sure you want to delete this user?</p>
+
+                                        </div>
+                                        <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
+                                            <button data-modal-toggle="deleteUserModal"
+                                                class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                                Back
+                                            </button>
+                                            <button type="submit"
+                                                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
+                                                Delete User
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div wire:ignore.self id="activateUserModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                            <div class="relative p-4 w-full max-w-xl max-h-full">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <!-- Modal header -->
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Activate User
+                                        </h3>
+                                        <button type="button"
+                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                            data-modal-toggle="activateUserModal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <form class="p-7 md:p-5" wire:submit.prevent="saveActivateUser({{$user['id']}},'activateUserModal')">
+                                        <div class="grid gap-5 mb-12 grid-cols-2">
+                                            <p>Are you sure you want to activate this user?</p>
+
+                                        </div>
+                                        <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
+                                            <button data-modal-toggle="activateUserModal"
+                                                class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                                Back
+                                            </button>
+                                            <button type="submit"
+                                                class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
+                                                Activate User
                                             </button>
                                         </div>
                                     </form>

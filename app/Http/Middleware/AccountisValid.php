@@ -15,24 +15,19 @@ class AccountisValid
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
-    {
-        // $user_details = $request->session()->all();
-        // $user_status = DB::table('users as u')
-        // ->select('u.user_status_id','us.user_status_details')
-        // ->join('user_status as us', 'u.user_status_id', '=', 'us.user_status_id')
-        // ->where('user_id','=', $user_details['user_id'])
-        // ->first();
-        
-        // if(isset($user_status->user_status_details) && $user_status->user_status_details == 'deleted' ){
-        //     return redirect('/deleted');
-        // }
-        // if(isset($user_status->user_status_details) && $user_status->user_status_details == 'inactive' ){
-        //     if(!request()->is('inactive*')){
-        //         return redirect('/inactive');
-        //     }
-            
-        // }
+    public function handle(Request $request, Closure $next){
+        $session = $request->session()->all();
+        if(isset($session['id']) && $user_details = DB::table('users as u')
+            ->select(
+                'is_active'
+              )
+            ->where('u.id','=',$session['id'])
+            ->get()
+            ->first()){
+            if($user_details->is_active == 0){
+                return redirect()->route('disabled-account');
+            }
+        }
         return $next($request);
     }
 }

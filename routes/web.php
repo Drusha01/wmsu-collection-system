@@ -17,7 +17,7 @@ use App\Http\Middleware\Darkmode;
 // authentication
 use App\Livewire\Authentication\Logout as AuthenticationLogout;
 use App\Livewire\Authentication\Login;
-
+use App\Livewire\Authentication\DisabledAccount;
 // admin
 use App\Livewire\Admin\AuditLogs\AuditLogs;
 use App\Livewire\Admin\Colleges\Colleges;
@@ -51,10 +51,11 @@ Route::middleware([Unauthenticated::class])->group(function () {
   
 });
 
+Route::get('/disabled', DisabledAccount::class)->name('disabled-account');
 
 Route::get('/', function () {})->middleware(CheckRoles::class);
 
-Route::middleware(isOfficer::class)->group(function () {
+Route::middleware([AccountisValid::class,isOfficer::class])->group(function () {
     Route::prefix('officer')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('officer-dashboard');
         Route::get('/payments', Payments::class)->name('officer-payments');
@@ -66,7 +67,7 @@ Route::middleware(isOfficer::class)->group(function () {
 });
 
 
-Route::middleware(isAdmin::class)->group(function () {
+Route::middleware([AccountisValid::class,isAdmin::class])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('admin-dashboard');
         Route::get('/payments', Payments::class)->name('admin-payments');
@@ -84,7 +85,7 @@ Route::middleware(isAdmin::class)->group(function () {
 });
 
 
-Route::middleware(isCollector::class)->group(function () {
+Route::middleware([AccountisValid::class,isCollector::class])->group(function () {
     Route::prefix('collector')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('collector-dashboard');
         Route::get('/payments', Payments::class)->name('collector-payments');

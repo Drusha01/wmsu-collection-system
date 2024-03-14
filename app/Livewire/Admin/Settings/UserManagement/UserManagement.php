@@ -30,12 +30,14 @@ class UserManagement extends Component
         if(isset($session['id']) && $user_details = DB::table('users as u')
             ->select(
                 'u.id',
-                'r.name as role_name'
+                'r.name as role_name',
+                'is_active'
               )
             ->where('u.id','=',$session['id'])
             ->join('roles as r','r.id','u.role_id')
             ->get()
             ->first()){
+        if($user_details->is_active == 1){
             if ($user_details->role_name == 'officer') {
                 return redirect()->route('officer-dashboard');
             }else if ($user_details->role_name == 'admin') {
@@ -43,9 +45,13 @@ class UserManagement extends Component
             }elseif($user_details->role_name == 'collector'){
                 return redirect()->route('collector-dashboard');
             }
+            }else{
+                return redirect('/login');
+            }
         }else{
-            return redirect('/login');
+            return redirect()->route('disabled-account');
         }
+           
     }
     public function render(){
         $users_data = DB::table('users as u')
@@ -68,6 +74,7 @@ class UserManagement extends Component
             ->join('roles as r','r.id','u.role_id')
             ->join('colleges as c','c.id','u.college_id')
             ->join('positions as p','p.id','u.position_id')
+            ->orderBy('u.date_created')
             ->paginate(10);
             // dd( $users_data );
         return view('livewire.admin.settings.user-management.user-management',[
@@ -303,5 +310,218 @@ class UserManagement extends Component
         ->get()
         ->toArray();
         $this->dispatch('openModal',$modal_id);
+    }
+
+    public function saveEditUser($id,$modal_id){
+        if(strlen($this->user['first_name'])<=0){
+            return;
+        }
+        if(strlen($this->user['last_name'])<=0){
+            return;
+        }
+       
+        // if(strlen($this->user['password'])<8){
+        //     $this->dispatch('swal:redirect',
+        //         position         									: 'center',
+        //         icon              									: 'warning',
+        //         title             									: 'Password must be at least 8 character!',
+        //         showConfirmButton 									: 'true',
+        //         timer             									: '1000',
+        //         link              									: '#'
+        //     );
+        //     return;
+        // }
+        if(intval($this->user['college_id'])<0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select college!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(!(DB::table('colleges')
+            ->where('id','=',$this->user['college_id'])
+            ->first())){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select college!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(intval($this->user['role_id'])<0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select college!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(!(DB::table('roles')
+            ->where('id','=',$this->user['role_id'])
+            ->first())){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select role!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(intval($this->user['position_id'])<0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select position!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(!(DB::table('positions')
+            ->where('id','=',$this->user['position_id'])
+            ->first())){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select position!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(DB::table('users')
+            ->where('id','=',$this->user['id'])
+            ->update([
+                'first_name' =>$this->user['first_name'],
+                'middle_name' =>$this->user['middle_name'],
+                'last_name' =>$this->user['last_name'],
+                'college_id' =>$this->user['college_id'],
+                'role_id' =>$this->user['role_id'],
+                'position_id' =>$this->user['position_id']
+                ])){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Successfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            $this->user = [
+                'id' =>NULL,
+                'first_name' =>NULL,
+                'middle_name' =>NULL,
+                'last_name' =>NULL,
+                'username' =>NULL,
+                'password' =>NULL,
+                'college_id' =>NULL,
+                'role_id' =>NULL,
+                'position_id' =>NULL,
+            ];
+            $this->dispatch('closeModal',$modal_id);
+            return;
+        }else{
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Unsuccessfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+    }
+    public function saveDeleteUser($id,$modal_id){
+        if(DB::table('users')
+            ->where('id','=',$this->user['id'])
+            ->update([
+                'is_active' =>0
+                ])){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Successfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            $this->user = [
+                'id' =>NULL,
+                'first_name' =>NULL,
+                'middle_name' =>NULL,
+                'last_name' =>NULL,
+                'username' =>NULL,
+                'password' =>NULL,
+                'college_id' =>NULL,
+                'role_id' =>NULL,
+                'position_id' =>NULL,
+            ];
+            $this->dispatch('closeModal',$modal_id);
+            return;
+        }else{
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Unsuccessfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+    }
+        public function saveActivateUser($id,$modal_id){
+            if(DB::table('users')
+                ->where('id','=',$this->user['id'])
+                ->update([
+                    'is_active' =>1
+                    ])){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'success',
+                    title             									: 'Successfully updated!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                $this->user = [
+                    'id' =>NULL,
+                    'first_name' =>NULL,
+                    'middle_name' =>NULL,
+                    'last_name' =>NULL,
+                    'username' =>NULL,
+                    'password' =>NULL,
+                    'college_id' =>NULL,
+                    'role_id' =>NULL,
+                    'position_id' =>NULL,
+                ];
+                $this->dispatch('closeModal',$modal_id);
+                return;
+            }else{
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Unsuccessfully updated!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+        }
     }
 }
