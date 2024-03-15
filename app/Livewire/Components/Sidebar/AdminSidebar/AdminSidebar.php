@@ -17,10 +17,12 @@ class AdminSidebar extends Component
         $this->user_details = DB::table('users as u')
             ->select(
                 'u.id',
-                'r.name as role_name'
+                'r.name as role_name',
+                'p.name as postion_name'
               )
             ->where('u.id','=',$session['id'])
             ->join('roles as r','r.id','u.role_id')
+            ->leftjoin('positions as p','p.id','u.position_id')
             ->get()
             ->first();
     }

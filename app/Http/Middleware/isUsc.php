@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 
-class isOfficer
+class isUsc
 {
     /**
      * Handle an incoming request.
@@ -26,12 +26,12 @@ class isOfficer
             ->join('roles as r','r.id','u.role_id')
             ->get()
             ->first()){
-            if ($user_details->role_name == 'officer') {
+            if ($user_details->role_name == 'admin-usc') {
 
             }else if ($user_details->role_name == 'admin') {
                 return redirect()->route('admin-dashboard');
-            }elseif($user_details->role_name == 'collector'){
-                return redirect()->route('collector-dashboard');
+            }elseif($user_details->role_name == 'admin-csc'){
+                return redirect()->route('csc-dashboard');
             }
         }else{
             return redirect('/login');

@@ -14,6 +14,11 @@ return new class extends Migration
         DB::statement('CREATE TABLE enrolled_students(
             id INT PRIMARY KEY AUTO_INCREMENT,
             student_id INT,
+            school_year_id INT NOT NULL,
+            semester_id INT NOT NULL,
+            department_id INT ,
+            year_level_id INT ,
+            
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');

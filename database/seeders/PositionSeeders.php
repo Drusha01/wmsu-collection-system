@@ -29,6 +29,10 @@ class PositionSeeders extends Seeder
             (NULL,
             "Secretary",
             NOW(),
+            NOW()),
+            (NULL,
+            "Collector",
+            NOW(),
             NOW());');
     }
 }

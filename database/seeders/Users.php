@@ -22,40 +22,13 @@ class Users extends Seeder
             "Admin",
             "'.bcrypt('123').'",
             1,
-            1,
-            2,
-            1,
-            NOW(),
-            NOW()
-        );');
-        DB::statement('INSERT INTO users VALUES(
-            NULL,
-            "Hanrickson",
-            "E.",
-            "Dumapit",
-            "Officer",
-            "'.bcrypt('123').'",
-            1,
-            1,
-            1,
+            0,
+            0,
             1,
             NOW(),
             NOW()
         );');
-        DB::statement('INSERT INTO users VALUES(
-            NULL,
-            "Hanrickson",
-            "E.",
-            "Dumapit",
-            "Collector",
-            "'.bcrypt('123').'",
-            1,
-            1,
-            3,
-            1,
-            NOW(),
-            NOW()
-        );');
+        
 
 
     }

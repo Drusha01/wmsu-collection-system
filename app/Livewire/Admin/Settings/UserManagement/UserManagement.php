@@ -25,21 +25,26 @@ class UserManagement extends Component
     public $colleges = [];
     public $roles = [];
     public $positions = [];
+    public $user_details;
     public function boot(Request $request ){
         $session = $request->session()->all();
         if(isset($session['id']) && $user_details = DB::table('users as u')
             ->select(
                 'u.id',
                 'r.name as role_name',
-                'is_active'
+                'p.name as position_name',
+                'is_active',
+                'u.college_id'
               )
             ->where('u.id','=',$session['id'])
             ->join('roles as r','r.id','u.role_id')
+            ->leftjoin('positions as p','p.id','u.position_id')
             ->get()
             ->first()){
+        $this->user_details = $user_details;
         if($user_details->is_active == 1){
             if ($user_details->role_name == 'officer') {
-                return redirect()->route('officer-dashboard');
+                // return redirect()->route('officer-dashboard');
             }else if ($user_details->role_name == 'admin') {
 
             }elseif($user_details->role_name == 'collector'){
@@ -54,28 +59,58 @@ class UserManagement extends Component
            
     }
     public function render(){
-        $users_data = DB::table('users as u')
-            ->select(
-                "u.id",
-                "u.first_name",
-                "u.middle_name",
-                "u.last_name",
-                "u.username",
-                "u.is_active",
-                "u.college_id",
-                "u.role_id",
-                "u.position_id",
-                "u.date_created",
-                "u.date_updated",
-                "r.name as role_name",
-                "c.name as college_name",
-                "p.name as position_name"
-            )
-            ->join('roles as r','r.id','u.role_id')
-            ->join('colleges as c','c.id','u.college_id')
-            ->join('positions as p','p.id','u.position_id')
-            ->orderBy('u.date_created')
-            ->paginate(10);
+        $users_data = [];
+        if ($this->user_details->role_name == 'officer') {
+            $users_data = DB::table('users as u')
+                ->select(
+                    "u.id",
+                    "u.first_name",
+                    "u.middle_name",
+                    "u.last_name",
+                    "u.username",
+                    "u.is_active",
+                    "u.college_id",
+                    "u.role_id",
+                    "u.position_id",
+                    "u.date_created",
+                    "u.date_updated",
+                    "r.name as role_name",
+                    "c.name as college_name",
+                    "p.name as position_name"
+                )
+                ->join('roles as r','r.id','u.role_id')
+                ->join('colleges as c','c.id','u.college_id')
+                ->join('positions as p','p.id','u.position_id')
+                ->where('college_id','=',$this->user_details->college_id)
+                ->where('r.name','<>','admin')
+                ->orderBy('u.date_created')
+                ->paginate(10);
+        }else if ($this->user_details->role_name == 'admin') {
+            $users_data = DB::table('users as u')
+                ->select(
+                    "u.id",
+                    "u.first_name",
+                    "u.middle_name",
+                    "u.last_name",
+                    "u.username",
+                    "u.is_active",
+                    "u.college_id",
+                    "u.role_id",
+                    "u.position_id",
+                    "u.date_created",
+                    "u.date_updated",
+                    "r.name as role_name",
+                    "c.name as college_name",
+                    "p.name as position_name"
+                )
+                ->join('roles as r','r.id','u.role_id')
+                ->join('colleges as c','c.id','u.college_id')
+                ->join('positions as p','p.id','u.position_id')
+                ->orderBy('u.date_created')
+                ->paginate(10);
+        }elseif($this->user_details->role_name == 'collector'){
+            return redirect()->route('collector-dashboard');
+        }
             // dd( $users_data );
         return view('livewire.admin.settings.user-management.user-management',[
             'users_data'=>$users_data])

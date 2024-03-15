@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 // middle ware
 use App\Http\Middleware\CheckRoles;
 use App\Http\Middleware\isAdmin;
-use App\Http\Middleware\isOfficer;
+use App\Http\Middleware\isUsc;
 use App\Http\Middleware\isCollector;
 use App\Http\Middleware\Logout;
 use App\Http\Middleware\Authenticated;
@@ -55,42 +55,55 @@ Route::get('/disabled', DisabledAccount::class)->name('disabled-account');
 
 Route::get('/', function () {})->middleware(CheckRoles::class);
 
-Route::middleware([AccountisValid::class,isOfficer::class])->group(function () {
-    Route::prefix('officer')->group(function () {
-        Route::get('/dashboard', Dashboard::class)->name('officer-dashboard');
-        Route::get('/payments', Payments::class)->name('officer-payments');
-        Route::get('/paymentrecords', PaymentRecords::class)->name('officer-paymentrecords');
-        Route::get('/students', Students::class)->name('officer-students');
-        Route::get('/fees', Fees::class)->name('officer-fees');
-        Route::get('/usermanagement', UserManagement::class)->name('officer-usermanagement');
-    });
-});
 
 
 Route::middleware([AccountisValid::class,isAdmin::class])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('admin-dashboard');
-        Route::get('/payments', Payments::class)->name('admin-payments');
         Route::get('/paymentrecords', PaymentRecords::class)->name('admin-paymentrecords');
         Route::get('/remitrecords', RemitRecords::class)->name('admin-remitrecords');
         Route::get('/enrolledstudents', EnrolledStudents::class)->name('admin-enrolledstudents');
         Route::get('/students', Students::class)->name('admin-students');
         Route::get('/colleges', Colleges::class)->name('admin-colleges');
-        Route::get('/systemlogs', SystemLogs::class)->name('admin-systemlogs');
         Route::get('/auditlogs', AuditLogs::class)->name('admin-auditlogs');
+        Route::get('/systemlogs', SystemLogs::class)->name('admin-systemlogs');
+       
         Route::get('/overview', Overview::class)->name('admin-overview');
-        Route::get('/fees', Fees::class)->name('admin-fees');
         Route::get('/usermanagement', UserManagement::class)->name('admin-usermanagement');
     });
 });
 
+Route::middleware([AccountisValid::class,isUsc::class])->group(function () {
+    Route::prefix('usc')->group(function () {
+        Route::get('/dashboard', Dashboard::class)->name('usc-dashboard');
+        Route::get('/paymentrecords', PaymentRecords::class)->name('usc-paymentrecords');
+        Route::get('/remittance', RemitRecords::class)->name('usc-remittance');
+        Route::get('/remitrecords', RemitRecords::class)->name('usc-remitrecords');
+       
+        Route::get('/fees', Fees::class)->name('usc-fees');
+    });
+});
 
-Route::middleware([AccountisValid::class,isCollector::class])->group(function () {
-    Route::prefix('collector')->group(function () {
-        Route::get('/dashboard', Dashboard::class)->name('collector-dashboard');
-        Route::get('/payments', Payments::class)->name('collector-payments');
-        Route::get('/paymentrecords', PaymentRecords::class)->name('collector-paymentrecords');
-        Route::get('/students', Students::class)->name('collector-students');
-        Route::get('/usermanagement', UserManagement::class)->name('collector-usermanagement');
+Route::middleware([AccountisValid::class,isCsc::class,isCollector::class])->group(function () {
+    Route::prefix('csc')->group(function () {
+        Route::get('/dashboard', Dashboard::class)->name('csc-dashboard');
+        Route::get('/payments', Payments::class)->name('csc-payments');
+        Route::get('/paymentrecords', PaymentRecords::class)->name('csc-paymentrecords');
+        Route::get('/remittance', RemitRecords::class)->name('csc-remittance');
+        Route::get('/remitrecords', RemitRecords::class)->name('csc-remitrecords');
+        Route::get('/enrolledstudents', EnrolledStudents::class)->name('csc-enrolledstudents');
+        Route::get('/auditlogs', AuditLogs::class)->name('csc-auditlogs');
+      
+        Route::get('/fees', Fees::class)->name('csc-fees');
+
+    });
+});
+
+Route::middleware([AccountisValid::class,isCsc::class,isCollector::class])->group(function () {
+    Route::prefix('csc/collector')->group(function () {
+        Route::get('/dashboard', Dashboard::class)->name('csc-collector-dashboard');
+        Route::get('/payments', Payments::class)->name('csc-collector-payments');
+        Route::get('/paymentrecords', PaymentRecords::class)->name('csc-collector-paymentrecords');
+        Route::get('/auditlogs', AuditLogs::class)->name('csc-collector-auditlogs');
     });
 });

@@ -26,13 +26,7 @@ class isCollector
             ->join('roles as r','r.id','u.role_id')
             ->get()
             ->first()){
-            if ($user_details->role_name == 'officer') {
-                return redirect()->route('officer-dashboard');
-            }else if ($user_details->role_name == 'admin') {
-                return redirect()->route('admin-dashboard');
-            }elseif($user_details->role_name == 'collector'){
-
-            }
+            
         }else{
             return redirect('/login');
         }

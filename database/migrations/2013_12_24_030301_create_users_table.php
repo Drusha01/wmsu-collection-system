@@ -19,10 +19,10 @@ return new class extends Migration
             last_name VARCHAR(255) NOT NULL,
             username VARCHAR(100) UNIQUE,
             password VARCHAR(255) NOT NULL,
-            is_active BOOL DEFAULT 1,
-            college_id INT,
             role_id INT,
+            college_id INT,
             position_id INT,
+            is_active BOOL DEFAULT 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');

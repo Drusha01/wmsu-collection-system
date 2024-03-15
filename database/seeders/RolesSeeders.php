@@ -15,15 +15,15 @@ class RolesSeeders extends Seeder
     {
         DB::statement('INSERT INTO roles VALUES(
             NULL,
-            "officer",
-            NOW(),
-            NOW()),
-            (NULL,
             "admin",
             NOW(),
             NOW()),
             (NULL,
-            "collector",
+            "usc-admin",
+            NOW(),
+            NOW()),
+            (NULL,
+            "csc-admin",
             NOW(),
             NOW());');
     }
