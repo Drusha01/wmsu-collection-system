@@ -15,7 +15,7 @@ class DepartmentsSeeders extends Seeder
     {
         DB::statement('INSERT INTO departments VALUES(
             NULL,
-            1,
+            15,
             "BSCS",
             "Bachelor of Science in Computer Science",
             1,
@@ -24,7 +24,7 @@ class DepartmentsSeeders extends Seeder
         );');
         DB::statement('INSERT INTO departments VALUES(
             NULL,
-            1,
+            15,
             "BSIT",
             "Bachelor of Science in Information Technology",
             1,
@@ -33,9 +33,9 @@ class DepartmentsSeeders extends Seeder
         );');
          DB::statement('INSERT INTO departments VALUES(
             NULL,
-            2,
-            "BSME",
-            "Bachelor of Science in Mechanical Engineering",
+            15,
+            "BSACT",
+            "Associate in Computer Technology",
             1,
             NOW(),
             NOW()

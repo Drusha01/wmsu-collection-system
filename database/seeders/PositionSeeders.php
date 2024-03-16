@@ -13,26 +13,6 @@ class PositionSeeders extends Seeder
      */
     public function run(): void
     {
-        DB::statement('INSERT INTO positions VALUES(
-            NULL,
-            "Mayor",
-            NOW(),
-            NOW()),
-            (NULL,
-            "Vice Mayor",
-            NOW(),
-            NOW()),
-            (NULL,
-            "Treasurer",
-            NOW(),
-            NOW()),
-            (NULL,
-            "Secretary",
-            NOW(),
-            NOW()),
-            (NULL,
-            "Collector",
-            NOW(),
-            NOW());');
+       
     }
 }

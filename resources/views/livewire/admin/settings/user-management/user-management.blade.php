@@ -65,8 +65,8 @@
                                 <tr>
                                     <th scope="col" class="px-4 py-3">#</th>
                                     <th scope="col" class="px-4 py-3">Name</th>
-                                    <th scope="col" class="px-4 py-3">College</th>
                                     <th scope="col" class="px-4 py-3">Role</th>
+                                    <th scope="col" class="px-4 py-3">College</th>
                                     <th scope="col" class="px-4 py-3">Position</th>
                                     <th scope="col" class="text-center px-4 py-3">Actions</th>
                                 </tr>
@@ -76,8 +76,8 @@
                                     <tr class="border-b dark:border-gray-700">
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($users_data->currentPage()-1)*$users_data->perPage()+$key+1 }}</th>
                                         <td class="px-4 py-3"> {{ $value->first_name. ' ' .$value->middle_name.' ' .$value->last_name }}</td>
-                                        <td class="px-4 py-3">{{ $value->college_name}}</td>
                                         <td class="px-4 py-3">{{ $value->role_name}}</td>
+                                        <td class="px-4 py-3">{{ $value->college_name}}</td>
                                         <td class="px-4 py-3">{{ $value->position_name}} </td>
                                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class="flex justify-center items-center space-x-4">
@@ -114,7 +114,6 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr>NO DATA</tr>
                                 @endforelse
                                 
                             </tbody>
@@ -188,39 +187,61 @@
 
 
                                             <div class="col-span-6">
-                                                <label for="colleges"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College</label>
-                                                <select id="colleges" required wire:model.defer="user.college_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option selected>Select College</option>
-                                                    @foreach($colleges as $key =>$value)
-                                                     <option value="{{$value->id}}">{{$value->name}}</option>
-                                                   @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-span-6">
-                                                <label for="position"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
-                                                <select id="position" required wire:model.defer="user.position_id" 
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option selected>Select Position</option>
-                                                   @foreach($positions as $key =>$value)
-                                                     <option value="{{$value->id}}">{{$value->name}}</option>
-                                                   @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-span-6">
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
                                                 <div class="flex items-center space-x-4">
                                                     @foreach($roles as $key =>$value)
-                                                    <input type="radio" required wire:model="user.role_id" id="role-{{$value->name}}" name="roles" value="{{$value->id}}"
-                                                        class="text-primary-500 focus:ring-primary-500 dark:focus:ring-primary-500 dark:text-white">
-                                                    <label for="role-{{$value->name}}"
-                                                        class="text-sm font-medium text-gray-900 dark:text-white">{{$value->name}}</label>
+                                                    @if($key == 0)
+                                                        <input type="radio" checked wire:model="user.role_id" wire:change="updateRole()" id="role-{{$value->name}}" name="{{$value->name}}" value="{{$value->id}}"
+                                                            class="text-primary-500 focus:ring-primary-500 dark:focus:ring-primary-500 dark:text-white">
+                                                        <label for="role-{{$value->name}}"
+                                                            class="text-sm font-medium text-gray-900 dark:text-white">{{$value->name}}
+                                                        </label>
+                                                    @else
+                                                        <input type="radio"  wire:model="user.role_id" wire:change="updateRole()" id="role-{{$value->name}}" name="{{$value->name}}" value="{{$value->id}}"
+                                                            class="text-primary-500 focus:ring-primary-500 dark:focus:ring-primary-500 dark:text-white">
+                                                        <label for="role-{{$value->name}}"
+                                                            class="text-sm font-medium text-gray-900 dark:text-white">{{$value->name}}
+                                                        </label>
+                                                    @endif
                                                    @endforeach
                                                 </div>
                                             </div>
+                                            @if($user['role_name'] == 'usc-admin')
+                                                <div class="col-span-6">
+                                                    <label for="position"
+                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
+                                                    <select id="position" required wire:model.defer="user.position_id" 
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        <option selected>Select Position</option>
+                                                    @foreach($positions as $key =>$value)
+                                                        <option value="{{$value->id}}">{{$value->name}}</option>
+                                                    @endforeach
+                                                    </select>
+                                                </div>
+                                            @elseif($user['role_name'] == 'csc-admin')
+                                                <div class="col-span-6">
+                                                    <label for="colleges"
+                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College</label>
+                                                    <select id="colleges" required wire:model.defer="user.college_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        <option selected>Select College</option>
+                                                        @foreach($colleges as $key =>$value)
+                                                        <option value="{{$value->id}}">{{$value->name}}</option>
+                                                    @endforeach
+                                                    </select>
+                                                </div>
 
+                                                <div class="col-span-6">
+                                                    <label for="position"
+                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
+                                                    <select id="position" required wire:model.defer="user.position_id" 
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        <option selected>Select Position</option>
+                                                    @foreach($positions as $key =>$value)
+                                                        <option value="{{$value->id}}">{{$value->name}}</option>
+                                                    @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
                                             <button data-modal-toggle="addUserModal"
@@ -236,6 +257,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div wire:ignore.self id="editUserModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                             <div class="relative p-4 w-full max-w-xl max-h-full">
                                 <!-- Modal content -->
@@ -286,7 +308,7 @@
                                             <div class="col-span-6">
                                                 <label for="email"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                                                <input type="text" disabled wire:model.defer="user.username" 
+                                                <input type="text" wire:model.defer="user.username" 
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -296,7 +318,7 @@
                                             <!-- <div class="col-span-6">
                                                 <label for="email"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                                <input type="password"
+                                                <input type="password" wire:model.defer="user.password"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -305,44 +327,74 @@
 
 
                                             <div class="col-span-6">
-                                                <label for="colleges"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College</label>
-                                                <select id="colleges" required wire:model.defer="user.college_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    @foreach($colleges as $key =>$value)
-                                                        @if($user['college_id'] == $value->id)
-                                                            <option selected value="{{$value->id}}">{{$value->name}}</option>
-                                                        @else
-                                                            <option value="{{$value->id}}">{{$value->name}}</option>
-                                                        @endif
+                                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
+                                                <div class="flex items-center space-x-4">
+                                                    @foreach($roles as $key =>$value)
+                                                    @if($key == 0)
+                                                        <input type="radio" required wire:model="user.role_id" wire:change="updateRole()" id="role-{{$value->name}}" name="roles" value="{{$value->id}}"
+                                                            class="text-primary-500 focus:ring-primary-500 dark:focus:ring-primary-500 dark:text-white">
+                                                        <label for="role-{{$value->name}}"
+                                                            class="text-sm font-medium text-gray-900 dark:text-white">{{$value->name}}
+                                                        </label>
+                                                    @else
+                                                        <input type="radio" required wire:model="user.role_id" wire:change="updateRole()" id="role-{{$value->name}}" name="roles" value="{{$value->id}}"
+                                                            class="text-primary-500 focus:ring-primary-500 dark:focus:ring-primary-500 dark:text-white">
+                                                        <label for="role-{{$value->name}}"
+                                                            class="text-sm font-medium text-gray-900 dark:text-white">{{$value->name}}
+                                                        </label>
+                                                    @endif
                                                    @endforeach
-                                                </select>
+                                                </div>
                                             </div>
-
-                                            <div class="col-span-6">
-                                                <label for="position"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
-                                                <select id="position" required wire:model.defer="user.position_id" 
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                   @foreach($positions as $key =>$value)
+                                            @if($user['role_name'] == 'usc-admin')
+                                                <div class="col-span-6">
+                                                    <label for="position"
+                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
+                                                    <select id="position" required wire:model.defer="user.position_id" 
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        <option selected>Select Position</option>
+                                                    @foreach($positions as $key =>$value)
                                                         @if($user['position_id'] == $value->id)
                                                             <option selected value="{{$value->id}}">{{$value->name}}</option>
                                                         @else
                                                             <option value="{{$value->id}}">{{$value->name}}</option>
                                                         @endif
-                                                   @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-span-6">
-                                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
-                                                <div class="flex items-center space-x-4">
-                                                    @foreach($roles as $key =>$value)
-                                                    <input type="radio" required wire:model="user.role_id" id="role-{{$value->name}}" name="roles" value="{{$value->id}}"
-                                                        class="text-primary-500 focus:ring-primary-500 dark:focus:ring-primary-500 dark:text-white">
-                                                    <label for="role-{{$value->name}}"
-                                                        class="text-sm font-medium text-gray-900 dark:text-white">{{$value->name}}</label>
-                                                   @endforeach
+                                                    @endforeach
+                                                    </select>
                                                 </div>
-                                            </div>
+                                            @elseif($user['role_name'] == 'csc-admin')
+                                                <div class="col-span-6">
+                                                    <label for="colleges"
+                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College</label>
+                                                    <select id="colleges" required wire:model.defer="user.college_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        <option selected>Select College</option>
+                                                        @foreach($colleges as $key =>$value)
+                                                            @if($user['college_id'] == $value->id)
+                                                                <option selected value="{{$value->id}}">{{$value->name}}</option>
+                                                            @else
+                                                                <option value="{{$value->id}}">{{$value->name}}</option>
+                                                            @endif
+                                                    @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-span-6">
+                                                    <label for="position"
+                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
+                                                    <select id="position" required wire:model.defer="user.position_id" 
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                        <option selected>Select Position</option>
+                                                    @foreach($positions as $key =>$value)
+                                                        @if($user['position_id'] == $value->id)
+                                                            <option selected value="{{$value->id}}">{{$value->name}}</option>
+                                                        @else
+                                                            <option value="{{$value->id}}">{{$value->name}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                    </select>
+                                                </div>
+                                            @endif
+                                            
 
                                         </div>
                                         <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
@@ -442,51 +494,9 @@
                         </div>
 
                     </div>
-                    <!--End Table-->
-                    <!--Table Pagination-->
-                    <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
-                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            Showing
-                            <span class="font-semibold text-gray-900 dark:text-white">1-10</span>
-                            of
-                            <span class="font-semibold text-gray-900 dark:text-white">1000</span>
-                        </span>
-                        <ul class="inline-flex items-stretch -space-x-px">
-                            <li>
-                                <a href="#" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    <span class="sr-only">Previous</span>
-                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-                            </li>
-                            <li>
-                                <a href="#" aria-current="page" class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-red-600 bg-red-50 border border-red-300 hover:bg-red-100 hover:text-red-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    <span class="sr-only">Next</span>
-                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <!--End Table Pagination-->
                 </div>
+                <div class="row my-2"></div>
+                {{ $users_data->links() }}
             </div>
         </section>
     </main>

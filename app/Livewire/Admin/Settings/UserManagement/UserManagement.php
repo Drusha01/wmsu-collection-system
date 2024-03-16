@@ -6,9 +6,11 @@ use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
 
 class UserManagement extends Component
 {
+    use WithPagination;
     public $title = "User Management";
 
     public $user = [
@@ -20,6 +22,7 @@ class UserManagement extends Component
         'password' =>NULL,
         'college_id' =>NULL,
         'role_id' =>NULL,
+        'role_name' => 'usc-admin',
         'position_id' =>NULL,
     ];
     public $colleges = [];
@@ -41,81 +44,76 @@ class UserManagement extends Component
             ->leftjoin('positions as p','p.id','u.position_id')
             ->get()
             ->first()){
-        $this->user_details = $user_details;
-        if($user_details->is_active == 1){
-            if ($user_details->role_name == 'officer') {
-                // return redirect()->route('officer-dashboard');
-            }else if ($user_details->role_name == 'admin') {
+            $this->user_details = $user_details;
+            if($user_details->is_active == 1){
+                if($user_details->role_name == 'admin') {
 
-            }elseif($user_details->role_name == 'collector'){
-                return redirect()->route('collector-dashboard');
-            }
+                }else{
+                    return redirect()->route('/');
+                }
             }else{
                 return redirect('/login');
             }
         }else{
             return redirect()->route('disabled-account');
         }
-           
     }
     public function render(){
         $users_data = [];
-        if ($this->user_details->role_name == 'officer') {
-            $users_data = DB::table('users as u')
-                ->select(
-                    "u.id",
-                    "u.first_name",
-                    "u.middle_name",
-                    "u.last_name",
-                    "u.username",
-                    "u.is_active",
-                    "u.college_id",
-                    "u.role_id",
-                    "u.position_id",
-                    "u.date_created",
-                    "u.date_updated",
-                    "r.name as role_name",
-                    "c.name as college_name",
-                    "p.name as position_name"
-                )
-                ->join('roles as r','r.id','u.role_id')
-                ->join('colleges as c','c.id','u.college_id')
-                ->join('positions as p','p.id','u.position_id')
-                ->where('college_id','=',$this->user_details->college_id)
-                ->where('r.name','<>','admin')
-                ->orderBy('u.date_created')
-                ->paginate(10);
-        }else if ($this->user_details->role_name == 'admin') {
-            $users_data = DB::table('users as u')
-                ->select(
-                    "u.id",
-                    "u.first_name",
-                    "u.middle_name",
-                    "u.last_name",
-                    "u.username",
-                    "u.is_active",
-                    "u.college_id",
-                    "u.role_id",
-                    "u.position_id",
-                    "u.date_created",
-                    "u.date_updated",
-                    "r.name as role_name",
-                    "c.name as college_name",
-                    "p.name as position_name"
-                )
-                ->join('roles as r','r.id','u.role_id')
-                ->join('colleges as c','c.id','u.college_id')
-                ->join('positions as p','p.id','u.position_id')
-                ->orderBy('u.date_created')
-                ->paginate(10);
-        }elseif($this->user_details->role_name == 'collector'){
-            return redirect()->route('collector-dashboard');
-        }
-            // dd( $users_data );
+      
+        $users_data = DB::table('users as u')
+            ->select(
+                "u.id",
+                "u.first_name",
+                "u.middle_name",
+                "u.last_name",
+                "u.username",
+                "u.is_active",
+                "u.college_id",
+                "u.role_id",
+                "u.position_id",
+                "u.date_created",
+                "u.date_updated",
+                "r.name as role_name",
+                "c.name as college_name",
+                "p.name as position_name"
+            )
+            ->join('roles as r','r.id','u.role_id')
+            ->leftjoin('colleges as c','c.id','u.college_id')
+            ->join('positions as p','p.id','u.position_id')
+            ->where('r.name','<>','admin')
+            ->orderBy('u.date_created')
+            ->paginate(10);
+       
         return view('livewire.admin.settings.user-management.user-management',[
             'users_data'=>$users_data])
             ->layout('components.layouts.admin',[
             'title'=>$this->title]);
+    }
+
+    public function updateRole(){
+        $this->user['position_id'] = NULL;
+        $this->user['college_id'] = NULL;
+        foreach ($this->roles as $key => $value) {
+            if( $value->id == $this->user['role_id']){
+                $this->user['role_name'] = $value->name;
+                if($this->user['role_name'] == 'usc-admin'){
+                    $this->positions = DB::table('positions')
+                        ->where('role_id','=',$this->user['role_id'])
+                        ->get()
+                        ->toArray();
+                }elseif($this->user['role_name'] == 'csc-admin'){
+                    $this->colleges = DB::table('colleges')
+                        ->where('is_active','=',1)
+                        ->get()
+                        ->toArray();
+                    $this->positions = DB::table('positions')
+                        ->where('role_id','=',$this->user['role_id'])
+                        ->get()
+                        ->toArray();
+                }
+            }
+        }
     }
     public function addUser($modal_id){
         $this->user = [
@@ -127,18 +125,33 @@ class UserManagement extends Component
             'password' =>NULL,
             'college_id' =>NULL,
             'role_id' =>NULL,
+            'role_name' => 'usc-admin',
             'position_id' =>NULL,
         ];
-        $this->positions = DB::table('positions')
-            ->get()
-            ->toArray();
-        $this->colleges = DB::table('colleges')
-            ->where('is_active','=',1)
-            ->get()
-            ->toArray();
+       
         $this->roles = DB::table('roles')
-        ->get()
-        ->toArray();
+            ->where('name','<>','admin')
+            ->orderBy('id')
+            ->get()
+            ->toArray();
+        if($this->user['role_name'] == 'usc-admin'){
+            $this->positions = DB::table('positions')
+                ->where('role_id','=',$this->user['role_id'])
+                ->get()
+                ->toArray();
+        }elseif($this->user['role_name'] == 'csc-admin'){
+            $this->colleges = DB::table('colleges')
+                ->where('is_active','=',1)
+                ->get()
+                ->toArray();
+            $this->positions = DB::table('positions')
+                ->where('role_id','=',$this->user['role_id'])
+                ->get()
+                ->toArray();
+        }
+       
+
+       
         $this->dispatch('openModal',$modal_id);
     }
     public function saveAddUser($modal_id){
@@ -184,30 +197,6 @@ class UserManagement extends Component
             );
             return;
         }
-        if(intval($this->user['college_id'])<0){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'warning',
-                title             									: 'Please select college!',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
-            return;
-        }
-        if(!(DB::table('colleges')
-            ->where('id','=',$this->user['college_id'])
-            ->first())){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'warning',
-                title             									: 'Please select college!',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
-            return;
-        }
         if(intval($this->user['role_id'])<0){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
@@ -219,7 +208,7 @@ class UserManagement extends Component
             );
             return;
         }
-        if(!(DB::table('roles')
+        if(!($role = DB::table('roles')
             ->where('id','=',$this->user['role_id'])
             ->first())){
             $this->dispatch('swal:redirect',
@@ -232,30 +221,83 @@ class UserManagement extends Component
             );
             return;
         }
-        if(intval($this->user['position_id'])<0){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'warning',
-                title             									: 'Please select position!',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
-            return;
+        if($role->name  == 'usc-admin'){
+            if(intval($this->user['position_id'])<0){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select position!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+            if(!(DB::table('positions')
+                ->where('id','=',$this->user['position_id'])
+                ->first())){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select position!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+        }elseif($role->name  == 'csc-admin'){
+            if(intval($this->user['position_id'])<0){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select position!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+            if(!(DB::table('positions')
+                ->where('id','=',$this->user['position_id'])
+                ->first())){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select position!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+
+            if(intval($this->user['college_id'])<0){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select college!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+            if(!(DB::table('colleges')
+                ->where('id','=',$this->user['college_id'])
+                ->first())){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select college!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
         }
-        if(!(DB::table('positions')
-            ->where('id','=',$this->user['position_id'])
-            ->first())){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'warning',
-                title             									: 'Please select position!',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
-            return;
-        }
+        
         if(DB::table('users')
             ->insert([
                 'first_name' =>$this->user['first_name'],
@@ -284,6 +326,7 @@ class UserManagement extends Component
                 'password' =>NULL,
                 'college_id' =>NULL,
                 'role_id' =>NULL,
+                'role_name' => 'usc-admin',
                 'position_id' =>NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
@@ -320,7 +363,7 @@ class UserManagement extends Component
             "p.name as position_name"
         )
         ->join('roles as r','r.id','u.role_id')
-        ->join('colleges as c','c.id','u.college_id')
+        ->leftjoin('colleges as c','c.id','u.college_id')
         ->join('positions as p','p.id','u.position_id')
         ->where('u.id','=',$id)
         ->first();
@@ -332,9 +375,11 @@ class UserManagement extends Component
             'username' =>$user->username,
             'college_id' =>$user->college_id,
             'role_id' =>$user->role_id,
+            'role_name' =>$user->role_name,
             'position_id' =>$user->position_id,
         ];
         $this->positions = DB::table('positions')
+            ->where('role_id','=',$user->role_id)
             ->get()
             ->toArray();
         $this->colleges = DB::table('colleges')
@@ -342,8 +387,10 @@ class UserManagement extends Component
             ->get()
             ->toArray();
         $this->roles = DB::table('roles')
-        ->get()
-        ->toArray();
+            ->where('name','<>','admin')
+            ->orderBy('id')
+            ->get()
+            ->toArray();
         $this->dispatch('openModal',$modal_id);
     }
 
@@ -465,6 +512,7 @@ class UserManagement extends Component
                 'password' =>NULL,
                 'college_id' =>NULL,
                 'role_id' =>NULL,
+                'role_name' => 'usc-admin',
                 'position_id' =>NULL,
             ];
             $this->dispatch('closeModal',$modal_id);

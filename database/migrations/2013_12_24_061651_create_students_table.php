@@ -21,6 +21,7 @@ return new class extends Migration
             email VARCHAR(100) UNIQUE,
             college_id INT,
             department_id INT,
+            is_muslim BOOL DEFAULT 0,
             is_active BOOL DEFAULT 1,
 
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,

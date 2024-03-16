@@ -6,9 +6,11 @@ use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
 
 class Colleges extends Component
 {
+    use WithPagination;
     public $title = "Colleges";
 
     public $college = [

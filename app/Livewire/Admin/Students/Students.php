@@ -17,6 +17,7 @@ class Students extends Component
         'middle_name' => NULL,
         'last_name' => NULL,
         'email' => NULL,
+        'is_muslim' => NULL,
         'college_id' => NULL,
         'department_id' => NULL,
     ];
@@ -61,6 +62,7 @@ class Students extends Component
                 "c.name as college_name",
                 "d.name as department_name",
                 "d.code as department_code",
+                's.is_muslim',
                 's.is_active'
             )
             ->join('colleges as c','s.college_id','c.id')
@@ -88,6 +90,7 @@ class Students extends Component
             'middle_name' => NULL,
             'last_name' => NULL,
             'email' => NULL,
+            'is_muslim' => NULL,
             'college_id' => NULL,
             'department_id' => NULL,
         ];
@@ -192,6 +195,7 @@ class Students extends Component
                 'middle_name' => $this->student['middle_name'],
                 'last_name' => $this->student['last_name'],
                 'email' => $this->student['email'],
+                'is_muslim' =>  $this->student['is_muslim'],
                 'college_id' => $this->student['college_id'],
                 'department_id' => $this->student['department_id'],
             ])){
@@ -224,6 +228,7 @@ class Students extends Component
             "c.name as college_name",
             "d.name as department_name",
             "d.code as department_code",
+            's.is_muslim'
         )
         ->join('colleges as c','s.college_id','c.id')
         ->join('departments as d','s.department_id','d.id')
@@ -237,6 +242,7 @@ class Students extends Component
             'middle_name' => $student->middle_name,
             'last_name' => $student->last_name,
             'email' => $student->email,
+            'is_muslim'=> $student->is_muslim,
             'college_id' => $student->college_id,
             'department_id' => 2,
         ];
