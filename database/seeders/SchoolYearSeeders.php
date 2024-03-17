@@ -17,8 +17,8 @@ class SchoolYearSeeders extends Seeder
             NULL,
             YEAR(NOW())-1,
             YEAR(NOW()),
-            DATE("2023-07-1"),
-            DATE("2024-06-30"),
+            DATE("2023-08-1"),
+            DATE("2024-05-31"),
             NOW(),
             NOW()
         );');
@@ -26,8 +26,8 @@ class SchoolYearSeeders extends Seeder
             NULL,
             YEAR(NOW()),
             YEAR(NOW())+1,
-            DATE("2024-07-1"),
-            DATE("2025-06-30"),
+            DATE("2024-08-1"),
+            DATE("2025-05-31"),
             NOW(),
             NOW()
         );');

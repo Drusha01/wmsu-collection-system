@@ -402,7 +402,7 @@ class UserManagement extends Component
         $this->school_years = DB::table('school_years')
         ->get()
         ->toArray();
-        
+
         $this->positions = DB::table('positions')
             ->where('role_id','=',$user->role_id)
             ->get()
@@ -438,30 +438,6 @@ class UserManagement extends Component
         //     );
         //     return;
         // }
-        if(intval($this->user['college_id'])<0){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'warning',
-                title             									: 'Please select college!',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
-            return;
-        }
-        if(!(DB::table('colleges')
-            ->where('id','=',$this->user['college_id'])
-            ->first())){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'warning',
-                title             									: 'Please select college!',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
-            return;
-        }
         if(intval($this->user['role_id'])<0){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
@@ -473,7 +449,7 @@ class UserManagement extends Component
             );
             return;
         }
-        if(!(DB::table('roles')
+        if(!($role = DB::table('roles')
             ->where('id','=',$this->user['role_id'])
             ->first())){
             $this->dispatch('swal:redirect',
@@ -486,29 +462,81 @@ class UserManagement extends Component
             );
             return;
         }
-        if(intval($this->user['position_id'])<0){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'warning',
-                title             									: 'Please select position!',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
-            return;
-        }
-        if(!(DB::table('positions')
-            ->where('id','=',$this->user['position_id'])
-            ->first())){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'warning',
-                title             									: 'Please select position!',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
-            return;
+        if($role->name  == 'usc-admin'){
+            if(intval($this->user['position_id'])<0){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select position!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+            if(!(DB::table('positions')
+                ->where('id','=',$this->user['position_id'])
+                ->first())){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select position!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+        }elseif($role->name  == 'csc-admin'){
+            if(intval($this->user['position_id'])<0){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select position!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+            if(!(DB::table('positions')
+                ->where('id','=',$this->user['position_id'])
+                ->first())){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select position!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+
+            if(intval($this->user['college_id'])<0){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select college!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+            if(!(DB::table('colleges')
+                ->where('id','=',$this->user['college_id'])
+                ->first())){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Please select college!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
         }
         if(DB::table('users')
             ->where('id','=',$this->user['id'])
@@ -516,6 +544,7 @@ class UserManagement extends Component
                 'first_name' =>$this->user['first_name'],
                 'middle_name' =>$this->user['middle_name'],
                 'last_name' =>$this->user['last_name'],
+                'school_year_id' =>$this->user['school_year_id'],
                 'college_id' =>$this->user['college_id'],
                 'role_id' =>$this->user['role_id'],
                 'position_id' =>$this->user['position_id']
@@ -536,6 +565,7 @@ class UserManagement extends Component
                 'username' =>NULL,
                 'password' =>NULL,
                 'college_id' =>NULL,
+                'school_year_id' =>NULL,
                 'role_id' =>NULL,
                 'role_name' => 'usc-admin',
                 'position_id' =>NULL,
@@ -576,6 +606,7 @@ class UserManagement extends Component
                 'username' =>NULL,
                 'password' =>NULL,
                 'college_id' =>NULL,
+                'school_year_id' =>NULL,
                 'role_id' =>NULL,
                 'role_name' => 'usc-admin',
                 'position_id' =>NULL,
@@ -616,6 +647,7 @@ class UserManagement extends Component
                     'username' =>NULL,
                     'password' =>NULL,
                     'college_id' =>NULL,
+                    'school_year_id' =>NULL,
                     'role_id' =>NULL,
                     'role_name' => 'usc-admin',
                     'position_id' =>NULL,

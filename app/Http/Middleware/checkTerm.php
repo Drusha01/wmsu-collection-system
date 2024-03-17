@@ -28,7 +28,6 @@ class checkTerm
             ->whereRaw('(now() between sy.date_start and sy.date_end)')
             ->get()
             ->first()){
-            
         }else{
             return redirect('/term-ended');
         }

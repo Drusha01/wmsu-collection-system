@@ -16,12 +16,20 @@ class Semesters extends Seeder
         DB::statement('INSERT INTO semesters VALUES(
             NULL,
             "1st Semester",
+            1,
+            8,
+            31,
+            12,
             NOW(),
             NOW()
         );');
          DB::statement('INSERT INTO semesters VALUES(
             NULL,
             "2nd Semester",
+            1,
+            1,
+            31,
+            5,
             NOW(),
             NOW()
         );');

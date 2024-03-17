@@ -14,6 +14,10 @@ return new class extends Migration
         DB::statement('CREATE TABLE semesters(
             id INT PRIMARY KEY AUTO_INCREMENT,
             semester VARCHAR(100) UNIQUE,
+            date_start_date INT,
+            date_start_month INT,
+            date_end_date INT,
+            date_end_month INT,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');

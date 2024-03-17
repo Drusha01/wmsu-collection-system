@@ -27,7 +27,7 @@
                     </nav>
                     <!--End Breadcrumb -->
                     <!--Table Header -->
-                    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                    <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
                         <div class="w-full md:w-1/4">
                             <form class="flex items-center">
                                 <label for="simple-search" class="sr-only">Search</label>
@@ -41,29 +41,47 @@
                                 </div>
                             </form>
                         </div>
+                        <button  id="Semester" style="display:none" type="button" data-modal-target="SemesterModal" data-modal-toggle="SemesterModal" class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
+                            1st Semester Span
+                        </button>
+                        <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0" >
+                            <button wire:click="editSemester(1,'Semester')" type="button" class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
+                                1st Semester Span
+                            </button>
+                        </div>
+                        <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0" data-modal-target="overview-modal" data-modal-toggle="overview-modal">
+                            <button type="button" wire:click="editSemester(2,'Semester')"  class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
+                                2nd Semester Span
+                            </button>
+                        </div>
+                        <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0" data-modal-target="overview-modal" data-modal-toggle="overview-modal">
+                            <button type="button" class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
+                                Academic Year Span
+                            </button>
+                        </div>
                         <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0" data-modal-target="overview-modal" data-modal-toggle="overview-modal">
                             <button type="button" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                 <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                 </svg>
-                                Add Academic Year and Semester
+                                Add Academic Year
                             </button>
                         </div>
                     </div>
 
-                    <div id="overview-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
+                    <div wire:ignore.self id="SemesterModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
                         <div class="relative w-8/12 max-w-6xl p-8 max-h-screen flex flex-col">
                             <!-- Modal content -->
                             <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
                                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        Overview Details
+                                        {{$semester['semester']}} Span
                                     </h3>
                                 </div>
                                 <!-- Close Button - Upper Right Corner -->
                                 <button type="button"
                                     class="absolute top-4 right-4 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-2 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                    data-modal-toggle="overview-modal">
+                                    data-modal-toggle="SemesterModal">
                                     <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
@@ -73,73 +91,79 @@
                                     <span class="sr-only">Close modal</span>
                                 </button>
 
-                                <div class="mt-8 ">
-                                    <form action="#" class="grid gap-6 grid-cols-1">
+                                <form action="#" class="grid gap-6 grid-cols-1" wire:submit.prevent="saveSemester({{$semester['id']}},'SemesterModal')">
+                                    <div class="mt-8 ">
                                         <div class="mb-2">
                                             <label for="start-date"
-                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">School Year</label>
-                                            <input type="text" name="start-date" id="start-date"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                                            focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                placeholder="Ex. 2020-2023">
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                Start Month
+                                            </label>
+                                            <select id="month" required wire:model.defer="semester.date_start_month"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                @foreach($months as $key =>$value)
+                                                    @if($semester['date_start_month'] == $value['month_number'])
+                                                        <option selected value="{{$value['month_number']}}">{{$value['month_name']}}</option>
+                                                    @else
+                                                        <option value="{{$value['month_number']}}">{{$value['month_name']}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="mb-2">
                                             <label for="start-date"
-                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Academic
-                                                StartAt</label>
-                                            <input type="date" name="start-date" id="start-date"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                                            focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                placeholder="Select start date">
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                Start Date 
+                                            </label>
+                                            
+                                            @if($semester['date_start_month'] >0)
+                                            <select id="month" required wire:model.defer="semester.date_start_date"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                @for($i = 0 ; $i< $months[$semester['date_start_month']]['max_date']; $i++)
+                                                    <option value="{{($i+1)}}">{{($i+1)}}</option>
+                                                @endfor
+                                            </select>
+                                            @endif
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label for="start-date"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                End Month
+                                            </label>
+                                            <select id="month" required wire:model.defer="semester.date_end_month"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                @foreach($months as $key =>$value)
+                                                    @if($semester['date_end_month'] == $value['month_number'])
+                                                        <option selected value="{{$value['month_number']}}">{{$value['month_name']}}</option>
+                                                    @else
+                                                        <option value="{{$value['month_number']}}">{{$value['month_name']}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="mb-2">
-                                            <label for="end-date"
-                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Academic End At</label>
-                                            <input type="date" name="end-date" id="end-date"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                                            focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                placeholder="Select end date">
+                                            <label for="start-date"
+                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                End Date 
+                                            </label>
+                                            
+                                            @if($semester['date_end_month'] >0)
+                                            <select id="month" required wire:model.defer="semester.date_end_date"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                @for($i = 0 ; $i< $months[$semester['date_end_month']-1]['max_date']; $i++)
+                                                    <option value="{{($i+1)}}">{{($i+1)}}</option>
+                                                @endfor
+                                            </select>
+                                            @endif
                                         </div>
-                                    </form>
-                                </div>
-                                <!-- Right Section - Semester  -->
-                                <div class="mt-8">
-                                    <h3 class="text-2xl font-semibold mb-4">Semester Details</h3>
-                                    <form action="#" class="grid gap-6">
-                                        <div class="mb-2">
-                                            <label for="semestername"
-                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester Name</label>
-                                            <input type="text" name="" id=""
-                                                class="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg
-                                            focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                placeholder="Ex. 1st Semester&ldquo;">
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="semduration"
-                                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Duration</label>
-                                            <input type="number" name="" id=""
-                                                class="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg
-                                            focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                            dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                placeholder="Ex. 6months&ldquo;">
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- Save Fees Button - Bottom Section -->
-                                <div class="flex items-center justify-end rounded-t dark:border-gray-600 p-2 mt-4">
-                                    <button data-modal-toggle="overview-modal"
-                                        class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
-                                        Back
-                                    </button>
-                                    <button type="submit"
-                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
-                                        Save Details
-                                    </button>
-                                </div>
+                                    </div>
+                                    <div class="flex items-center justify-end rounded-t dark:border-gray-600 p-2 mt-4">
+                                        <button data-modal-toggle="SemesterModal"
+                                            class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                            Back
+                                        </button>
+                                        <button type="submit"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
