@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 
-class isUsc
+class checkTerm
 {
     /**
      * Handle an incoming request.
@@ -20,21 +20,17 @@ class isUsc
         if(isset($session['id']) && $user_details = DB::table('users as u')
             ->select(
                 'u.id',
-                'r.name as role_name'
+               'sy.date_start',
+               'sy.date_end'
               )
+            ->leftjoin('school_years as sy','sy.id','u.school_year_id')
             ->where('u.id','=',$session['id'])
-            ->join('roles as r','r.id','u.role_id')
+            ->whereRaw('(now() between sy.date_start and sy.date_end)')
             ->get()
             ->first()){
-            if ($user_details->role_name == 'usc-admin') {
-
-            }else if ($user_details->role_name == 'admin') {
-                return redirect()->route('admin-dashboard');
-            }elseif($user_details->role_name == 'csc-admin'){
-                return redirect()->route('csc-dashboard');
-            }
+            
         }else{
-            return redirect('/login');
+            return redirect('/term-ended');
         }
         return $next($request);
     }

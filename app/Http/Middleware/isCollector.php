@@ -20,13 +20,17 @@ class isCollector
         if(isset($session['id']) && $user_details = DB::table('users as u')
             ->select(
                 'u.id',
-                'r.name as role_name'
+                'r.name as role_name',
+                'p.name as position_name'
               )
             ->where('u.id','=',$session['id'])
             ->join('roles as r','r.id','u.role_id')
+            ->join('positions as p','p.id','u.position_id')
             ->get()
             ->first()){
-            
+            if($user_details->position_name == 'Collector'){
+                return redirect()->route('csc-collector-dashboard');
+            }
         }else{
             return redirect('/login');
         }

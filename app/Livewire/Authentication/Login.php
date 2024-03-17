@@ -45,23 +45,23 @@ class Login extends Component
                         timer             									: '1500',
                         link              									: 'admin/dashboard'
                     );
-                }elseif($user_details->name == 'officer'){
+                }elseif($user_details->name == 'csc-admin'){
                     $this->dispatch('swal:redirect',
                         position         									: 'center',
                         icon              									: 'success',
-                        title             									: 'Welcome back officer!',
+                        title             									: 'Welcome back CSC admin!',
                         showConfirmButton 									: 'true',
                         timer             									: '1500',
-                        link              									: 'officer/dashboard'
+                        link              									: 'csc/dashboard'
                     );
-                }elseif($user_details->name == 'collector'){
+                }elseif($user_details->name == 'usc-admin'){
                     $this->dispatch('swal:redirect',
                         position         									: 'center',
                         icon              									: 'success',
-                        title             									: 'Welcome back collector!',
+                        title             									: 'Welcome back USC admin!',
                         showConfirmButton 									: 'true',
                         timer             									: '1500',
-                        link              									: 'collector/dashboard'
+                        link              									: 'usc/dashboard'
                     );
                 }
             }else{

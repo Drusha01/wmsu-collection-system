@@ -26,13 +26,13 @@ class isAdmin
             ->join('roles as r','r.id','u.role_id')
             ->get()
             ->first()){
-                if ($user_details->role_name == 'admin-usc') {
-                    return redirect()->route('usc-dashboard');
-                }else if ($user_details->role_name == 'admin') {
+            if ($user_details->role_name == 'usc-admin') {
+                return redirect()->route('usc-dashboard');
+            }else if ($user_details->role_name == 'admin') {
 
-                }elseif($user_details->role_name == 'admin-csc'){
-    
-                }
+            }elseif($user_details->role_name == 'csc-admin'){
+                return redirect()->route('csc-dashboard');
+            }
         }else{
             return redirect('/login');
         }

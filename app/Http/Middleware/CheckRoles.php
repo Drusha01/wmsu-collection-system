@@ -26,12 +26,12 @@ class CheckRoles
             ->join('roles as r','r.id','u.role_id')
             ->get()
             ->first()){
-            if ($user_details->role_name == 'officer') {
-                return redirect()->route('officer-dashboard');
+            if ($user_details->role_name == 'usc-admin') {
+                return redirect()->route('usc-dashboard');
             }else if ($user_details->role_name == 'admin') {
                 return redirect()->route('admin-dashboard');
-            }elseif($user_details->role_name == 'collector'){
-                return redirect()->route('collector-dashboard');
+            }elseif($user_details->role_name == 'csc-admin'){
+                return redirect()->route('csc-dashboard');
             }
         }else{
             return redirect('/login');

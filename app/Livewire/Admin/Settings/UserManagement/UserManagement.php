@@ -21,10 +21,12 @@ class UserManagement extends Component
         'username' =>NULL,
         'password' =>NULL,
         'college_id' =>NULL,
+        'school_year_id' =>NULL,
         'role_id' =>NULL,
         'role_name' => 'usc-admin',
         'position_id' =>NULL,
     ];
+    public $school_years = [];
     public $colleges = [];
     public $roles = [];
     public $positions = [];
@@ -74,12 +76,17 @@ class UserManagement extends Component
                 "u.position_id",
                 "u.date_created",
                 "u.date_updated",
+                
                 "r.name as role_name",
                 "c.name as college_name",
-                "p.name as position_name"
+                "p.name as position_name",
+                'u.school_year_id',
+                'sy.year_start',
+                'sy.year_end',
             )
             ->join('roles as r','r.id','u.role_id')
             ->leftjoin('colleges as c','c.id','u.college_id')
+            ->leftjoin('school_years as sy','sy.id','u.school_year_id')
             ->join('positions as p','p.id','u.position_id')
             ->where('r.name','<>','admin')
             ->orderBy('u.date_created')
@@ -124,6 +131,7 @@ class UserManagement extends Component
             'username' =>NULL,
             'password' =>NULL,
             'college_id' =>NULL,
+            'school_year_id' =>NULL,
             'role_id' =>NULL,
             'role_name' => 'usc-admin',
             'position_id' =>NULL,
@@ -132,6 +140,9 @@ class UserManagement extends Component
         $this->roles = DB::table('roles')
             ->where('name','<>','admin')
             ->orderBy('id')
+            ->get()
+            ->toArray();
+        $this->school_years = DB::table('school_years')
             ->get()
             ->toArray();
         if($this->user['role_name'] == 'usc-admin'){
@@ -305,6 +316,7 @@ class UserManagement extends Component
                 'last_name' =>$this->user['last_name'],
                 'username' =>$this->user['username'],
                 'password' =>bcrypt($this->user['password']),
+                'school_year_id' =>$this->user['school_year_id'],
                 'college_id' =>$this->user['college_id'],
                 'role_id' =>$this->user['role_id'],
                 'position_id' =>$this->user['position_id']
@@ -325,6 +337,7 @@ class UserManagement extends Component
                 'username' =>NULL,
                 'password' =>NULL,
                 'college_id' =>NULL,
+                'school_year_id' =>NULL,
                 'role_id' =>NULL,
                 'role_name' => 'usc-admin',
                 'position_id' =>NULL,
@@ -360,10 +373,14 @@ class UserManagement extends Component
             "u.date_updated",
             "r.name as role_name",
             "c.name as college_name",
-            "p.name as position_name"
+            "p.name as position_name",
+            'u.school_year_id',
+            'sy.year_start',
+            'sy.year_end',
         )
         ->join('roles as r','r.id','u.role_id')
         ->leftjoin('colleges as c','c.id','u.college_id')
+        ->leftjoin('school_years as sy','sy.id','u.school_year_id')
         ->join('positions as p','p.id','u.position_id')
         ->where('u.id','=',$id)
         ->first();
@@ -373,11 +390,19 @@ class UserManagement extends Component
             'middle_name' =>$user->middle_name,
             'last_name' =>$user->last_name,
             'username' =>$user->username,
+            'school_year_id' =>$user->school_year_id,
+            'sy.year_start' =>$user->year_start,
+            'sy.year_end' =>$user->year_end,
             'college_id' =>$user->college_id,
             'role_id' =>$user->role_id,
             'role_name' =>$user->role_name,
             'position_id' =>$user->position_id,
         ];
+
+        $this->school_years = DB::table('school_years')
+        ->get()
+        ->toArray();
+        
         $this->positions = DB::table('positions')
             ->where('role_id','=',$user->role_id)
             ->get()
@@ -552,6 +577,7 @@ class UserManagement extends Component
                 'password' =>NULL,
                 'college_id' =>NULL,
                 'role_id' =>NULL,
+                'role_name' => 'usc-admin',
                 'position_id' =>NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
@@ -591,6 +617,7 @@ class UserManagement extends Component
                     'password' =>NULL,
                     'college_id' =>NULL,
                     'role_id' =>NULL,
+                    'role_name' => 'usc-admin',
                     'position_id' =>NULL,
                 ];
                 $this->dispatch('closeModal',$modal_id);

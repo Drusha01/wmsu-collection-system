@@ -15,15 +15,22 @@ class SchoolYearSeeders extends Seeder
     {
         DB::statement('INSERT INTO school_years VALUES(
             NULL,
-            CONCAT(YEAR(NOW())-1," - ",YEAR(NOW())),
+            YEAR(NOW())-1,
+            YEAR(NOW()),
+            DATE("2023-07-1"),
+            DATE("2024-06-30"),
             NOW(),
             NOW()
         );');
-         DB::statement('INSERT INTO school_years VALUES(
+        DB::statement('INSERT INTO school_years VALUES(
             NULL,
-            CONCAT(YEAR(NOW())," - ",YEAR(NOW())+1),
+            YEAR(NOW()),
+            YEAR(NOW())+1,
+            DATE("2024-07-1"),
+            DATE("2025-06-30"),
             NOW(),
             NOW()
         );');
+      
     }
 }

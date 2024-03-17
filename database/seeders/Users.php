@@ -21,6 +21,7 @@ class Users extends Seeder
             "Dumapit",
             "Admin",
             "'.bcrypt('123').'",
+            0,
             1,
             0,
             0,

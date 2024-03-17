@@ -64,7 +64,9 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-4 py-3">#</th>
+                                    <th scope="col" class="px-4 py-3">Username</th>
                                     <th scope="col" class="px-4 py-3">Name</th>
+                                    <th scope="col" class="px-4 py-3">Term</th>
                                     <th scope="col" class="px-4 py-3">Role</th>
                                     <th scope="col" class="px-4 py-3">College</th>
                                     <th scope="col" class="px-4 py-3">Position</th>
@@ -75,7 +77,9 @@
                                 @forelse($users_data as $key => $value)
                                     <tr class="border-b dark:border-gray-700">
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($users_data->currentPage()-1)*$users_data->perPage()+$key+1 }}</th>
+                                        <td class="px-4 py-3">{{ $value->username}}</td>
                                         <td class="px-4 py-3"> {{ $value->first_name. ' ' .$value->middle_name.' ' .$value->last_name }}</td>
+                                        <td class="px-4 py-3">{{ $value->year_start.' - '.$value->year_end}}</td>
                                         <td class="px-4 py-3">{{ $value->role_name}}</td>
                                         <td class="px-4 py-3">{{ $value->college_name}}</td>
                                         <td class="px-4 py-3">{{ $value->position_name}} </td>
@@ -185,6 +189,17 @@
                                                     placeholder="Password" required>
                                             </div>
 
+                                            <div class="col-span-6">
+                                                <label for="position"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Term</label>
+                                                <select id="position" required wire:model.defer="user.school_year_id" 
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected>Select Term</option>
+                                                @foreach($school_years as $key =>$value)
+                                                    <option value="{{$value->id}}">{{$value->year_start.' - '.$value->year_end}}</option>
+                                                @endforeach
+                                                </select>
+                                            </div>
 
                                             <div class="col-span-6">
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
@@ -325,7 +340,21 @@
                                                     placeholder="Password" required>
                                             </div> -->
 
-
+                                            <div class="col-span-6">
+                                                <label for="position"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Term</label>
+                                                <select id="position" required wire:model.defer="user.school_year_id" 
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected>Select Term</option>
+                                                @foreach($school_years as $key =>$value)
+                                                    @if($user['school_year_id'] == $value->id)
+                                                        <option selected value="{{$value->id}}">{{$value->year_start.' - '.$value->year_end}}</option>
+                                                    @else
+                                                        <option value="{{$value->id}}">{{$value->year_start.' - '.$value->year_end}}</option>
+                                                    @endif
+                                                @endforeach
+                                                </select>
+                                            </div>
                                             <div class="col-span-6">
                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
                                                 <div class="flex items-center space-x-4">
