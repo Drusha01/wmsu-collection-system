@@ -232,6 +232,19 @@ class UserManagement extends Component
             );
             return;
         }
+        if(!($term = DB::table('school_years')
+            ->where('id','=',$this->user['school_year_id'])
+            ->first())){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select term!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
         if($role->name  == 'usc-admin'){
             if(intval($this->user['position_id'])<0){
                 $this->dispatch('swal:redirect',
@@ -456,6 +469,19 @@ class UserManagement extends Component
                 position         									: 'center',
                 icon              									: 'warning',
                 title             									: 'Please select role!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(!($term = DB::table('school_years')
+            ->where('id','=',$this->user['school_year_id'])
+            ->first())){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select term!',
                 showConfirmButton 									: 'true',
                 timer             									: '1000',
                 link              									: '#'

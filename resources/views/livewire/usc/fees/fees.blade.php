@@ -31,6 +31,7 @@
                             </li>
                         </ol>
                     </nav>
+                    <div class="row px-5"><h6> Academic Year {{$term->year_start.' - '.$term->year_end}}</h6></div>
                     <!--End Breadcrumb -->
                     <!--Table Header -->
                     <div
@@ -53,9 +54,12 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0"
-                            data-modal-target="create-universityfee-modal" data-modal-toggle="create-universityfee-modal">
-                            <button type="button"
+                        <button  type="button" data-modal-target="DeleteUniversityFeeModal" data-modal-toggle="DeleteUniversityFeeModal" id="DeleteFeeToggle" style="display:none;" ></button>
+                        <button  type="button" data-modal-target="ActivateUniversityFeeModal" data-modal-toggle="ActivateUniversityFeeModal" id="ActivateFeeToggle" style="display:none;" ></button>
+                        <button  type="button" data-modal-target="EditUniversityFeeModal" data-modal-toggle="EditUniversityFeeModal" id="EditFeeToggle" style="display:none;" ></button>
+                        <button  type="button" data-modal-target="AddUniversityFeeModal" data-modal-toggle="AddUniversityFeeModal" id="AddFeeToggle" style="display:none;" ></button>
+                        <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+                            <button type="button" wire:click="addFees('AddFeeToggle')"
                                 class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                 <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -67,111 +71,233 @@
                         </div>
                     </div>
 
-                    <div id="create-universityfee-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
+                    <div wire:ignore.self id="AddUniversityFeeModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
                         <div class="relative w-8/12 max-w-6xl p-8 max-h-screen flex flex-col">
                             <!-- Modal content -->
-                            <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
-                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        Add University Fees
-                                    </h3>
-                                </div>
-                                <!-- Close Button - Upper Right Corner -->
-                                <button type="button"
-                                    class="absolute top-4 right-4 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-2 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                    data-modal-toggle="create-universityfee-modal">
-                                    <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="sr-only">Close modal</span>
-                                </button>
-                                <form action="#" method="POST">
-                                    <div class="flex flex-row justify-between">
-                                        <!-- Left Section - Fee Details -->
-                                        <div class="mt-8 basis-1/2 pr-4">
-                                            <h3 class="text-2xl font-semibold mb-4">Fee Details</h3>
-                                            <div action="#" class="grid gap-6">
-                                                <div class="mb-4">
-                                                    <label for="name"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                                                    <input type="text" name="name" id="name"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                                                focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Ex. University fee&ldquo;">
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label for="amount"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount</label>
-                                                    <input type="number" name="amount" id="amount"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                                                focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="P300">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Right Section - Fee Scheduling -->
-                                        <div class="mt-8 basis-1/2 pl-4">
-                                            <h3 class="text-2xl font-semibold mb-4">Fee Scheduling</h3>
-                                            <div class="grid gap-6">
-                                                <div class="mb-2">
-                                                    <label for="academic-year"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Academic
-                                                        Year</label>
-                                                    <select id="academic-year"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                        <option selected="">Select Academic Year</option>
-                                                        <option value="">2022-2023</option>
-                                                        <option value="">2023-2024</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <label for="semester"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester</label>
-                                                    <select id="semester"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                        <option selected="">Select Semester</option>
-                                                        <option value="">First Semester</option>
-                                                        <option value="">Second Semester</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <label for="start-date"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start Date</label>
-                                                    <input type="date" name="start-date" id="start-date"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                                                focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Select start date">
-                                                </div>
-                                                <div class="mb-2">
-                                                    <label for="end-date"
-                                                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">End Date</label>
-                                                    <input type="date" name="end-date" id="end-date"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-                                                focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
-                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                        placeholder="Select end date">
-                                                </div>
-                                            </div>
-                                        </div>
+                            <form action="#" wire:submit.prevent="saveAddFees('AddUniversityFeeModal')">
+                                <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Add University Fees
+                                        </h3>
                                     </div>
-                                </form>
-                                <!-- Save Fees Button - Bottom Section -->
-                                <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
-                                    <button data-modal-toggle="create-universityfee-modal"
-                                        class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
-                                        Back
+                                    <!-- Close Button - Upper Right Corner -->
+                                    <button type="button"
+                                        class="absolute top-4 right-4 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-2 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        data-modal-toggle="AddUniversityFeeModal">
+                                        <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
                                     </button>
-                                    <button type="submit"
+                                        <div class="flex flex-row justify-between">
+                                            <!-- Left Section - Fee Details -->
+                                            <div class="mt-8 basis-1/2 pr-4">
+                                                <h3 class="text-2xl font-semibold mb-4">Fee Details</h3>
+                                                <div action="#" class="grid gap-6">
+                                                    <div class="mb-4">
+                                                        <label for="name"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
+                                                        <input type="text" wire:model.defer="fee.code" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
+                                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="Ex. University fee&ldquo;">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="name"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                                        <input type="text" wire:model.defer="fee.name" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
+                                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="Ex. University fee&ldquo;">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="amount"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount</label>
+                                                        <input type="number" wire:model.defer="fee.amount" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
+                                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="P300">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Right Section - Fee Scheduling -->
+                                            <div class="mt-8 basis-1/2 pl-4">
+                                                <h3 class="text-2xl font-semibold mb-4">Fee Scheduling</h3>
+                                                <div class="grid gap-6">
+                                                    <div class="mb-2">
+                                                        <label for="academic-year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Academic
+                                                            Year {{$term->year_start.' - '.$term->year_end}}</label>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <label for="semester"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester</label>
+                                                        <select id="semester" wire:model.defer="fee.semester_id" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                            <option selected="">Select Semester</option>
+                                                            @foreach($semesters as $key =>$value)
+                                                                <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Save Fees Button - Bottom Section -->
+                                        <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
+                                            <button data-modal-toggle="AddUniversityFeeModal"
+                                            class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                            Back
+                                        </button>
+                                        <button type="submit"
                                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
-                                        Save Fees
+                                        Add Fee
                                     </button>
                                 </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div wire:ignore.self id="EditUniversityFeeModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
+                        <div class="relative w-8/12 max-w-6xl p-8 max-h-screen flex flex-col">
+                            <!-- Modal content -->
+                            <form action="#" wire:submit.prevent="saveEditFees({{$fee['id']}},'EditUniversityFeeModal')">
+                                <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Add University Fees
+                                        </h3>
+                                    </div>
+                                    <!-- Close Button - Upper Right Corner -->
+                                    <button type="button"
+                                        class="absolute top-4 right-4 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-2 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        data-modal-toggle="EditUniversityFeeModal">
+                                        <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                        <div class="flex flex-row justify-between">
+                                            <!-- Left Section - Fee Details -->
+                                            <div class="mt-8 basis-1/2 pr-4">
+                                                <h3 class="text-2xl font-semibold mb-4">Fee Details</h3>
+                                                <div action="#" class="grid gap-6">
+                                                    <div class="mb-4">
+                                                        <label for="name"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
+                                                        <input type="text" wire:model.defer="fee.code" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
+                                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="Ex. University fee&ldquo;">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="name"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                                                        <input type="text" wire:model.defer="fee.name" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
+                                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="Ex. University fee&ldquo;">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label for="amount"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount</label>
+                                                        <input type="number" wire:model.defer="fee.amount" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                    focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
+                                                    dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                            placeholder="P300">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Right Section - Fee Scheduling -->
+                                            <div class="mt-8 basis-1/2 pl-4">
+                                                <h3 class="text-2xl font-semibold mb-4">Fee Scheduling</h3>
+                                                <div class="grid gap-6">
+                                                    <div class="mb-2">
+                                                        <label for="academic-year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                            Academic
+                                                            Year {{$term->year_start.' - '.$term->year_end}}</label>
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <label for="semester"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester</label>
+                                                        <select id="semester" wire:model.defer="fee.semester_id" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                            <option selected="">Select Semester</option>
+                                                            @foreach($semesters as $key =>$value)
+                                                                @if($fee['semester_id'] == $value->id)
+                                                                    <option selected value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                                                @else
+                                                                    <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Save Fees Button - Bottom Section -->
+                                        <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
+                                            <button data-modal-toggle="EditUniversityFeeModal"
+                                            class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                            Back
+                                        </button>
+                                        <button type="submit"
+                                        class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
+                                        Save Fee
+                                    </button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div wire:ignore.self id="DeleteUniversityFeeModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
+                        <div class="relative w-8/12 max-w-6xl p-8 max-h-screen flex flex-col">
+                            <!-- Modal content -->
+                            <form action="#" wire:submit.prevent="saveDeleteFees({{$fee['id']}},'DeleteUniversityFeeModal')">
+                                <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Add University Fees
+                                        </h3>
+                                    </div>
+                                    <!-- Close Button - Upper Right Corner -->
+                                    <button type="button"
+                                        class="absolute top-4 right-4 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-2 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        data-modal-toggle="DeleteUniversityFeeModal">
+                                        <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                        <p> Are you sure you want to delete this Fee?</p>
+                                        <!-- Save Fees Button - Bottom Section -->
+                                        <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
+                                            <button data-modal-toggle="DeleteUniversityFeeModal"
+                                            class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                            Back
+                                        </button>
+                                        <button type="submit"
+                                        class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
+                                        Delete Fee
+                                    </button>
+                                </div>
+                            </form>
                             </div>
                         </div>
                     </div>
@@ -183,154 +309,69 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-4 py-3">ID</th>
-                                    <th scope="col" class="px-4 py-3">Fees Name</th>
+                                    <th scope="col" class="px-4 py-3">Fee Type</th>
+                                    <th scope="col" class="px-4 py-3">Fee Code</th>
+                                    <th scope="col" class="px-4 py-3">Fee Name</th>
                                     <th scope="col" class="px-4 py-3">Semester</th>
                                     <th scope="col" class="px-4 py-3">Amount</th>
+                                    <th scope="col" class="px-4 py-3">Academic Year</th>
+                                    <th scope="col" class="px-4 py-3">Semester</th>
                                     <th scope="col" class="px-4 py-3">Start Date</th>
                                     <th scope="col" class="px-4 py-3">End Date</th>
-                                    <th scope="col" class="px-4 py-3">Academic Year</th>
                                     <th scope="col" class="px-4 py-3">Created By</th>
                                     <th scope="col" class="text-center px-4 py-3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-b dark:border-gray-700">
-                                    <th scope="row"
-                                        class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">1</th>
-                                    <td class="px-4 py-3">University Fee</td>
-                                    <td class="px-4 py-3">1st Semester</td>
-                                    <td class="px-4 py-3">150</td>
-                                    <td class="px-4 py-3">April 1, 2023</td>
-                                    <td class="px-4 py-3">April 30, 2023</td>
-                                    <td class="px-4 py-3">2022-2023</td>
-                                    <td class="px-4 py-3">Jackson</td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="flex justify-center items-center space-x-4">
-                                            <button type="button"
-                                                class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
-                                                    viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path
-                                                        d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                    <path fill-rule="evenodd"
-                                                        d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                Edit
-                                            </button>
-                                            <button type="button"
-                                                class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
-                                                    viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd"
-                                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="border-b dark:border-gray-700">
-                                    <th scope="row"
-                                        class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">2
-                                    </th>
-                                    <td class="px-4 py-3">CSB Fee</td>
-                                    <td class="px-4 py-3">2nd Semester</td>
-                                    <td class="px-4 py-3">250</td>
-                                    <td class="px-4 py-3">May 1, 2023</td>
-                                    <td class="px-4 py-3">May 30, 2023</td>
-                                    <td class="px-4 py-3">2022-2023</td>
-                                    <td class="px-4 py-3">Thomas</td>
-                                    <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div class="flex justify-center items-center space-x-4">
-                                            <button type="button"
-                                                class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
-                                                    viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path
-                                                        d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                    <path fill-rule="evenodd"
-                                                        d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                Edit
-                                            </button>
-                                            <button type="button"
-                                                class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
-                                                    viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd"
-                                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                        clip-rule="evenodd" />
-                                                </svg>
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @foreach($university_fees_data as $key =>$value)
+                                    <tr class="border-b dark:border-gray-700">
+                                        <th scope="row"
+                                            class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">1</th>
+                                        <td class="px-4 py-3">University Fee</td>
+                                        <td class="px-4 py-3">{{$value->code}}</td>
+                                        <td class="px-4 py-3">{{$value->name}}</td>
+                                        <td class="px-4 py-3">{{$value->semester}}</td>
+                                        <td class="px-4 py-3">{{$value->amount}}</td>
+                                        <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
+                                        <td class="px-4 py-3">{{$value->semester}}</td>
+                                        <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date}}</td>
+                                        <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
+                                        <td class="px-4 py-3">{{$value->first_name.' '.$value->middle_name.' '.$value->last_name}}</td>
+                                        <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            <div class="flex justify-center items-center space-x-4">
+                                                <button type="button" wire:click="editFees({{$value->id}},'EditFeeToggle')"
+                                                    class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
+                                                        viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path
+                                                            d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                        <path fill-rule="evenodd"
+                                                            d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    Edit
+                                                </button>
+                                                <button type="button"  wire:click="editFees({{$value->id}},'DeleteFeeToggle')"
+                                                    class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
+                                                        viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd"
+                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                            clip-rule="evenodd" />
+                                                    </svg>
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                     <!--End Table-->
-                    <!--Table Pagination-->
-                    <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-                        aria-label="Table navigation">
-                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            Showing
-                            <span class="font-semibold text-gray-900 dark:text-white">1-10</span>
-                            of
-                            <span class="font-semibold text-gray-900 dark:text-white">1000</span>
-                        </span>
-                        <ul class="inline-flex items-stretch -space-x-px">
-                            <li>
-                                <a href="#"
-                                    class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    <span class="sr-only">Previous</span>
-                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-                            </li>
-                            <li>
-                                <a href="#" aria-current="page"
-                                    class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-red-600 bg-red-50 border border-red-300 hover:bg-red-100 hover:text-red-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    <span class="sr-only">Next</span>
-                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <!--End Table Pagination-->
                 </div>
+                <div class="row my-2"></div>
+                {{ $university_fees_data->links() }}
             </div>
         </section>
     </main>

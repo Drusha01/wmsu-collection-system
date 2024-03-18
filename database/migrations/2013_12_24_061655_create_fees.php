@@ -14,13 +14,13 @@ return new class extends Migration
         DB::statement('CREATE TABLE fees(
             id INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(255) NOT NULL ,
-            code VARCHAR(100) UNIQUE,
+            code VARCHAR(100),
             fee_type_id INT,
             amount DOUBLE NOT NULL,
             school_year_id INT NOT NULL,
             semester_id INT NOT NULL,
-            start_date DATETIME NOT NULL,
-            end_date DATETIME NOT NULL,
+            is_active BOOL DEFAULT 1,
+            created_by INT,
 
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
