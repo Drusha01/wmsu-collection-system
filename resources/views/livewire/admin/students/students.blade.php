@@ -46,9 +46,9 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                    <input type="text" id="simple-search"
+                                    <input type="text" id="simple-search" wire:model.live="student_id_search"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        placeholder="Search" required="">
+                                        placeholder="Search student code" required="">
                                 </div>
                             </form>
                         </div>
@@ -465,7 +465,7 @@
                                             <div class="col-span-6">
                                                 <label for="email"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Muslim?</label>
-                                                <input type="checkbox" wire:model.defer="student.is_muslim" 
+                                                <input type="checkbox" wire:key="is_muslim-view{{$value->id}}" @if($student['is_muslim'] == 1) checked @endif
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -613,7 +613,7 @@
                                             <div class="col-span-6">
                                                 <label for="email"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Muslim?</label>
-                                                <input type="checkbox" wire:model.defer="student.is_muslim" checked
+                                                <input type="checkbox" wire:key="is_muslim{{$value->id}}" wire:model.defer="student.is_muslim" 
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"

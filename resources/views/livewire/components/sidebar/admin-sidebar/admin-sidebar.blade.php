@@ -87,6 +87,15 @@
                 </li>
                 <!-- Admin Students -->
                 <li>
+                    <a  href="{{route('admin-students')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group 
+                        {{ Route::is('admin-students')  ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
+                        <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.333 6.764a3 3 0 1 1 3.141-5.023M2.5 16H1v-2a4 4 0 0 1 4-4m7.379-8.121a3 3 0 1 1 2.976 5M15 10a4 4 0 0 1 4 4v2h-1.761M13 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-4 6h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z"/>
+                        </svg>
+                        <span class="ms-3">Students</span>
+                    </a>
+                </li>
+                <li>
                     <a  href="{{route('admin-enrolledstudents')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group 
                         {{ Route::is('admin-enrolledstudents')  ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
                         <svg width="28px" height="28px" viewBox="0 0 48.00 48.00" id="Layer_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" stroke="#000000" stroke-width="1.6799999999999997"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><style type="text/css"> .st0{fill:#010101;} </style><path class="st0" d="M8.04,41.5H32.7c0.276,0,0.5-0.224,0.5-0.5v-5.233l2.736,2.736c0.023,0.023,0.052,0.034,0.077,0.051 c0.019,0.025,0.029,0.056,0.053,0.079l0.64,0.64c0.417,0.417,0.969,0.646,1.554,0.646c0.592,0,1.146-0.229,1.563-0.646 c0.001-0.001,0.002-0.001,0.003-0.002c0.852-0.864,0.851-2.262-0.006-3.118l-0.646-0.637c-0.023-0.023-0.053-0.034-0.079-0.053 c-0.017-0.026-0.029-0.055-0.051-0.077L33.2,29.543V7c0-0.276-0.224-0.5-0.5-0.5H8.04c-0.276,0-0.5,0.224-0.5,0.5v34 C7.54,41.276,7.764,41.5,8.04,41.5z M26.74,27.239l-0.158,0.157l-1.006-2.367l2.367,1.012L26.74,27.239z M27.619,27.776l9.166,9.166 l-0.496,0.5l-3.235-3.235c0,0,0,0,0,0l-5.934-5.935L27.619,27.776z M39.114,38.568c-0.451,0.451-1.24,0.458-1.701-0.001 l-0.417-0.417l1.459-1.467l0.237-0.237l0.424,0.418C39.582,37.329,39.581,38.094,39.114,38.568z M37.49,36.233l-9.163-9.163 l0.493-0.493l3.526,3.526c0,0,0.001,0.001,0.001,0.001l5.636,5.636L37.49,36.233z M8.54,7.5H32.2v21.043l-3.026-3.026 c-0.04-0.04-0.088-0.067-0.136-0.09c-0.008-0.004-0.013-0.013-0.021-0.016l-4.19-1.79c-0.003-0.001-0.005,0-0.008-0.001 c-0.086-0.071-0.193-0.119-0.313-0.119H13.036c-0.276,0-0.5,0.224-0.5,0.5s0.224,0.5,0.5,0.5h11.229l1.683,3.961c0,0,0,0,0,0.001 l0.002,0.004c0.002,0.005,0.007,0.007,0.009,0.011c0.025,0.054,0.056,0.104,0.098,0.147l6.144,6.144V40.5H8.54V7.5z"></path>
@@ -95,15 +104,6 @@
                          </svg>
        
                         <span class="ms-3">Enrolled Students</span>
-                    </a>
-                </li>
-                <li>
-                    <a  href="{{route('admin-students')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group 
-                        {{ Route::is('admin-students')  ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
-                        <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.333 6.764a3 3 0 1 1 3.141-5.023M2.5 16H1v-2a4 4 0 0 1 4-4m7.379-8.121a3 3 0 1 1 2.976 5M15 10a4 4 0 0 1 4 4v2h-1.761M13 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-4 6h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z"/>
-                        </svg>
-                        <span class="ms-3">Students</span>
                     </a>
                 </li>
                 <!-- Admin Colleges -->
@@ -249,6 +249,15 @@
                              </svg>
 
                             <span class="ms-3">Remit Records</span>
+                        </a>
+                    </li>
+                    <li>
+                    <a  href="{{route('csc-students')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group 
+                            {{ Route::is('csc-students')  ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
+                            <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.333 6.764a3 3 0 1 1 3.141-5.023M2.5 16H1v-2a4 4 0 0 1 4-4m7.379-8.121a3 3 0 1 1 2.976 5M15 10a4 4 0 0 1 4 4v2h-1.761M13 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-4 6h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z"/>
+                            </svg>
+                            <span class="ms-3">Students</span>
                         </a>
                     </li>
                     <li>
