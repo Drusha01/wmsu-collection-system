@@ -16,6 +16,7 @@ return new class extends Migration
             student_id INT,
             school_year_id INT NOT NULL,
             semester_id INT NOT NULL,
+            college_id INT,
             department_id INT ,
             year_level_id INT ,
             

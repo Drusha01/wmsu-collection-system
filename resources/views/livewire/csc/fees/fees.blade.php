@@ -25,8 +25,8 @@
                                             stroke-width="2" d="m1 9 4-4-4-4" />
                                     </svg>
                                     <span
-                                        class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">University
-                                        Fee</span>
+                                        class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                                        Local Fee</span>
                                 </div>
                             </li>
                         </ol>
@@ -78,7 +78,7 @@
                                 <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Add University Fees
+                                            Add Local Fees
                                         </h3>
                                     </div>
                                     <!-- Close Button - Upper Right Corner -->
@@ -124,6 +124,17 @@
                                                     focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                     dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                             placeholder="P300">
+                                                    </div>
+                                                    <div class="mb-2">
+                                                        <label for="semester"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
+                                                        <select id="semester" wire:model.defer="fee.department_id" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                            <option selected="">Select Course</option>
+                                                            @foreach($departments as $key =>$value)
+                                                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -172,7 +183,7 @@
                                 <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Add University Fees
+                                            Add Local Fees
                                         </h3>
                                     </div>
                                     <!-- Close Button - Upper Right Corner -->
@@ -218,6 +229,22 @@
                                                     focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                     dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                             placeholder="P300">
+                                                    </div>
+
+                                                    <div class="mb-2">
+                                                        <label for="semester"
+                                                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department</label>
+                                                        <select id="semester" wire:model.defer="fee.department_id" required
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                            <option value="0">Select Course</option>
+                                                            @foreach($departments as $key =>$value)
+                                                                @if($fee['department_id'] == $value->id)
+                                                                    <option selected value="{{$value->id}}">{{$value->name}}</option>
+                                                                @else 
+                                                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -270,7 +297,7 @@
                                 <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Add University Fees
+                                            Edit Local Fees
                                         </h3>
                                     </div>
                                     <!-- Close Button - Upper Right Corner -->
@@ -316,8 +343,8 @@
                                     <th scope="col" class="px-4 py-3">Amount</th>
                                     <th scope="col" class="px-4 py-3">Academic Year</th>
                                     <th scope="col" class="px-4 py-3">Semester</th>
-                                    <th scope="col" class="px-4 py-3">Start Date</th>
-                                    <th scope="col" class="px-4 py-3">End Date</th>
+                                    <th scope="col" class="px-4 py-3">Department</th>
+                                    <th scope="col" class="px-4 py-3">Duration</th>
                                     <th scope="col" class="px-4 py-3">Created By</th>
                                     <th scope="col" class="text-center px-4 py-3">Actions</th>
                                 </tr>
@@ -334,8 +361,8 @@
                                         <td class="px-4 py-3">{{$value->amount}}</td>
                                         <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
                                         <td class="px-4 py-3">{{$value->semester}}</td>
-                                        <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date}}</td>
-                                        <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
+                                        <td class="px-4 py-3">{{$value->department_name}}</td>
+                                        <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
                                         <td class="px-4 py-3">{{$value->first_name.' '.$value->middle_name.' '.$value->last_name}}</td>
                                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class="flex justify-center items-center space-x-4">

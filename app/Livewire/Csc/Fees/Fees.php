@@ -23,6 +23,7 @@ class Fees extends Component
         'school_year_id' => NULL,
         'semester_id' => NULL,
         'created_by' => NULL,
+        'department_id' => NULL,
     ];
     public $months = [
         0=>['month_name'=> 'January','month_number'=>1,'max_date'=>31],
@@ -39,6 +40,7 @@ class Fees extends Component
         11=>['month_name'=> 'December','month_number'=>12,'max_date'=>31],
 
     ];
+    public $departments;
     public $semesters = [];
     public function boot(Request $request ){
 
@@ -75,6 +77,10 @@ class Fees extends Component
             ->where('id','=',$this->user_details->school_year_id)
             ->get()
             ->first();
+        $this->departments = DB::table('departments')
+            ->where('college_id','=',$this->user_details->college_id)
+            ->get()
+            ->toArray();
         $local_fees_data = DB::table('fees as f')
             ->select(
                 'f.id',
@@ -93,11 +99,13 @@ class Fees extends Component
                 'u.last_name',
                 'u.middle_name',
                 'u.id as user_id',
+                'd.name as department_name'
             )
             ->join('fee_types as ft','ft.id','f.fee_type_id')
             ->join('users as u','u.id','f.created_by')
             ->join('school_years as sy','sy.id','f.school_year_id')
             ->join('semesters as s','s.id','f.semester_id')
+            ->leftjoin('departments as d','d.id','f.department_id')
             ->where('f.school_year_id','=',$this->user_details->school_year_id)
             ->where('f.fee_type_id','=',$fee_type->id)
             ->paginate(10);
@@ -123,6 +131,7 @@ class Fees extends Component
             'school_year_id' => $this->user_details->school_year_id,
             'semester_id' => NULL,
             'created_by' => NULL,
+            'department_id' => NULL,
         ];
         $this->dispatch('openModal',$modal_id);
     }
@@ -182,6 +191,7 @@ class Fees extends Component
             'school_year_id' => $this->fee['school_year_id'],
             'semester_id' => $this->fee['semester_id'],
             'created_by' => $this->user_details->id,
+            'department_id' => $this->fee['department_id'],
         ])){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
@@ -225,6 +235,7 @@ class Fees extends Component
             'school_year_id' => $this->user_details->school_year_id,
             'semester_id' => $fee->semester_id,
             'created_by' => $fee->created_by,
+            'department_id' => $fee->department_id,
         ];
         $this->dispatch('openModal',$modal_id);
         return;
@@ -288,6 +299,7 @@ class Fees extends Component
             'code' => $this->fee['code'],
             'amount' => $this->fee['amount'],
             'semester_id' => $this->fee['semester_id'],
+            'department_id' => $this->fee['department_id']
         ])){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
@@ -305,6 +317,7 @@ class Fees extends Component
                 'amount' => NULL,
                 'school_year_id' => NULL,
                 'semester_id' => NULL,
+                'department_id' => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
             return;
@@ -335,6 +348,7 @@ class Fees extends Component
                 'amount' => NULL,
                 'school_year_id' => NULL,
                 'semester_id' => NULL,
+                'department_id' => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
             return;
