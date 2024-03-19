@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 
-class Payments extends Component
+class StudentPayments extends Component
 {
     use WithPagination;
-    public $title = "Payments";
+    public $title = "Student Payments";
     public $filters = [
         'department_id'=>NULL,
         'semester_id' => NULL,
@@ -79,54 +79,7 @@ class Payments extends Component
         $this->year_levels = DB::table('year_levels')
             ->get()
             ->toArray();
-
-            $enrolled_students_data = DB::table('students as s')
-            ->select(
-                "s.id",
-                "s.student_code",
-                "s.first_name",
-                "s.middle_name",
-                "s.last_name",
-                "s.email",
-            )
-            ->rightjoin('enrolled_students as es','es.student_id','s.id')
-            ->groupBy('s.id')
-            ->paginate(10);
-        // $enrolled_students_data = DB::table('enrolled_students as es')
-        //     ->select(
-        //         "s.student_code",
-        //         "s.first_name",
-        //         "s.middle_name",
-        //         "s.last_name",
-        //         "s.email",
-        //         "es.college_id",
-        //         "es.department_id",
-        //         "c.code as college_code",
-        //         "c.name as college_name",
-        //         "d.name as department_name",
-        //         "d.code as department_code",
-        //         's.is_muslim',
-        //         's.is_active',
-        //         'sm.semester',
-        //         'sy.year_start',
-        //         'sy.year_end',
-        //         'yl.year_level'
-        //     )
-        //     ->join('students as s','es.student_id','s.id')
-        //     ->join('colleges as c','es.college_id','c.id')
-        //     ->join('departments as d','es.department_id','d.id')
-        //     ->join('semesters as sm','es.semester_id','sm.id')
-        //     ->join('school_years as sy','es.school_year_id','sy.id')
-        //     ->join('year_levels as yl','es.year_level_id','yl.id')
-        //     ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
-        //     ->where('es.department_id','like',$this->filters['department_id'].'%')
-        //     ->where('es.semester_id','like',$this->filters['semester_id'].'%')
-        //     ->where('s.student_code','like',$this->student_id_search.'%')
-        //     ->groupBy('es.student_id')
-        //     ->paginate(10);
-        return view('livewire.csc.payments.payments',[
-            'enrolled_students_data'=>$enrolled_students_data
-        ])
+        return view('livewire.csc.payments.student-payments')
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
     }

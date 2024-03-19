@@ -53,6 +53,7 @@ use App\Livewire\Csc\Paymentrecords\Paymentrecords as CscPaymentrecords;
 use App\Livewire\Csc\Payments\Payments as CscPayments;
 use App\Livewire\Csc\Remitrecords\Remitrecords as CscRemitrecords;
 use App\Livewire\Csc\Remittance\Remittance as CscRemittance;
+use App\Livewire\Csc\Payments\StudentPayments as CscStudentPayments;
 
 
 use App\Livewire\Csc\Dashboard\Dashboard;
@@ -117,6 +118,7 @@ Route::middleware([AccountisValid::class,isCsc::class,isCollector::class,checkTe
     Route::prefix('csc')->group(function () {
         Route::get('/dashboard', CscDashboard::class)->name('csc-dashboard');
         Route::get('/payments', CscPayments::class)->name('csc-payments');
+        Route::get('/payments/{id}', CscStudentPayments::class)->name('csc-student-payments');
         Route::get('/paymentrecords', CscPaymentRecords::class)->name('csc-paymentrecords');
         Route::get('/remittance', CscRemitRecords::class)->name('csc-remittance');
         Route::get('/remitrecords', CscRemitRecords::class)->name('csc-remitrecords');

@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown"
+                            <!-- <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown"
                                 class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 type="button">
                                 <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
@@ -69,10 +69,10 @@
                                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                                 </svg>
                             </button>
-                    
+                     -->
                             <button style="display:none" id="activateEnrolledStudentModalToggler" data-modal-target="activateEnrolledStudentModal" data-modal-toggle="activateEnrolledStudentModal">asdf</button>
                             <button style="display:none" id="deleteEnrolledStudentModalToggler" data-modal-target="deleteEnrolledStudentModal" data-modal-toggle="deleteEnrolledStudentModal">asdf</button>
-                            <button style="display:none" id="viewEnrolledStudentModalToggler" data-modal-target="viewEnrolledStudentModal" data-modal-toggle="viewSEnrolledtudentModal">asdf</button>
+                            <button style="display:none" id="viewEnrolledStudentModalToggler" data-modal-target="viewEnrolledStudentModal" data-modal-toggle="viewEnrolledStudentModal">asdf</button>
                             <button style="display:none" id="editEnrolledStudentModalToggler" data-modal-target="editEnrolledStudentModal" data-modal-toggle="editEnrolledStudentModal">asdf</button>
                             <button style="display:none" id="addEnrolledStudentModalToggler" data-modal-target="addEnrolledStudentModal" data-modal-toggle="addEnrolledStudentModal">asdf</button>
                             <div
@@ -106,124 +106,33 @@
                     </div>
                     <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
                         <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <button id="filterDropdownButton3" data-dropdown-toggle="filterDropdown3"
-                                class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                                type="button">
-                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                    class="h-4 w-4 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                College Filter
-                                <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path clip-rule="evenodd" fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                </svg>
-                            </button>
-                            <div id="filterDropdown3"
-                                class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                                <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
-                                    <li class="flex items-center">
-                                        <input id="ascend" type="radio" value="ascending" name="college"
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="ascend"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Ascending</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="descend" type="radio" value="descending" name="college"
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="descend"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Descending</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>    
-
-                        <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown"
-                                class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                                type="button">
-                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                    class="h-4 w-4 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                                        clip-rule="evenodd" />
-                                </svg>                            
-                                Department Filter
-                                <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path clip-rule="evenodd" fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                </svg>
-                            </button>
-                            
-                            <div id="filterDropdown"
-                                class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                                <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Departments</h6>
-                                <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
-                                    <li class="flex items-center">
-                                        <input id="CS" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="CS"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Computer Science</label>
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="IT" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="IT"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">Information Technology</label>
-
-                                    </li>
-                                </ul>
-                            </div>
+                            <select id="course" name="course" wire:model.live="filters.year_level_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="" >Filter Year</option>
+                                @foreach($year_levels as $key =>$value)
+                                        <option value="{{$value->id}}">{{$value->year_level}}</option>
+                                @endforeach
+                            </select>
                         </div>    
                         <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <button id="filterDropdownButton" data-dropdown-toggle="filterDropdown2" data-dropdown-target="filterDropdownButton2"
-                                class="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                                type="button">
-                                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-                                    class="h-4 w-4 mr-2 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                Course Filter
-                                <svg class="-mr-1 ml-1.5 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                    <path clip-rule="evenodd" fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                </svg>
-                            </button>
-                            <div id="filterDropdown2"
-                                class="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
-                                <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Courses</h6>
-                                <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton2">
-                                    <li class="flex items-center">
-                                        <input id="BSCS" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="BSCS"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">BSCS</label>
-
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="BSIT" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="BSIT"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">BSIT</label>
-
-                                    </li>
-                                    <li class="flex items-center">
-                                        <input id="ACT" type="checkbox" value=""
-                                            class="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                        <label for="ACT"
-                                            class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">ACT</label>
-
-                                    </li>
-                                </ul>
-                            </div>
+                            <select id="course" name="course" wire:model.live="filters.department_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="" >Filter course</option>
+                                @foreach ( $department_data as $department)
+                                    <option value="{{ $department->id }}">{{ $department->code }}</option>
+                                @endforeach
+                            </select>
                         </div>    
+                        <div class="flex items-center space-x-3 w-full md:w-auto">
+                            <select id="course" name="course" wire:model.live="filters.semester_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="" >Select semester</option>
+                                @foreach($semesters as $key =>$value)
+                                        <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                @endforeach
+                            </select>
+                        </div>    
+
                     </div>
                     <!--End Table Header -->
                     <!--Table-->
@@ -237,6 +146,7 @@
                                     <th scope="col" class="px-4 py-3">Course</th>
                                     <th scope="col" class="px-4 py-3">S.Y.</th>
                                     <th scope="col" class="px-4 py-3">Semester</th>
+                                    <th scope="col" class="px-4 py-3">Yr. Level</th>
                                     <th scope="col" class="px-4 py-3 text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -249,9 +159,20 @@
                                         <td class="px-4 py-3">{{ $value->department_code}}</td>
                                         <td class="px-4 py-3">{{ $value->year_start.' - '.$value->year_end}}</td>
                                         <td class="px-4 py-3">{{ $value->semester}}</td>
+                                        <td class="px-4 py-3">{{ $value->year_level}}</td>
                                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class="flex justify-center items-center space-x-4">
-                                                <button type="button" wire:click="editStudent({{$value->id}},'viewEnrolledStudentModalToggler')"
+                                                <a href="/csc/payments/{{$value->student_id}}">
+                                                    <button type="button" 
+                                                    class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none
+                                                     focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                                     <svg class="w-4 h-4 mx-1 mr-3 text-white-800 dark:dark-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1M2 5h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+                                                    </svg>
+                                                    Payment
+                                                </button>
+                                            </a>
+                                                <button type="button" wire:click="editEnrolledStudents({{$value->id}},'viewEnrolledStudentModalToggler')"
                                                     class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24"
                                                         fill="currentColor" class="w-4 h-4 mr-2 -ml-0.5">
@@ -261,7 +182,7 @@
                                                     </svg>
                                                     Preview
                                                 </button>
-                                                <button type="button" wire:click="editStudent({{$value->id}},'editEnrolledStudentModalToggler')"
+                                                <button type="button" wire:click="editEnrolledStudents({{$value->id}},'editEnrolledStudentModalToggler')"
                                                     class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none
                                                      focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
@@ -274,7 +195,7 @@
                                                     </svg>
                                                     Edit
                                                 </button>
-                                                <button type="button" wire:click="editStudent({{$value->id}},'deleteEnrolledStudentModalToggler')"
+                                                <button type="button" wire:click="editEnrolledStudents({{$value->id}},'deleteEnrolledStudentModalToggler')"
                                                     class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
                                                         viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -298,7 +219,7 @@
                                     <!-- Modal header -->
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Add Student
+                                            Add Enrolled Student
                                         </h3>
                                         <button type="button"
                                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -398,6 +319,246 @@
                                             <button type="submit"
                                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
                                                 Add
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div wire:ignore.self id="editEnrolledStudentModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100% - 1rem)] max-h-full">
+                            <div class="relative p-4 w-full max-w-3xl max-h-full">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <!-- Modal header -->
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Edit Enrolled Student
+                                        </h3>
+                                        <button type="button"
+                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                            data-modal-toggle="editEnrolledStudentModal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <form class="p-7 md:p-5" wire:submit.prevent="saveEditEnrolledStudent({{$enrolledStudent['id']}},'editEnrolledStudentModal')">
+                                        @csrf
+                                        <div class="grid gap-4 mb-12 grid-cols-2">
+                                            <div class="col-span-6">
+                                                <label for="snumber"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student ID</label>
+                                                <input type="text" wire:model.defer="enrolledStudent.student_code" wire:change="updateStudentName()"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
+                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    placeholder="Student ID" required="" value="{{ old('snumber') }}">
+                                                @error('snumber')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                                <label for="snumber" class="block  mt-2 my-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                    Name: {{$enrolledStudent['student_name']}}
+                                                </label>
+                                            </div>
+
+
+                                            <div class="col-span-6">
+                                                <label for="course"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year Level</label>
+                                                <select id="course" name="course" wire:model.defer="enrolledStudent.year_level_id"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected >Select Year Level</option>
+                                                    @foreach ( $year_levels as $key =>$value )
+                                                        @if($enrolledStudent['year_level_id'] == $value->id)
+                                                            <option selected value="{{ $value->id }}">{{ $value->year_level }}</option>
+                                                        @else 
+                                                            <option value="{{ $value->id }}">{{ $value->year_level }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @error('course')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                            <div class="col-span-6">
+                                                <label for="course"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester</label>
+                                                <select id="course" name="course" wire:model.defer="enrolledStudent.semester_id"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected >Select semester</option>
+                                                    @foreach($semesters as $key =>$value)
+                                                        @if($enrolledStudent['semester_id'] == $value->id)
+                                                            <option selected value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                                        @else
+                                                            <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @error('course')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-span-6">
+                                                <label for="college"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College</label>
+                                                <select id="college" required wire:model="enrolledStudent.college_id" wire:change="updateDepartments()" name="college"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    @foreach ( $colleges_data as $college)
+                                                        <option selected value="{{ $college->id }}">{{ $college->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('college')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-span-6">
+                                                <label for="course"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Course</label>
+                                                <select id="course" name="course" wire:model.defer="enrolledStudent.department_id"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected >Select your course</option>
+                                                    @foreach ( $department_data as $department)
+                                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('course')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
+                                            <button type="button" data-modal-toggle="editEnrolledStudentModal"
+                                                class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                                Back
+                                            </button>
+                                            <button type="submit"
+                                                class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div wire:ignore.self id="viewEnrolledStudentModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100% - 1rem)] max-h-full">
+                            <div class="relative p-4 w-full max-w-3xl max-h-full">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <!-- Modal header -->
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            View Enrolled Student
+                                        </h3>
+                                        <button type="button"
+                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                            data-modal-toggle="viewEnrolledStudentModal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <form class="p-7 md:p-5">
+                                        @csrf
+                                        <div class="grid gap-4 mb-12 grid-cols-2">
+                                            <div class="col-span-6">
+                                                <label for="snumber"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student ID</label>
+                                                <input type="text" wire:model.defer="enrolledStudent.student_code" wire:change="updateStudentName()"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
+                                                dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    placeholder="Student ID" required="" value="{{ old('snumber') }}">
+                                                @error('snumber')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                                <label for="snumber" class="block  mt-2 my-2 text-sm font-medium text-gray-900 dark:text-white">
+                                                    Name: {{$enrolledStudent['student_name']}}
+                                                </label>
+                                            </div>
+
+
+                                            <div class="col-span-6">
+                                                <label for="course"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year Level</label>
+                                                <select disabled id="course" name="course" wire:model.defer="enrolledStudent.year_level_id"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected >Select Year Level</option>
+                                                    @foreach ( $year_levels as $key =>$value )
+                                                        @if($enrolledStudent['year_level_id'] == $value->id)
+                                                            <option selected value="{{ $value->id }}">{{ $value->year_level }}</option>
+                                                        @else 
+                                                            <option value="{{ $value->id }}">{{ $value->year_level }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @error('course')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                            <div class="col-span-6">
+                                                <label for="course"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester</label>
+                                                <select  disabled id="course" name="course" wire:model.defer="enrolledStudent.semester_id"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected >Select semester</option>
+                                                    @foreach($semesters as $key =>$value)
+                                                        @if($enrolledStudent['semester_id'] == $value->id)
+                                                            <option selected value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                                        @else
+                                                            <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                                @error('course')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-span-6">
+                                                <label for="college"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College</label>
+                                                <select disabled id="college" required wire:model="enrolledStudent.college_id" wire:change="updateDepartments()" name="college"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    @foreach ( $colleges_data as $college)
+                                                        <option selected value="{{ $college->id }}">{{ $college->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('college')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-span-6">
+                                                <label for="course"
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Course</label>
+                                                <select  disabled id="course" name="course" wire:model.defer="enrolledStudent.department_id"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                                    <option selected >Select your course</option>
+                                                    @foreach ( $department_data as $department)
+                                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('course')
+                                                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
+                                            <button type="button" data-modal-toggle="viewEnrolledStudentModal"
+                                                class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                                Back
                                             </button>
                                         </div>
                                     </form>
