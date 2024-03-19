@@ -215,7 +215,7 @@ class Enrolledstudents extends Component
             return ;
         }
         if(DB::table('enrolled_students')
-            ->where('id','=',$this->enrolledStudent['student_id'])
+            ->where('student_id','=',$this->enrolledStudent['student_id'])
             ->where('school_year_id','=',$this->enrolledStudent['school_year_id'])
             ->where('semester_id','=',$this->enrolledStudent['semester_id'])
             ->first()
