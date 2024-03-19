@@ -53,6 +53,21 @@
                   
                     <!--Table-->
                     <div class="overflow-x-auto">
+                        <div class="py-2 px-2 flex items-center justify-end  ">
+                        <button type="button" class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path d="M9 11H15M9 7H13M9 15H15M5 6.2V21L7.5 19L10 21L12 19L14 21L16.5 19L19 21V6.2C19 5.0799 19 4.51984 18.782 4.09202C18.5903 3.71569 18.2843 3.40973 17.908 3.21799C17.4802 3 16.9201 3 15.8 3H8.2C7.0799 3 6.51984 3 6.09202 3.21799C5.71569 3.40973 5.40973 3.71569 5.21799 4.09202C5 4.51984 5 5.0799 5 6.2Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </g>
+                            </svg>
+                            <span class="ml-2">Download Receipt</span>
+                        </button>
+                        <button type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-red-600 dark:focus:ring-offset-gray-800">
+                            Confirm
+                        </button>
+                        </div>
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -77,28 +92,38 @@
                                     </td>                            
                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="flex justify-center items-center space-x-4">
-                                            <button type="button" class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                    <g id="SVGRepo_iconCarrier">
-                                                        <path d="M9 11H15M9 7H13M9 15H15M5 6.2V21L7.5 19L10 21L12 19L14 21L16.5 19L19 21V6.2C19 5.0799 19 4.51984 18.782 4.09202C18.5903 3.71569 18.2843 3.40973 17.908 3.21799C17.4802 3 16.9201 3 15.8 3H8.2C7.0799 3 6.51984 3 6.09202 3.21799C5.71569 3.40973 5.40973 3.71569 5.21799 4.09202C5 4.51984 5 5.0799 5 6.2Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </g>
-                                                </svg>
-                                                <span class="ml-2">Download Receipt</span>
-                                            </button>
-                                            
-                                    
                                         </div>
                                     </td>
                                 </tr>
-                               
                             </tbody>
                         </table>
+
+                        <!-- Partial Payment Section -->
+                        <div class="mx-5 px-3 mb-5 mt-5">
+                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Partial Payment</h2>
+                            <div class="flex items-center space-x-4">
+                                <input type="number" placeholder="Enter Amount" class="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                <button type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-800">
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Void Payment Section -->
+                        <div class="mx-5 px-3 mb-5 mt-5">
+                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Void Payment</h2>
+                            <div class="flex items-center space-x-4">
+                                <input type="number" placeholder="Enter Fixed Amount" class="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                <button type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-red-600 dark:focus:ring-offset-gray-800">
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
                     </div>
+                    
                 </div>
-                <div class="row my-2"></div>
+                <div class="row my-2"></div>     
             </div>
+            
         </section>
     </main>
 </div>
