@@ -53,7 +53,7 @@
                   
                     <!--Table-->
                     <div class="overflow-x-auto">
-                        <div class="py-2 px-2 flex items-center justify-end">
+                        <div class="py-2 px-2 flex items-center justify-end mr-24">
                         <button data-modal-target="receipt-modal" data-modal-toggle="receipt-modal" type="button" class=" mr-3 py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                             <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -142,22 +142,31 @@
                         <div class="p-4 md:p-5">
                             <div class="flex items-center justify-center p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    Upload Promisory Note
+                                  Promisory Note
                                 </h3>
                             </div>
-                            <label class="block mt-5 text-sm font-medium text-gray-900 dark:text-white" for="small_size"></label>
-                            <input class="block w-full mb-10 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
+                            <div>
+                            <br>
+                            <br>
+                            <span class="text-sm font-medium text-gray-600 dark:text-white">Please upload your promisory note:</span>
+                            <label class="block mt-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size"></label>
+                            <input class="block w-full mb-12 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
                              dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file">
                             <div class="flex justify-center">
                             <button data-modal-hide="confirm-modal" type="button" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                                 Yes, I'm sure
                             </button>
-                            <button data-modal-hide="confirm-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
-                        </div>
+                            <button data-modal-hide="confirm-modal" type="button"
+                             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none 
+                             bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700
+                              focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800
+                            dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
+         </div>
+    </div>
 
             {{-- Modal partial --}}
             <div id="confirm-modal-red" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
