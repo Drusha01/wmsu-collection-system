@@ -148,6 +148,10 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="flex items-center ps-4">
+                                                    <input wire:model.defer="fee.for_muslim" id="bordered-checkbox-2" type="checkbox" value="" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="bordered-checkbox-2" class="p-5  w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">For Muslim Student</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- Save Fees Button - Bottom Section -->
@@ -312,6 +316,7 @@
                                     <th scope="col" class="px-4 py-3">Fee Type</th>
                                     <th scope="col" class="px-4 py-3">Fee Code</th>
                                     <th scope="col" class="px-4 py-3">Fee Name</th>
+                                    <th scope="col" class="px-4 py-3">For Muslim?</th>
                                     <th scope="col" class="px-4 py-3">Semester</th>
                                     <th scope="col" class="px-4 py-3">Amount</th>
                                     <th scope="col" class="px-4 py-3">Academic Year</th>
@@ -325,11 +330,11 @@
                             <tbody>
                                 @foreach($university_fees_data as $key =>$value)
                                     <tr class="border-b dark:border-gray-700">
-                                        <th scope="row"
-                                            class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">1</th>
+                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($university_fees_data->currentPage()-1)*$university_fees_data->perPage()+$key+1 }}</th>
                                         <td class="px-4 py-3">University Fee</td>
                                         <td class="px-4 py-3">{{$value->code}}</td>
                                         <td class="px-4 py-3">{{$value->name}}</td>
+                                        <td class="px-4 py-3">@if($value->for_muslim) Yes @else No @endif</td>
                                         <td class="px-4 py-3">{{$value->semester}}</td>
                                         <td class="px-4 py-3">{{$value->amount}}</td>
                                         <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>

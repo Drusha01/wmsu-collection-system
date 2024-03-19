@@ -38,7 +38,7 @@
                     <!--End Breadcrumb -->
                     <!--Table Header -->
                     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-                        <div class="row p-4 text-base font-medium text-gray-700 uppercase"><h5>DAFSDFAS</h5></div>
+                        <div class="row p-4 text-base font-medium text-gray-700 uppercase"><h5>{{'('.$student['student_code'].') - '.$student['first_name'].' '.$student['middle_name'].' '.$student['last_name']}}</h5></div>
                         <div class="flex items-center space-x-3 w-full md:w-auto">
                             <select id="course" name="course" wire:model.live="filters.semester_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
@@ -56,17 +56,45 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-4 py-3">Student ID</th>
-                                    <th scope="col" class="px-4 py-3">Student Name</th>
-                                    <th scope="col" class="px-4 py-3 text-center">Actions</th>
+                                    <th scope="col" class="px-4 py-3">Fee Type</th>
+                                    <th scope="col" class="px-4 py-3">Fee Code</th>
+                                    <th scope="col" class="px-4 py-3">Fee Name</th>
+                                    <th scope="col" class="px-4 py-3">Amount</th>
+                                    <th scope="col" class="px-4 py-3">Status</th>
+                                    <th scope="col" class="text-center px-4 py-3">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>         
+                            <tbody>
+                                <tr class="border-b dark:border-gray-700">
+                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">2019-01392</th>
+                                    <td class="px-4 py-3">Angelito Sidestepper</td>
+                                    <td class="px-4 py-3">650</td>
+                                    <td class="px-4 py-3">2023-04-28 02:58:27</td>
+                                    <td class="px-4 py-3">USC644b1a3358b43</td>
+                                    <td class="px-4 py-3">Angelita the Officer</td>
+                                    <td class="px-4 py-3">
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">Paid</span>
+                                    </td>                            
+                                    <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        <div class="flex justify-center items-center space-x-4">
+                                            <button type="button" class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path d="M9 11H15M9 7H13M9 15H15M5 6.2V21L7.5 19L10 21L12 19L14 21L16.5 19L19 21V6.2C19 5.0799 19 4.51984 18.782 4.09202C18.5903 3.71569 18.2843 3.40973 17.908 3.21799C17.4802 3 16.9201 3 15.8 3H8.2C7.0799 3 6.51984 3 6.09202 3.21799C5.71569 3.40973 5.40973 3.71569 5.21799 4.09202C5 4.51984 5 5.0799 5 6.2Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </g>
+                                                </svg>
+                                                <span class="ml-2">Download Receipt</span>
+                                            </button>
+                                            
+                                    
+                                        </div>
+                                    </td>
+                                </tr>
                                
                             </tbody>
                         </table>
-
-                
                     </div>
                 </div>
                 <div class="row my-2"></div>

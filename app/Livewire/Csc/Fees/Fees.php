@@ -132,6 +132,7 @@ class Fees extends Component
             'semester_id' => NULL,
             'created_by' => NULL,
             'department_id' => NULL,
+            'college_id' => NULL,
         ];
         $this->dispatch('openModal',$modal_id);
     }
@@ -182,6 +183,9 @@ class Fees extends Component
             );
             return;
         }
+        if(!(intval($this->fee['department_id']))){
+            $this->fee['department_id'] = 0;
+        }
         if(DB::table('fees')
             ->insert([
             'name' => $this->fee['name'], 
@@ -192,6 +196,7 @@ class Fees extends Component
             'semester_id' => $this->fee['semester_id'],
             'created_by' => $this->user_details->id,
             'department_id' => $this->fee['department_id'],
+            'college_id' => $this->user_details->college_id,
         ])){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
@@ -209,6 +214,8 @@ class Fees extends Component
                 'amount' => NULL,
                 'school_year_id' => NULL,
                 'semester_id' => NULL,
+                'department_id' => NULL,
+                'college_id'  => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
             return;
@@ -236,6 +243,8 @@ class Fees extends Component
             'semester_id' => $fee->semester_id,
             'created_by' => $fee->created_by,
             'department_id' => $fee->department_id,
+            'college_id' => $fee->college_id,
+            
         ];
         $this->dispatch('openModal',$modal_id);
         return;
@@ -299,7 +308,7 @@ class Fees extends Component
             'code' => $this->fee['code'],
             'amount' => $this->fee['amount'],
             'semester_id' => $this->fee['semester_id'],
-            'department_id' => $this->fee['department_id']
+            'department_id' => $this->fee['department_id'],
         ])){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
@@ -318,6 +327,7 @@ class Fees extends Component
                 'school_year_id' => NULL,
                 'semester_id' => NULL,
                 'department_id' => NULL,
+                'college_id' => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
             return;
@@ -349,6 +359,7 @@ class Fees extends Component
                 'school_year_id' => NULL,
                 'semester_id' => NULL,
                 'department_id' => NULL,
+                'college_id' => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
             return;

@@ -21,7 +21,9 @@ return new class extends Migration
             semester_id INT NOT NULL,
             is_active BOOL DEFAULT 1,
             created_by INT,
+            college_id INT DEFAULT 0,
             department_id INT DEFAULT 0,
+            for_muslim BOOL DEFAULT 0,
 
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

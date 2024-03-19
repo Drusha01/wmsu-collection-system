@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        DB::statement('CREATE TABLE payments(
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            student_id INT,
+            fee_id INT,
+            amount DOUBLE NOT NULL,
+            created_by INT,
+            date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+            date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );');
     }
 
     /**

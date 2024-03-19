@@ -23,6 +23,7 @@ class Fees extends Component
         'school_year_id' => NULL,
         'semester_id' => NULL,
         'created_by' => NULL,
+        'for_muslim' => NULL,
     ];
     public $months = [
         0=>['month_name'=> 'January','month_number'=>1,'max_date'=>31],
@@ -93,6 +94,7 @@ class Fees extends Component
                 'u.last_name',
                 'u.middle_name',
                 'u.id as user_id',
+                'f.for_muslim'
             )
             ->join('fee_types as ft','ft.id','f.fee_type_id')
             ->join('users as u','u.id','f.created_by')
@@ -123,6 +125,7 @@ class Fees extends Component
             'school_year_id' => $this->user_details->school_year_id,
             'semester_id' => NULL,
             'created_by' => NULL,
+            'for_muslim' =>NULL,
         ];
         $this->dispatch('openModal',$modal_id);
     }
@@ -182,6 +185,7 @@ class Fees extends Component
             'school_year_id' => $this->fee['school_year_id'],
             'semester_id' => $this->fee['semester_id'],
             'created_by' => $this->user_details->id,
+            'for_muslim' => $this->fee['for_muslim'],
         ])){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
@@ -199,6 +203,7 @@ class Fees extends Component
                 'amount' => NULL,
                 'school_year_id' => NULL,
                 'semester_id' => NULL,
+                'for_muslim' => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
             return;
@@ -225,6 +230,7 @@ class Fees extends Component
             'school_year_id' => $this->user_details->school_year_id,
             'semester_id' => $fee->semester_id,
             'created_by' => $fee->created_by,
+            'for_muslim' => $fee->for_muslim,
         ];
         $this->dispatch('openModal',$modal_id);
         return;
@@ -305,6 +311,7 @@ class Fees extends Component
                 'amount' => NULL,
                 'school_year_id' => NULL,
                 'semester_id' => NULL,
+                'for_muslim' => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
             return;
@@ -335,6 +342,7 @@ class Fees extends Component
                 'amount' => NULL,
                 'school_year_id' => NULL,
                 'semester_id' => NULL,
+                'for_muslim' => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
             return;

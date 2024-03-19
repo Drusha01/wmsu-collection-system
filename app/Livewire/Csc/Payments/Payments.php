@@ -90,6 +90,7 @@ class Payments extends Component
                 "s.email",
             )
             ->rightjoin('enrolled_students as es','es.student_id','s.id')
+            ->where('es.college_id','=', $this->user_details->college_id)
             ->groupBy('s.id')
             ->paginate(10);
         // $enrolled_students_data = DB::table('enrolled_students as es')

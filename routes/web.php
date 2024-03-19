@@ -118,7 +118,7 @@ Route::middleware([AccountisValid::class,isCsc::class,isCollector::class,checkTe
     Route::prefix('csc')->group(function () {
         Route::get('/dashboard', CscDashboard::class)->name('csc-dashboard');
         Route::get('/payments', CscPayments::class)->name('csc-payments');
-        Route::get('/payments/{id}', CscStudentPayments::class)->name('csc-student-payments');
+        Route::get('/payments/{student_id}', CscStudentPayments::class)->name('csc-student-payments');
         Route::get('/paymentrecords', CscPaymentRecords::class)->name('csc-paymentrecords');
         Route::get('/remittance', CscRemitRecords::class)->name('csc-remittance');
         Route::get('/remitrecords', CscRemitRecords::class)->name('csc-remitrecords');
