@@ -269,7 +269,7 @@
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Year Level</label>
                                                 <select id="course" name="course" wire:model.defer="enrolledStudent.year_level_id"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option selected >Select Year Level</option>
+                                                    <option selected value='' >Select Year Level</option>
                                                     @foreach ( $year_levels as $key =>$value )
                                                         <option value="{{ $value->id }}">{{ $value->year_level }}</option>
                                                     @endforeach
@@ -283,7 +283,7 @@
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester</label>
                                                 <select id="course" name="course" wire:model.defer="enrolledStudent.semester_id"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option selected >Select semester</option>
+                                                    <option selected value='' >Select semester</option>
                                                     @foreach($semesters as $key =>$value)
                                                             <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
                                                     @endforeach
@@ -312,7 +312,7 @@
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Course</label>
                                                 <select id="course" name="course" wire:model.defer="enrolledStudent.department_id"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                    <option selected >Select your course</option>
+                                                    <option selected value='' >Select your course</option>
                                                     @foreach ( $department_data as $department)
                                                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                                                     @endforeach
