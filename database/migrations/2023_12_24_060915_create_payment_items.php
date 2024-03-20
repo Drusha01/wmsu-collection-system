@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE TABLE payments(
+        DB::statement('CREATE TABLE payment_items(
             id INT PRIMARY KEY AUTO_INCREMENT,
-            student_id INT,
-            semester_id INT, 
-            school_year_id INT,
+            payment_id INT,
+            fee_id INT ,
+            student_id INT, 
             amount DOUBLE NOT NULL,
             collected_by INT,
-            promisory_note VARCHAR(100) DEFAULT NULL,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('payment_items');
     }
 };
