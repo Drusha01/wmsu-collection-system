@@ -111,7 +111,7 @@
                             <div
                                 class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                                 <button wire:click="addStudent('addStudentModalToggler')"
-                                    class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 
+                                    class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300
                                     dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                     <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -150,8 +150,8 @@
                                     <th scope="col" class="px-4 py-3">College</th>
                                     <th scope="col" class="px-4 py-3">Course</th>
                                     <th scope="col" class="px-4 py-3">Email</th>
-                                    <th scope="col" class="px-4 py-3">Is active?</th>
-                                    <th scope="col" class="px-4 py-3">Is muslim?</th>
+                                    <th scope="col" class="px-4 py-3">Is active</th>
+                                    <th scope="col" class="px-4 py-3">Is muslim</th>
                                     <th scope="col" class="text-center px-4 py-3">Actions</th>
                                 </tr>
                             </thead>
@@ -225,7 +225,7 @@
                             </tbody>
                         </table>
 
-                        
+
                         <div wire:ignore.self id="addStudentModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100% - 1rem)] max-h-full">
                             <div class="relative p-4 w-full max-w-3xl max-h-full">
                                 <!-- Modal content -->
@@ -318,7 +318,7 @@
                                             <div class="col-span-6">
                                                 <label for="email"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Muslim?</label>
-                                                <input type="checkbox" wire:model.defer="student.is_muslim" 
+                                                <input type="checkbox" wire:model.defer="student.is_muslim"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -519,7 +519,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div wire:ignore.self id="editStudentModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100% - 1rem)] max-h-full">
                             <div class="relative p-4 w-full max-w-3xl max-h-full">
                                 <!-- Modal content -->
@@ -611,20 +611,20 @@
                                             </div>
 
 
-                                            {{-- 
-                                                New Is Muslim Check Box 
-                                                
+                                            {{--
+                                                New Is Muslim Check Box
+
                                                 <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
                                                 <input checked id="bordered-checkbox-2" type="checkbox" value="" name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="bordered-checkbox-2" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
                                             </div>
-                                            
+
                                             --}}
 
                                             <div class="col-span-6">
                                                 <label for="email"
                                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Is Muslim?</label>
-                                                <input type="checkbox" wire:key="is_muslim{{$value->id}}" wire:model.defer="student.is_muslim" 
+                                                <input type="checkbox" wire:key="is_muslim{{$value->id}}" wire:model.defer="student.is_muslim"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
