@@ -28,6 +28,16 @@
                         </ol>
                     </nav>
                     <!--End Breadcrumb -->
+                    
+                    {{-- College and School Year Header --}}
+                    <div class="col">
+                        <div class=" flex flex-wrap items-center justify-start p-4">
+                            <span class="font-bold text-gray-700 uppercase">College of Computing Studies</span>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-start -mt-7 p-4">
+                            <span class="font-semibold text-base text-gray-700 uppercase">School Year - 2023-2024</span>
+                        </div>
+                    </div>
                     <!--Table Header -->
                     <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
                         <div class="flex items-center space-x-3 w-full md:w-auto">

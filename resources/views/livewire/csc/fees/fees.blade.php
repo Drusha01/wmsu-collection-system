@@ -31,11 +31,17 @@
                             </li>
                         </ol>
                     </nav>
-                    <div class="row px-5"><h6> Academic Year {{$term->year_start.' - '.$term->year_end}}</h6></div>
+                    <div class="col">
+                        <div class=" flex flex-wrap items-center justify-start p-4">
+                            <span class="font-bold text-gray-700 uppercase">College of Computing Studies</span>
+                        </div>
+                    <div class="row px-5 font-semibold text-base text-gray-700 uppercase -mt-3"><h6> Academic Year {{$term->year_start.' - '.$term->year_end}}</h6>
+                    </div>
+                </div>
                     <!--End Breadcrumb -->
                     <!--Table Header -->
                     <div
-                        class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                        class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4 mt-8">
                         <div class="w-full md:w-1/4">
                             <form class="flex items-center">
                                 <label for="simple-search" class="sr-only">Search</label>
@@ -249,6 +255,7 @@
                                                 </div>
                                             </div>
                                             <!-- Right Section - Fee Scheduling -->
+   
                                             <div class="mt-8 basis-1/2 pl-4">
                                                 <h3 class="text-2xl font-semibold mb-4">Fee Scheduling</h3>
                                                 <div class="grid gap-6">
@@ -274,6 +281,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                         <!-- Save Fees Button - Bottom Section -->
                                         <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
