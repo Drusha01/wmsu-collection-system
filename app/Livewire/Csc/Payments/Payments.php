@@ -125,8 +125,19 @@ class Payments extends Component
         //     ->where('s.student_code','like',$this->student_id_search.'%')
         //     ->groupBy('es.student_id')
         //     ->paginate(10);
+        $page_info = DB::table('users as u')
+        ->select(
+            'c.name as college_name',
+            DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+          )
+        ->where('u.id','=',$this->user_details->id)
+        ->join('colleges as c','c.id','u.college_id')
+        ->join('school_years as sy','sy.id','u.school_year_id')
+        ->get()
+        ->first();
         return view('livewire.csc.payments.payments',[
-            'enrolled_students_data'=>$enrolled_students_data
+            'enrolled_students_data'=>$enrolled_students_data,
+            'page_info'=>$page_info
         ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);

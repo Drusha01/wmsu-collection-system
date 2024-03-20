@@ -158,13 +158,17 @@ class StudentPayments extends Component
                 'u.id',
                 'r.name as role_name',
                 'p.name as position_name',
-                'is_active',
+                'u.is_active',
                 'u.college_id',
-                'u.school_year_id'
+                'u.school_year_id',
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as schoo_year')
               )
             ->where('u.id','=',$session['id'])
             ->join('roles as r','r.id','u.role_id')
             ->leftjoin('positions as p','p.id','u.position_id')
+            ->join('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
             ->get()
             ->first()){
             $this->user_details = $user_details;
@@ -260,14 +264,24 @@ class StudentPayments extends Component
                     }
                 }
         }
-        // fees
-    
+        $page_info = DB::table('users as u')
+        ->select(
+            'c.name as college_name',
+            DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+          )
+        ->where('u.id','=',$this->user_details->id)
+        ->join('colleges as c','c.id','u.college_id')
+        ->join('school_years as sy','sy.id','u.school_year_id')
+        ->get()
+        ->first();
+
         $this->semesters = DB::table('semesters')
         ->get()
         ->toArray();
         
         return view('livewire.csc.payments.student-payments',[
-            'fees'=>$fees
+            'fees'=>$fees,
+            'page_info'=>$page_info
         ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);

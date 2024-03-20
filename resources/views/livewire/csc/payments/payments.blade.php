@@ -29,13 +29,12 @@
                     </nav>
                     <!--End Breadcrumb -->
                     
-                    {{-- College and School Year Header --}}
                     <div class="col">
                         <div class=" flex flex-wrap items-center justify-start p-4">
-                            <span class="font-bold text-gray-700 uppercase">College of Computing Studies</span>
+                            <span class="font-bold text-gray-700 uppercase">{{$page_info->college_name}}</span>
                         </div>
                         <div class="flex flex-wrap items-center justify-start -mt-7 p-4">
-                            <span class="font-semibold text-base text-gray-700 uppercase">Academic Year - 2023-2024</span>
+                            <span class="font-semibold text-base text-gray-700 uppercase">Academic Year - {{$page_info->school_year}}</span>
                         </div>
                     </div>
                     <!--Table Header -->

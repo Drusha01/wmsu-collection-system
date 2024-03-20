@@ -37,15 +37,14 @@
                     </nav>
                     <!--End Breadcrumb -->
 
-                    {{-- College and School Year --}}
-                        <div class="col">
-                            <div class=" flex flex-wrap items-center justify-start p-4">
-                                <span class="font-bold text-gray-700 uppercase">College of Computing Studies</span>
-                            </div>
-                            <div class="flex flex-wrap items-center justify-start -mt-7 p-4">
-                                <span class="font-semibold text-base text-gray-700 uppercase">Academic Year - 2023-2024</span>
-                            </div>
+                    <div class="col">
+                        <div class=" flex flex-wrap items-center justify-start p-4">
+                            <span class="font-bold text-gray-700 uppercase">{{$page_info->college_name}}</span>
                         </div>
+                        <div class="flex flex-wrap items-center justify-start -mt-7 p-4">
+                            <span class="font-semibold text-base text-gray-700 uppercase">Academic Year - {{$page_info->school_year}}</span>
+                        </div>
+                    </div>
 
                     <!--Table Header -->
                     <div class="flex flex-col md:flex-row items-center justify-between p-4 -mt-10">
