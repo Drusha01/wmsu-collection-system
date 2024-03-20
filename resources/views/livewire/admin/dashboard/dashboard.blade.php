@@ -190,7 +190,7 @@
         </div>
         <!--Tabs widget -->
         <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 mb-5 mr-4">
-            <h3 class="flex items-center mb-4 text-lg font-semibold text-gray-900 dark:text-white">Recent CSC Projects
+            <h3 class="flex items-center mb-4 text-lg font-semibold text-gray-900 dark:text-white"> CSC Fees
                 <svg fill="#000000" width="15px" height="15px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" style="margin-left: 5px;">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
