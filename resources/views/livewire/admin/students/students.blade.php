@@ -204,7 +204,7 @@
                                                                 d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                                                                 clip-rule="evenodd" />
                                                         </svg>
-                                                        Delete
+                                                        Deactivate
                                                     </button>
                                                 @else
                                                     <button type="button" wire:click="editStudent({{$value->id}},'activateStudentModalToggler')"
@@ -689,7 +689,7 @@
                                     <!-- Modal header -->
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Delete Student
+                                            Deactivate Student
                                         </h3>
                                         <button type="button"
                                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -705,8 +705,8 @@
                                     <!-- Modal body -->
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveDeleteStudent({{$student['id']}},'deleteStudentModal')">
                                         @csrf
-                                        <div class="grid gap-4 mb-12 grid-cols-2">
-                                            <p>Are you sure you want to delete this student?</p>
+                                        <div class="grid gap-4 mb-12">
+                                            <p>Are you sure you want to deactivate this student?</p>
                                         </div>
                                         <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
                                             <button type="button" data-modal-toggle="deleteStudentModal"
@@ -715,7 +715,7 @@
                                             </button>
                                             <button type="submit"
                                                 class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
-                                                Delete Student
+                                                Deactivate Student
                                             </button>
                                         </div>
                                     </form>
@@ -747,7 +747,7 @@
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveActivateStudent({{$student['id']}},'activateStudentModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-12 grid-cols-2">
-                                            <p>Are you sure you want to delete this student?</p>
+                                            <p>Are you sure you want to deactivate this student?</p>
                                         </div>
                                         <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
                                             <button type="button" data-modal-toggle="activateStudentModal"

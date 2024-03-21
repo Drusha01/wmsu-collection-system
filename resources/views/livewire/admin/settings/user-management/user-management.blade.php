@@ -104,7 +104,7 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                                     </svg>
-                                                    Delete
+                                                    Deactivate
                                                 </button>
                                                 @else 
                                                 <button type="button" wire:click="editUser({{$value->id}},'activateUserModaltoggler')"  class="flex items-center text-yellow-700 hover:text-white border border-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-yellow-500 dark:text-yellow-500 dark:hover:text-white dark:hover:bg-yellow-600 dark:focus:ring-yellow-900">
@@ -448,7 +448,7 @@
                                     <!-- Modal header -->
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                            Delete User
+                                            Deactivate User
                                         </h3>
                                         <button type="button"
                                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -463,8 +463,8 @@
                                     </div>
                                     <!-- Modal body -->
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveDeleteUser({{$user['id']}},'deleteUserModal')">
-                                        <div class="grid gap-5 mb-12 grid-cols-2">
-                                            <p>Are you sure you want to delete this user?</p>
+                                        <div class="grid gap-5 mb-12">
+                                            <p>Are you sure you want to deactivate this user?</p>
 
                                         </div>
                                         <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
@@ -474,7 +474,7 @@
                                             </button>
                                             <button type="submit"
                                                 class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
-                                                Delete User
+                                                Deactivate User
                                             </button>
                                         </div>
                                     </form>
