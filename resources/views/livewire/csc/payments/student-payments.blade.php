@@ -38,7 +38,7 @@
                     <!--End Breadcrumb -->
 
                     <div class="col">
-                    <div class="flex flex-wrap items-center justify-start mt-3 px-4 p-2">
+                        <div class="flex flex-wrap items-center justify-start mt-3 px-4 p-2">
                             <h6 class="font-bold text-base text-gray-700 uppercase">Academic Year - {{$page_info->school_year}}</h6>
                         </div>
                         <div class=" flex flex-wrap items-center justify-start px-4">
