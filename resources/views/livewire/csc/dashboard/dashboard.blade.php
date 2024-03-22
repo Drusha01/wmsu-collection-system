@@ -22,18 +22,26 @@
                         </div>
                     </div>
 
-                    <!-- Sum of all paid students-->
-                    <div class="col-span-1 mt-8 items-center justify-between p-4 bg-white border ml-4 mr-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                     <!-- Sum of all paid students-->
+                     <div class="col-span-1 mt-8 items-center justify-between p-4 bg-white border ml-4 mr-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                         <div class="w-full">
-                            <h3 class="text-base font-normal text-gray-900 dark:text-gray-400">Sum of all paid students</h3>
+                            <h3 class="text-base font-normal text-gray-900 dark:text-gray-400">Total Collected</h3>
                             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 52,250</span>
+                        </div>
+                    </div>
+
+                     <!-- CSC -->
+                     <div class="col-span-1 mt-8 items-center justify-between p-4 bg-white border ml-4 mr-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                        <div class="w-full">
+                            <h3 class="text-base font-normal text-gray-900 dark:text-gray-400">CSC shares</h3>
+                            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 36,575</span>
                         </div>
                     </div>
 
                     <!-- USC to collect -->
                     <div class="col-span-1 mt-8 items-center justify-between p-4 bg-white border ml-4 mr-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                         <div class="w-full">
-                            <h3 class="text-base font-normal text-gray-900 dark:text-gray-400">USC to collect</h3>
+                            <h3 class="text-base font-normal text-gray-900 dark:text-gray-400">USC shares</h3>
                             <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 15,675</span>
                         </div>
                     </div>
