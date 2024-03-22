@@ -40,6 +40,35 @@ class Students extends Component
         11=>['month_name'=> 'December','month_number'=>12,'max_date'=>31],
 
     ];
+    public function boot(Request $request ){
+
+        $session = $request->session()->all();
+        $user_id = $session['id'];
+        if(isset($session['id']) && $user_details = DB::table('users as u')
+            ->select(
+                'u.id',
+                'r.name as role_name',
+                'p.name as position_name',
+                'u.is_active',
+                'u.college_id',
+                'u.school_year_id',
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as schoo_year')
+              )
+            ->where('u.id','=',$session['id'])
+            ->join('roles as r','r.id','u.role_id')
+            ->leftjoin('positions as p','p.id','u.position_id')
+            ->join('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first()){
+            $this->user_details = $user_details;
+            
+          
+        }else{
+            return redirect()->route('login');
+        }
+    }
     public function render()
     {
         if($this->prevstudent_id_search != $this->student_id_search){
@@ -74,15 +103,29 @@ class Students extends Component
             ->join('departments as d','s.department_id','d.id')
             ->where('s.college_id','like',$this->filters['college_id'].'%')
             ->where('s.student_code','like',$this->student_id_search.'%')
+            ->where('s.college_id','=',$this->user_details->college_id)
             ->paginate(10);
         
     
         $this->colleges_data = DB::table('colleges')
             ->get()
             ->toArray();
+            
+        $page_info = DB::table('users as u')
+            ->select(
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+            )
+            ->where('u.id','=',$this->user_details->id)
+            ->join('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first();
 
-        return view('livewire.csc.students.students',
-            ['student_data'=>$student_data ])
+        return view('livewire.csc.students.students',[
+            'student_data'=>$student_data,
+            'page_info'=>$page_info
+             ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
     }

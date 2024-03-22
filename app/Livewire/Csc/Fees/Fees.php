@@ -106,12 +106,25 @@ class Fees extends Component
             ->join('school_years as sy','sy.id','f.school_year_id')
             ->join('semesters as s','s.id','f.semester_id')
             ->leftjoin('departments as d','d.id','f.department_id')
+            ->where('f.college_id','=',$this->user_details->college_id)
             ->where('f.school_year_id','=',$this->user_details->school_year_id)
             ->where('f.fee_type_id','=',$fee_type->id)
             ->paginate(10);
         // dd($university_fees);
+        $page_info = DB::table('users as u')
+            ->select(
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+              )
+            ->where('u.id','=',$this->user_details->id)
+            ->join('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first();
         return view('livewire.csc.fees.fees',[
-            'local_fees_data'=> $local_fees_data])
+            'local_fees_data'=> $local_fees_data,
+            'page_info'=>$page_info
+            ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
     }

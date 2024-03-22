@@ -37,15 +37,18 @@
                     </nav>
                     <!--End Breadcrumb -->
 
-                    {{-- College and School Year --}}
-                        <div class="col">
-                            <div class=" flex flex-wrap items-center justify-start p-4">
-                                <span class="font-bold text-gray-700 uppercase">College of Computing Studies</span>
-                            </div>
-                            <div class="flex flex-wrap items-center justify-start -mt-7 p-4">
-                                <span class="font-semibold text-base text-gray-700 uppercase">Academic Year - 2023-2024</span>
-                            </div>
+                    <div class="col">
+                        <div class="flex flex-wrap items-center justify-start mt-3 px-4 p-2">
+                            <h6 class="font-bold text-base text-gray-700 uppercase">Academic Year - {{$page_info->school_year}}</h6>
                         </div>
+                        <div class=" flex flex-wrap items-center justify-start px-4">
+                            <span class="font-semibold text-gray-700 uppercase ">{{$page_info->college_name}}</span>
+                        </div>
+                        <div class=" flex flex-wrap items-center justify-start px-4 pb-4">
+                            <span class="semi-semibold text-gray-700 uppercase">{{$student['department_name']}}</span>
+                        </div>
+                        
+                    </div>
 
                     <!--Table Header -->
                     <div class="flex flex-col md:flex-row items-center justify-between p-4 -mt-10">
@@ -179,6 +182,8 @@
                             </div>
                         </div>
                         @endif
+
+                        <div>payment history here</div>
                     </div>
                     
                 </div>
@@ -237,7 +242,7 @@
                                     </h3>
                                 </div>
                                 <label class="block mt-5 mb-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size">Amount</label>
-                                <input required max="{{$total['total_amount']}}" wire:model.defer="void.amount" type="number" placeholder="Enter Amount" class=" w-50 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                <input required max="{{$total['total_amount_paid']}}" wire:model.defer="void.amount" type="number" placeholder="Enter Amount" class=" w-50 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                 
                                 <div class="flex justify-center mt-10">
                                     <button type="submit" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">

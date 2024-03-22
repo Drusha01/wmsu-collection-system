@@ -123,16 +123,28 @@ class Enrolledstudents extends Component
             ->join('semesters as sm','es.semester_id','sm.id')
             ->join('school_years as sy','es.school_year_id','sy.id')
             ->join('year_levels as yl','es.year_level_id','yl.id')
+            ->where('es.college_id','=',$this->user_details->college_id)
             ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
             ->where('es.department_id','like',$this->filters['department_id'].'%')
             ->where('es.semester_id','like',$this->filters['semester_id'].'%')
             ->where('s.student_code','like',$this->student_id_search.'%')
             ->paginate(10);
   
+        $page_info = DB::table('users as u')
+            ->select(
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+              )
+            ->where('u.id','=',$this->user_details->id)
+            ->join('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first();
         return view('livewire.csc.enrolledstudents.enrolledstudents',[
             'colleges_data'=>$colleges_data,
             'department_data'=>$department_data,
-            'enrolled_students_data'=>$enrolled_students_data
+            'enrolled_students_data'=>$enrolled_students_data,
+            'page_info'=>$page_info
         ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);

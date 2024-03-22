@@ -29,13 +29,12 @@
                     </nav>
                     <!--End Breadcrumb -->
                     
-                    {{-- College and School Year Header --}}
                     <div class="col">
-                        <div class=" flex flex-wrap items-center justify-start p-4">
-                            <span class="font-bold text-gray-700 uppercase">College of Computing Studies</span>
+                        <div class="flex flex-wrap items-center justify-start mt-3 px-4 p-2">
+                            <h6 class="font-bold text-base text-gray-700 uppercase">Academic Year - {{$page_info->school_year}}</h6>
                         </div>
-                        <div class="flex flex-wrap items-center justify-start -mt-7 p-4">
-                            <span class="font-semibold text-base text-gray-700 uppercase">Academic Year - 2023-2024</span>
+                        <div class=" flex flex-wrap items-center justify-start px-4">
+                            <span class="font-semibold text-gray-700 uppercase ">{{$page_info->college_name}}</span>
                         </div>
                     </div>
                     <!--Table Header -->
@@ -75,6 +74,7 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
+                                    <th scope="col" class="px-4 py-3">#</th>
                                     <th scope="col" class="px-4 py-3">Student ID</th>
                                     <th scope="col" class="px-4 py-3">Student Name</th>
                                     <th scope="col" class="px-4 py-3 text-center">Actions</th>
@@ -83,6 +83,7 @@
                             <tbody>         
                                 @foreach ($enrolled_students_data as $key =>$value)              
                                     <tr class="border-b dark:border-gray-700">
+                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($enrolled_students_data->currentPage()-1)*$enrolled_students_data->perPage()+$key+1 }}</th>
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$value->student_code}}</th>
                                         <td class="px-4 py-3">{{ $value->first_name. ' ' .$value->middle_name.' ' .$value->last_name }}</td>
                                    
