@@ -48,7 +48,7 @@
             <!--Admin Sidebar -->
             @if ($user_details->role_name == 'admin')
                 <!--Admin Home (Dashboard) -->
-                {{-- <li>
+                <li>
                 <a  href="{{route('admin-dashboard')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group
                     {{ Route::is('admin-dashboard') ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
@@ -60,11 +60,11 @@
 
                     <span class="ms-3">Dashboard</span>
                 </a>
-                </li> --}}
+                </li>
                 <!--Admin Payments -->
 
                 <!--Admin Payment Records -->
-                {{-- <li>
+                <li>
                 <a  href="{{route('admin-paymentrecords')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group
                     {{ Route::is('admin-paymentrecords') ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
@@ -73,9 +73,9 @@
 
                     <span class="ms-3">Payment Records</span>
                 </a>
-                </li> --}}
+                </li>
                 <!-- Admin Remits -->
-                {{-- <li>
+                <li>
                     <a  href="{{route('admin-remitrecords')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group
                         {{ Route::is('admin-remitrecords') ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">
@@ -84,7 +84,7 @@
 
                         <span class="ms-3">Remit Records</span>
                     </a>
-                </li> --}}
+                </li>
                 <!-- Admin Students -->
                 <li>
                     <a  href="{{route('admin-students')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group
