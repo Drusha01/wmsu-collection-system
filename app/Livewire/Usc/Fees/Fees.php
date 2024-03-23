@@ -103,7 +103,6 @@ class Fees extends Component
             ->where('f.school_year_id','=',$this->user_details->school_year_id)
             ->where('f.fee_type_id','=',$fee_type->id)
             ->paginate(10);
-        // dd($university_fees);
         return view('livewire.usc.fees.fees',[
             'university_fees_data'=> $university_fees_data])
         ->layout('components.layouts.admin',[
@@ -195,6 +194,14 @@ class Fees extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has added a fee ('.$this->fee['code'].') '.$this->fee['name'],
+                'link' => route('admin-fees'),
+            ]);
             $this->fee = [
                 'id' => NULL,
                 'name' => NULL, 
@@ -303,6 +310,14 @@ class Fees extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has updated a fee ('.$this->fee['code'].') '.$this->fee['name'],
+                'link' => route('admin-fees'),
+            ]);
             $this->fee = [
                 'id' => NULL,
                 'name' => NULL, 
@@ -334,6 +349,14 @@ class Fees extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has deleted a fee ('.$this->fee['code'].') '.$this->fee['name'],
+                'link' => route('admin-fees'),
+            ]);
             $this->fee = [
                 'id' => NULL,
                 'name' => NULL, 

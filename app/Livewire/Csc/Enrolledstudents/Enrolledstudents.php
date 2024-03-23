@@ -259,6 +259,14 @@ class Enrolledstudents extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+                ->insert([
+                    'id' =>NULL,
+                    'log_type_id' =>1,
+                    'created_by' =>$this->user_details->id,
+                    'log_details' =>'has added an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
+                    'link' => route('admin-fees'),
+                ]);
             $this->dispatch('closeModal',$modal_id);
             return;
         }
@@ -347,6 +355,14 @@ class Enrolledstudents extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+                ->insert([
+                    'id' =>NULL,
+                    'log_type_id' =>1,
+                    'created_by' =>$this->user_details->id,
+                    'log_details' =>'has updated an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
+                    'link' => route('admin-fees'),
+                ]);
             $this->dispatch('closeModal',$modal_id);
             return;
         }else{
@@ -368,9 +384,41 @@ class Enrolledstudents extends Component
                     timer             									: '1000',
                     link              									: '#'
                 );
+                DB::table('logs')
+                    ->insert([
+                        'id' =>NULL,
+                        'log_type_id' =>1,
+                        'created_by' =>$this->user_details->id,
+                        'log_details' =>'has updated an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
+                        'link' => route('admin-fees'),
+                    ]);
                 $this->dispatch('closeModal',$modal_id);
                 return;
             }
         }
+    }
+    public function saveDeleteEnrolledStudent($id,$modal_id){
+        if(DB::table('enrolled_students as es')
+                ->where('es.id','=',$id)
+                ->delete()){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'success',
+                    title             									: 'Successfully deleted',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                DB::table('logs')
+                    ->insert([
+                        'id' =>NULL,
+                        'log_type_id' =>1,
+                        'created_by' =>$this->user_details->id,
+                        'log_details' =>'has deleted an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
+                        'link' => route('admin-fees'),
+                    ]);
+                $this->dispatch('closeModal',$modal_id);
+                return;
+            }
     }
 }

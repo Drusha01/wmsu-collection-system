@@ -583,6 +583,14 @@ class UserManagement extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has edited ('.$this->user['username'].') '.$this->user['first_name'].' '.$this->user['middle_name'].' '.$this->user['last_name'],
+                'link' =>route('admin-usermanagement'),
+            ]);
             $this->user = [
                 'id' =>NULL,
                 'first_name' =>NULL,
@@ -624,6 +632,14 @@ class UserManagement extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has deleted ('.$this->user['username'].') '.$this->user['first_name'].' '.$this->user['middle_name'].' '.$this->user['last_name'],
+                'link' =>route('admin-usermanagement'),
+            ]);
             $this->user = [
                 'id' =>NULL,
                 'first_name' =>NULL,
@@ -651,45 +667,54 @@ class UserManagement extends Component
             return;
         }
     }
-        public function saveActivateUser($id,$modal_id){
-            if(DB::table('users')
-                ->where('id','=',$this->user['id'])
-                ->update([
-                    'is_active' =>1
-                    ])){
-                $this->dispatch('swal:redirect',
-                    position         									: 'center',
-                    icon              									: 'success',
-                    title             									: 'Successfully updated!',
-                    showConfirmButton 									: 'true',
-                    timer             									: '1000',
-                    link              									: '#'
-                );
-                $this->user = [
-                    'id' =>NULL,
-                    'first_name' =>NULL,
-                    'middle_name' =>NULL,
-                    'last_name' =>NULL,
-                    'username' =>NULL,
-                    'password' =>NULL,
-                    'college_id' =>NULL,
-                    'school_year_id' =>NULL,
-                    'role_id' =>NULL,
-                    'role_name' => 'usc-admin',
-                    'position_id' =>NULL,
-                ];
-                $this->dispatch('closeModal',$modal_id);
-                return;
-            }else{
-                $this->dispatch('swal:redirect',
-                    position         									: 'center',
-                    icon              									: 'warning',
-                    title             									: 'Unsuccessfully updated!',
-                    showConfirmButton 									: 'true',
-                    timer             									: '1000',
-                    link              									: '#'
-                );
-                return;
+    public function saveActivateUser($id,$modal_id){
+        if(DB::table('users')
+            ->where('id','=',$this->user['id'])
+            ->update([
+                'is_active' =>1
+                ])){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Successfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has activated ('.$this->user['username'].') '.$this->user['first_name'].' '.$this->user['middle_name'].' '.$this->user['last_name'],
+                'link' =>route('admin-usermanagement'),
+            ]);
+            $this->user = [
+                'id' =>NULL,
+                'first_name' =>NULL,
+                'middle_name' =>NULL,
+                'last_name' =>NULL,
+                'username' =>NULL,
+                'password' =>NULL,
+                'college_id' =>NULL,
+                'school_year_id' =>NULL,
+                'role_id' =>NULL,
+                'role_name' => 'usc-admin',
+                'position_id' =>NULL,
+            ];
+            $this->dispatch('closeModal',$modal_id);
+            
+            return;
+        }else{
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Unsuccessfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
         }
     }
 }

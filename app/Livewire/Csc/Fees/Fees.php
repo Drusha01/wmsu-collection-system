@@ -219,6 +219,14 @@ class Fees extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has added a fee ('.$this->fee['code'].') '.$this->fee['name'],
+                'link' => route('admin-fees'),
+            ]);
             $this->fee = [
                 'id' => NULL,
                 'name' => NULL, 
@@ -331,6 +339,14 @@ class Fees extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has updated a fee ('.$this->fee['code'].') '.$this->fee['name'],
+                'link' => route('admin-fees'),
+            ]);
             $this->fee = [
                 'id' => NULL,
                 'name' => NULL, 
@@ -363,6 +379,14 @@ class Fees extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has deleted a fee ('.$this->fee['code'].') '.$this->fee['name'],
+                'link' => route('admin-fees'),
+            ]);
             $this->fee = [
                 'id' => NULL,
                 'name' => NULL, 

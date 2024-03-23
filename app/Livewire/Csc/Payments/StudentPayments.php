@@ -459,6 +459,21 @@ class StudentPayments extends Component
             if($payment_id){
                 $payment_id = $payment_id->id;
             }
+            $student_info = DB::table('students')
+                ->where('id','=',$this->student['id'])
+                ->get()
+                ->first();
+            if($student_info){
+                DB::table('logs')
+                ->insert([
+                    'id' =>NULL,
+                    'log_type_id' =>2,
+                    'school_year_id'=>$payment['school_year_id'],
+                    'created_by' =>$this->user_details->id,
+                    'log_details' =>'has collected an amount of ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                    'link' =>route('admin-paymentrecords'),
+                ]);
+            }
                        
             foreach ($fees as $key => $value) {
                 if( intval($value->amount) - intval($value->paid_amount) > 0){
@@ -644,6 +659,21 @@ class StudentPayments extends Component
                 ->where('p.amount','=',$payment['amount'])
                 ->orderBy('p.id','desc')
                 ->first();
+            $student_info = DB::table('students')
+                ->where('id','=',$this->student['id'])
+                ->get()
+                ->first();
+            if($student_info){
+                DB::table('logs')
+                ->insert([
+                    'id' =>NULL,
+                    'log_type_id' =>2,
+                    'school_year_id'=>$payment['school_year_id'],
+                    'created_by' =>$this->user_details->id,
+                    'log_details' =>'has collected a partial payment of ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                    'link' =>route('admin-paymentrecords'),
+                ]);
+            }
             if($payment_id){
                 $payment_id = $payment_id->id;
             }
@@ -829,6 +859,21 @@ class StudentPayments extends Component
                 ->where('p.amount','=',$payment['amount'])
                 ->orderBy('p.id','desc')
                 ->first();
+                $student_info = DB::table('students')
+                    ->where('id','=',$this->student['id'])
+                    ->get()
+                    ->first();
+                if($student_info){
+                    DB::table('logs')
+                    ->insert([
+                        'id' =>NULL,
+                        'log_type_id' =>2,
+                        'school_year_id'=>$payment['school_year_id'],
+                        'created_by' =>$this->user_details->id,
+                        'log_details' =>'has voided a payment of  ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                        'link' =>route('admin-paymentrecords'),
+                    ]);
+                }
             if($payment_id){
                 $payment_id = $payment_id->id;
             }

@@ -32,21 +32,28 @@ class Students extends Component
         if(isset($session['id']) && $user_details = DB::table('users as u')
             ->select(
                 'u.id',
-                'r.name as role_name'
+                'r.name as role_name',
+                'p.name as position_name',
+                'is_active',
+                'u.college_id'
               )
             ->where('u.id','=',$session['id'])
             ->join('roles as r','r.id','u.role_id')
+            ->leftjoin('positions as p','p.id','u.position_id')
             ->get()
             ->first()){
-            if ($user_details->role_name == 'officer') {
-                return redirect()->route('officer-dashboard');
-            }else if ($user_details->role_name == 'admin') {
+            $this->user_details = $user_details;
+            if($user_details->is_active == 1){
+                if($user_details->role_name == 'admin') {
 
-            }elseif($user_details->role_name == 'collector'){
-                return redirect()->route('collector-dashboard');
+                }else{
+                    return redirect()->route('/');
+                }
+            }else{
+                return redirect('/login');
             }
         }else{
-            return redirect('/login');
+            return redirect()->route('disabled-account');
         }
     }
     public function render(){
@@ -218,6 +225,14 @@ class Students extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has added a new student ('.$this->student['student_code'].') '.$this->student['first_name'].' '.$this->student['middle_name'].' '.$this->student['last_name'],
+                'link' =>route('admin-usermanagement'),
+            ]);
             $this->dispatch('closeModal',$modal_id);
         }
     }
@@ -358,6 +373,14 @@ class Students extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has updated a student ('.$this->student['student_code'].') '.$this->student['first_name'].' '.$this->student['middle_name'].' '.$this->student['last_name'],
+                'link' =>route('admin-students'),
+            ]);
             $this->dispatch('closeModal',$modal_id);
         }
     }
@@ -375,6 +398,14 @@ class Students extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has deleted a student ('.$this->student['student_code'].') '.$this->student['first_name'].' '.$this->student['middle_name'].' '.$this->student['last_name'],
+                'link' =>route('admin-students'),
+            ]);
             $this->dispatch('closeModal',$modal_id);
         }
     }
@@ -392,6 +423,14 @@ class Students extends Component
                 timer             									: '1000',
                 link              									: '#'
             );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has activated a student ('.$this->student['student_code'].') '.$this->student['first_name'].' '.$this->student['middle_name'].' '.$this->student['last_name'],
+                'link' =>route('admin-students'),
+            ]);
             $this->dispatch('closeModal',$modal_id);
         }
     }

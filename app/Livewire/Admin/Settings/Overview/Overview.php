@@ -6,9 +6,11 @@ use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
 
 class Overview extends Component
 {
+    use WithPagination;
     public $title = "Overview";
     
     public $semester = [
@@ -39,25 +41,36 @@ class Overview extends Component
         if(isset($session['id']) && $user_details = DB::table('users as u')
             ->select(
                 'u.id',
-                'r.name as role_name'
+                'r.name as role_name',
+                'p.name as position_name',
+                'is_active',
+                'u.college_id'
               )
             ->where('u.id','=',$session['id'])
             ->join('roles as r','r.id','u.role_id')
+            ->leftjoin('positions as p','p.id','u.position_id')
             ->get()
             ->first()){
-            if ($user_details->role_name == 'usc-admin') {
-                return redirect()->route('usc-dashboard');
-            }else if ($user_details->role_name == 'admin') {
+            $this->user_details = $user_details;
+            if($user_details->is_active == 1){
+                if($user_details->role_name == 'admin') {
 
-            }elseif($user_details->role_name == 'csc-admin'){
-                return redirect()->route('csc-dashboard');
+                }else{
+                    return redirect()->route('/');
+                }
+            }else{
+                return redirect('/login');
             }
         }else{
-            return redirect('/login');
+            return redirect()->route('disabled-account');
         }
     }
     public function render(){
-        return view('livewire.admin.settings.overview.overview')
+        $school_years = DB::table('school_years')
+            ->paginate(10);
+        return view('livewire.admin.settings.overview.overview',[
+            'school_years'=>$school_years
+        ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
     }
@@ -77,6 +90,96 @@ class Overview extends Component
         $this->dispatch('openModal',$modal_id);
     }
     public function saveSemester($id,$modal_id){
-        dd($this->semester);
+        if($this->semester['date_start_month'] < 0 || $this->semester['date_start_month'] > 12){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid start month',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if($this->semester['date_start_date'] > $this->months[$this->semester['date_start_month']-1]['max_date']  || $this->semester['date_start_date'] < 0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid start date',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+
+        if($this->semester['date_end_month'] < 0 || $this->semester['date_end_month'] > 12){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid end month',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if($this->semester['date_end_date'] > $this->months[$this->semester['date_end_month']-1]['max_date']  || $this->semester['date_end_date'] < 0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid end date',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if($this->semester['date_start_month'] >= $this->semester['date_end_month']){
+            if($this->semester['date_start_month'] == $this->semester['date_end_month'] && $this->semester['date_start_date'] >= $this->semester['date_end_date']){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Start date must be previous of end date',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+        }
+        if(DB::table('semesters')
+            ->where('id','=',$this->semester['id'])
+            ->update([
+                'date_start_date' => $this->semester['date_start_date'],
+                'date_start_month' => $this->semester['date_start_month'],
+                'date_end_date' => $this->semester['date_end_date'],
+                'date_end_month' => $this->semester['date_end_month'],
+            ])){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Successfully updated',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has updated ('.$this->semester['semester'].')',
+                'link' =>route('admin-overview'),
+            ]);
+            $this->dispatch('closeModal',$modal_id);
+            return;
+        }
+    }
+    public function addSchoolYear(){
+        $latest_school_year = DB::table('school_years')
+            ->orderBy('id','desc')
+            ->first();
+        dd($latest_school_year);
     }
 }

@@ -64,6 +64,14 @@ class Login extends Component
                         link              									: 'usc/dashboard'
                     );
                 }
+                DB::table('logs')
+                ->insert([
+                    'id' =>NULL,
+                    'log_type_id' =>1,
+                    'created_by' =>$user_details->id,
+                    'log_details' =>'has logged in',
+                    'link' => '#',
+                ]);
             }else{
                 $this->dispatch('swal:redirect',
                     position          									: 'center',

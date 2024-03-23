@@ -6,9 +6,10 @@ use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use Livewire\WithPagination;
 class PaymentRecords extends Component
 {
+    use WithPagination;
     public $title = "Payments";
     
     public function render()

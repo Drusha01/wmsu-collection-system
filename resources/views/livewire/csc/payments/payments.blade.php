@@ -89,7 +89,7 @@
                                    
                                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class="flex justify-center items-center space-x-4">
-                                                <a href="/csc/payments/{{$value->id}}">
+                                                <a href="@if(Route::is('csc-student-payments'))  /csc/payments/{{$value->id}} @else /csc/collector/payments/{{$value->id}} @endif  ">
                                                     <button type="button" 
                                                     class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none
                                                      focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">

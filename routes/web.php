@@ -98,6 +98,7 @@ Route::middleware([AccountisValid::class,isAdmin::class])->group(function () {
         Route::get('/auditlogs', AdminAuditLogs::class)->name('admin-auditlogs');
         Route::get('/systemlogs', AdminSystemLogs::class)->name('admin-systemlogs');
        
+        Route::get('/fees', AdminFees::class)->name('admin-fees');
         Route::get('/overview', AdminOverview::class)->name('admin-overview');
         Route::get('/usermanagement', AdminUserManagement::class)->name('admin-usermanagement');
     });
@@ -135,6 +136,7 @@ Route::middleware([AccountisValid::class,isCsc::class,checkTerm::class])->group(
     Route::prefix('csc/collector')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('csc-collector-dashboard');
         Route::get('/payments', Payments::class)->name('csc-collector-payments');
+        Route::get('/payments/{student_id}', CscStudentPayments::class)->name('csc-collector-student-payments');
         Route::get('/paymentrecords', PaymentRecords::class)->name('csc-collector-paymentrecords');
         Route::get('/auditlogs', AuditLogs::class)->name('csc-collector-auditlogs');
     });
