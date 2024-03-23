@@ -52,9 +52,10 @@
 
         <!-- Activity Card on the Right -->
         <div class="mt-10">
-            <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 p-4 mb-5 ">
-                <div class="items-center justify-between lg:flex mb-10">
-                  <canvas id="myChart3"></canvas>
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 p-4 mb-5">
+                <div class="items-center content-center lg:flex mb-10">
+                  <canvas id="myChart3" style="max-height: 14rem"></canvas>
+                >
                </div>
               </div>
             <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 p-4 ">
