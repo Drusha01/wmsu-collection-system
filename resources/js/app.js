@@ -118,3 +118,120 @@
         });
     });
     
+
+var ctxSchoolYear = document.getElementById('schoolYearRemittedChart').getContext('2d');
+var schoolYearRemittedChart = new Chart(ctxSchoolYear, {
+    type: 'bar',
+    data: {
+        labels: ['2023', '2024'], 
+        datasets: [{
+            label: 'Total Remitted',
+            data: [25000, 35000], // 
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Chart for Semester 1 and 2 Total Remitted
+var ctxSemester = document.getElementById('semesterRemittedChart').getContext('2d');
+var semesterRemittedChart = new Chart(ctxSemester, {
+    type: 'bar',
+    data: {
+        labels: ['Semester 1', 'Semester 2'],
+        datasets: [{
+            label: 'Total Remitted',
+            data: [15000, 25000], 
+            backgroundColor: [
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Chart for List of Fees and Total Amount Remitted
+var ctxFees = document.getElementById('feesRemittedChart').getContext('2d');
+var feesRemittedChart = new Chart(ctxFees, {
+    type: 'bar',
+    data: {
+        labels: ['UNIV FEE', 'Other Fee'], 
+        datasets: [{
+            label: 'Total Amount Remitted',
+            data: [21000, 15000], 
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Chart for Different Colleges Remitted Total
+var ctxColleges = document.getElementById('collegesRemittedChart').getContext('2d');
+var collegesRemittedChart = new Chart(ctxColleges, {
+    type: 'bar',
+    data: {
+        labels: ['CCS', 'CLA', 'CSM'], 
+        datasets: [{
+            label: 'Total Amount Remitted',
+            data: [10000, 15000, 20000], 
+            backgroundColor: [
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});

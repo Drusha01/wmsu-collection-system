@@ -56,7 +56,27 @@
                 <div class="items-center justify-between lg:flex mb-10">
                   <canvas id="myChart3"></canvas>
                </div>
-              </div>
+
+                 <!-- Canvas for School Year Remitted Chart -->
+            <div class="mt-5">
+                <canvas id="schoolYearRemittedChart"></canvas>
+            </div>
+
+            <!-- Canvas for Semester Remitted Chart -->
+            <div class="mt-5">
+                <canvas id="semesterRemittedChart"></canvas>
+            </div>
+
+            <!-- Canvas for Fees Remitted Chart -->
+            <div class="mt-5">
+                <canvas id="feesRemittedChart"></canvas>
+            </div>
+
+            <!-- Canvas for Colleges Remitted Chart -->
+            <div class="mt-5">
+                <canvas id="collegesRemittedChart"></canvas>
+            </div>
+            </div>
             <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 p-4 ">
                 <div class="sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 ml-4 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 dark:bg-gray-800">
                     <div class="items-center justify-between lg:flex mb-10">
