@@ -1,6 +1,6 @@
 <main class="p-9 sm:ml-64 pt-20 sm:pt-8 h-auto">
-    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-
+    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+        <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Sections on the Left -->
         <div class="mt-5">
             <div class="  relative  sm:rounded-lg overflow-hidden">
@@ -52,6 +52,11 @@
 
         <!-- Activity Card on the Right -->
         <div class="mt-10">
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 p-4 mb-5 ">
+                <div class="items-center justify-between lg:flex mb-10">
+                  <canvas id="myChart3"></canvas>
+               </div>
+              </div>
             <div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 p-4 ">
                 <div class="sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 ml-4 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 dark:bg-gray-800">
                     <div class="items-center justify-between lg:flex mb-10">
@@ -92,7 +97,7 @@
 
                                             <label for="fitbit"
                                                 class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                Returned
+                                                Remitted
                                             </label>
                                         </li>
                                     </ul>
@@ -126,7 +131,8 @@
                                     </th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800">                       <td class="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                <tbody class="bg-white dark:bg-gray-800">                       
+                                    <td class="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
                                         Payment from <span class="font-semibold">Alphabet LLC</span>
                                     </td>
                                     <td class="p-4 text-sm font-semibold text-gray-900 whitespace-nowrap dark:text-white">
@@ -161,7 +167,7 @@
                                     </tr>
                                     <tr class="bg-gray-50 dark:bg-gray-700">
                                         <td class="p-4 text-sm font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                                        Returned by <span class="font-semibold">Ye Boi</span>
+                                        Remitted by <span class="font-semibold">Ye Boi</span>
                                         </td>
                                         <td class="p-4 text-sm font-semibold text-gray-900 whitespace-nowrap dark:text-white">
                                         Php 200
@@ -173,7 +179,7 @@
                                         Php 10,000
                                         </td>
                                         <td class="p-4 whitespace-nowrap">
-                                        <span class="bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md border border-purple-100 dark:bg-gray-700 dark:border-purple-500 dark:text-purple-400">Returned</span>
+                                        <span class="bg-purple-100 text-purple-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md border border-purple-100 dark:bg-gray-700 dark:border-purple-500 dark:text-purple-400">Remitted</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -185,8 +191,10 @@
             </div>
         </div>
 
+        
     </div>
+</div>
 </main>
 
 
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
