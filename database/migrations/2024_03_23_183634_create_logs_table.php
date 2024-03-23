@@ -16,6 +16,7 @@ return new class extends Migration
             log_type_id INT,
             created_by INT,
             school_year_id INT DEFAULT NULL,
+            college_id INT DEFAULT NULL,
             log_details VARCHAR(1028),
             link VARCHAR(255),
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,

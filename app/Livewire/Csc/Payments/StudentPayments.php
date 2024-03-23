@@ -470,6 +470,7 @@ class StudentPayments extends Component
                     'log_type_id' =>2,
                     'school_year_id'=>$payment['school_year_id'],
                     'created_by' =>$this->user_details->id,
+                    'college_id'=>$this->user_details->college_id,
                     'log_details' =>'has collected an amount of ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
                     'link' =>route('admin-paymentrecords'),
                 ]);
@@ -670,6 +671,7 @@ class StudentPayments extends Component
                     'log_type_id' =>2,
                     'school_year_id'=>$payment['school_year_id'],
                     'created_by' =>$this->user_details->id,
+                    'college_id'=>$this->user_details->college_id,
                     'log_details' =>'has collected a partial payment of ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
                     'link' =>route('admin-paymentrecords'),
                 ]);
@@ -870,6 +872,7 @@ class StudentPayments extends Component
                         'log_type_id' =>2,
                         'school_year_id'=>$payment['school_year_id'],
                         'created_by' =>$this->user_details->id,
+                        'college_id'=>$this->user_details->college_id,
                         'log_details' =>'has voided a payment of  ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
                         'link' =>route('admin-paymentrecords'),
                     ]);

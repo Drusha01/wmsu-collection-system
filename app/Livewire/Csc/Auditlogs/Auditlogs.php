@@ -45,6 +45,7 @@ class Auditlogs extends Component
             ->join('users as u','u.id','l.created_by')
             ->where('l.log_type_id','=',2)
             ->where('l.school_year_id','=',$this->user_details->school_year_id)
+            ->where('l.college_id','=',$this->user_details->college_id)
             ->orderBy('l.date_created','desc')
             ->paginate(10);
         return view('livewire.csc.auditlogs.auditlogs',[
