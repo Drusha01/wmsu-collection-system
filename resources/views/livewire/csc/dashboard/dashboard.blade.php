@@ -29,7 +29,7 @@
             </div>
 
         </div>
-        <div class="px-4 pt-6 2xl:px-0 max-w-screen-xl mx-auto">
+        <div class="px-4 pt-6 2xl:px-0 max-w-screen-xl mx-auto -mt-8">
             <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4 max-w-full">
             
                 <!-- First Section -->
