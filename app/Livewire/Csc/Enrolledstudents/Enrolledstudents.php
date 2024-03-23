@@ -226,6 +226,32 @@ class Enrolledstudents extends Component
             );
             return ;
         }
+        if(!(DB::table('students')
+            ->where('id','=',$this->enrolledStudent['student_id'])
+            ->first())){
+                $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid student code',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(!(DB::table('departments')
+            ->where('id','=',$this->enrolledStudent['department_id'])
+            ->first())){
+                $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please select department',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
         if(DB::table('enrolled_students')
             ->where('student_id','=',$this->enrolledStudent['student_id'])
             ->where('school_year_id','=',$this->enrolledStudent['school_year_id'])
@@ -341,20 +367,38 @@ class Enrolledstudents extends Component
             );
             return ;
         }
+        if(!(DB::table('students')
+        ->where('id','=',$this->enrolledStudent['student_id'])
+        ->first())){
+            $this->dispatch('swal:redirect',
+            position         									: 'center',
+            icon              									: 'warning',
+            title             									: 'Invalid student code',
+            showConfirmButton 									: 'true',
+            timer             									: '1000',
+            link              									: '#'
+        );
+        return;
+    }
+    if(!(DB::table('departments')
+        ->where('id','=',$this->enrolledStudent['department_id'])
+        ->first())){
+            $this->dispatch('swal:redirect',
+            position         									: 'center',
+            icon              									: 'warning',
+            title             									: 'Please select department',
+            showConfirmButton 									: 'true',
+            timer             									: '1000',
+            link              									: '#'
+        );
+        return;
+    }
         if(DB::table('enrolled_students')
             ->where('id','=',$this->enrolledStudent['student_id'])
             ->where('school_year_id','=',$this->enrolledStudent['school_year_id'])
             ->where('semester_id','=',$this->enrolledStudent['semester_id'])
             ->first()
             ){
-            $this->dispatch('swal:redirect',
-                position         									: 'center',
-                icon              									: 'success',
-                title             									: 'Successfully updated',
-                showConfirmButton 									: 'true',
-                timer             									: '1000',
-                link              									: '#'
-            );
             DB::table('logs')
                 ->insert([
                     'id' =>NULL,
@@ -363,8 +407,6 @@ class Enrolledstudents extends Component
                     'log_details' =>'has updated an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
                     'link' => route('admin-fees'),
                 ]);
-            $this->dispatch('closeModal',$modal_id);
-            return;
         }else{
             if(DB::table('enrolled_students as es')
                 ->where('es.id','=',$id)
@@ -376,14 +418,6 @@ class Enrolledstudents extends Component
                         'department_id' => $this->enrolledStudent['department_id'],
                         'year_level_id' => $this->enrolledStudent['year_level_id'],
                     ])){
-                $this->dispatch('swal:redirect',
-                    position         									: 'center',
-                    icon              									: 'success',
-                    title             									: 'Successfully updated',
-                    showConfirmButton 									: 'true',
-                    timer             									: '1000',
-                    link              									: '#'
-                );
                 DB::table('logs')
                     ->insert([
                         'id' =>NULL,
@@ -392,10 +426,17 @@ class Enrolledstudents extends Component
                         'log_details' =>'has updated an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
                         'link' => route('admin-fees'),
                     ]);
-                $this->dispatch('closeModal',$modal_id);
-                return;
             }
         }
+        $this->dispatch('swal:redirect',
+            position         									: 'center',
+            icon              									: 'success',
+            title             									: 'Successfully updated',
+            showConfirmButton 									: 'true',
+            timer             									: '1000',
+            link              									: '#'
+        );
+        $this->dispatch('closeModal',$modal_id);
     }
     public function saveDeleteEnrolledStudent($id,$modal_id){
         if(DB::table('enrolled_students as es')
