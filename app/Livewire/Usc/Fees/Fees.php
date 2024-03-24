@@ -103,8 +103,19 @@ class Fees extends Component
             ->where('f.school_year_id','=',$this->user_details->school_year_id)
             ->where('f.fee_type_id','=',$fee_type->id)
             ->paginate(10);
+        $page_info = DB::table('users as u')
+            ->select(
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+              )
+            ->where('u.id','=',$this->user_details->id)
+            ->leftjoin('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first();
         return view('livewire.usc.fees.fees',[
-            'university_fees_data'=> $university_fees_data])
+            'university_fees_data'=> $university_fees_data,
+            'page_info'=>$page_info])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
     }

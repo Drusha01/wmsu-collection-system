@@ -31,7 +31,12 @@
                             </li>
                         </ol>
                     </nav>
-                    <div class="row px-5"><h6> Academic Year {{$term->year_start.' - '.$term->year_end}}</h6></div>
+                    <div class="col">
+                        <div class="flex flex-wrap items-center justify-start mt-3 px-4 p-2">
+                            <h6 class="font-bold text-base text-gray-700 uppercase">Academic Year - {{$page_info->school_year}}</h6>
+                        </div>
+                     
+                    </div>
                     <!--End Breadcrumb -->
                     <!--Table Header -->
                     <div
@@ -317,13 +322,12 @@
                                     <th scope="col" class="px-4 py-3">Fee Code</th>
                                     <th scope="col" class="px-4 py-3">Fee Name</th>
                                     <th scope="col" class="px-4 py-3">For Muslim?</th>
-                                    <th scope="col" class="px-4 py-3">Semester</th>
-                                    <th scope="col" class="px-4 py-3">Amount</th>
                                     <th scope="col" class="px-4 py-3">Academic Year</th>
                                     <th scope="col" class="px-4 py-3">Semester</th>
                                     <th scope="col" class="px-4 py-3">Start Date</th>
                                     <th scope="col" class="px-4 py-3">End Date</th>
                                     <th scope="col" class="px-4 py-3">Created By</th>
+                                    <th scope="col" class="px-4 py-3">Amount</th>
                                     <th scope="col" class="text-center px-4 py-3">Actions</th>
                                 </tr>
                             </thead>
@@ -335,13 +339,12 @@
                                         <td class="px-4 py-3">{{$value->code}}</td>
                                         <td class="px-4 py-3">{{$value->name}}</td>
                                         <td class="px-4 py-3">@if($value->for_muslim) Yes @else No @endif</td>
-                                        <td class="px-4 py-3">{{$value->semester}}</td>
-                                        <td class="px-4 py-3">{{$value->amount}}</td>
                                         <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
                                         <td class="px-4 py-3">{{$value->semester}}</td>
                                         <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date}}</td>
                                         <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
                                         <td class="px-4 py-3">{{$value->first_name.' '.$value->middle_name.' '.$value->last_name}}</td>
+                                        <td class="px-4 py-3">{{$value->amount}}</td>
                                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class="flex justify-center items-center space-x-4">
                                                 <button type="button" wire:click="editFees({{$value->id}},'EditFeeToggle')"

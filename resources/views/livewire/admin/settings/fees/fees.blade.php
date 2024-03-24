@@ -73,30 +73,28 @@
                                     <th scope="col" class="px-4 py-3">Fee Code</th>
                                     <th scope="col" class="px-4 py-3">Fee Name</th>
                                     <th scope="col" class="px-4 py-3">For Muslim?</th>
-                                    <th scope="col" class="px-4 py-3">Semester</th>
-                                    <th scope="col" class="px-4 py-3">Amount</th>
                                     <th scope="col" class="px-4 py-3">Academic Year</th>
                                     <th scope="col" class="px-4 py-3">Semester</th>
-                                    <th scope="col" class="px-4 py-3">Department</th>
-                                    <th scope="col" class="px-4 py-3">Duration</th>
+                                    <th scope="col" class="px-4 py-3">Start Date</th>
+                                    <th scope="col" class="px-4 py-3">End Date</th>
                                     <th scope="col" class="px-4 py-3">Created By</th>
+                                    <th scope="col" class="px-4 py-3">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($fees_data as $key =>$value)
                                     <tr class="border-b dark:border-gray-700">
                                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($fees_data->currentPage()-1)*$fees_data->perPage()+$key+1 }}</th>
-                                        <td class="px-4 py-3">Local Fee</td>
+                                        <td class="px-4 py-3">University Fee</td>
                                         <td class="px-4 py-3">{{$value->code}}</td>
                                         <td class="px-4 py-3">{{$value->name}}</td>
                                         <td class="px-4 py-3">@if($value->for_muslim) Yes @else No @endif</td>
-                                        <td class="px-4 py-3">{{$value->semester}}</td>
-                                        <td class="px-4 py-3">{{$value->amount}}</td>
                                         <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
                                         <td class="px-4 py-3">{{$value->semester}}</td>
-                                        <td class="px-4 py-3">{{$value->department_name}}</td>
-                                        <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
+                                        <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' ,'.$value->year_start}}</td>
+                                        <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.' ,'.$value->year_end}}</td>
                                         <td class="px-4 py-3">{{$value->first_name.' '.$value->middle_name.' '.$value->last_name}}</td>
+                                        <td class="px-4 py-3">{{$value->amount}}</td>
                                       
                                     </tr>
                                 @endforeach
