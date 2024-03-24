@@ -182,7 +182,7 @@ class StudentPayments extends Component
         }
     }
     public function render(){
-        
+        $fees = [];
         if($this->enrolled_student){
             $this->total = [
                 'total_amount'=>0,
