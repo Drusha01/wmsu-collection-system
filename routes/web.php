@@ -108,7 +108,7 @@ Route::middleware([AccountisValid::class,isUsc::class,checkTerm::class])->group(
     Route::prefix('usc')->group(function () {
         Route::get('/dashboard', UscDashboard::class)->name('usc-dashboard');
         Route::get('/paymentrecords', UscPaymentRecords::class)->name('usc-paymentrecords');
-        Route::get('/remittance', UscRemitRecords::class)->name('usc-remittance');
+        Route::get('/remittance', UscRemittance::class)->name('usc-remittance');
         Route::get('/remitrecords', UscRemitRecords::class)->name('usc-remitrecords');
        
         Route::get('/fees', UscFees::class)->name('usc-fees');
@@ -121,7 +121,7 @@ Route::middleware([AccountisValid::class,isCsc::class,isCollector::class,checkTe
         Route::get('/payments', CscPayments::class)->name('csc-payments');
         Route::get('/payments/{student_id}', CscStudentPayments::class)->name('csc-student-payments');
         Route::get('/paymentrecords', CscPaymentRecords::class)->name('csc-paymentrecords');
-        Route::get('/remittance', CscRemitRecords::class)->name('csc-remittance');
+        Route::get('/remittance', CscRemittance::class)->name('csc-remittance');
         Route::get('/remitrecords', CscRemitRecords::class)->name('csc-remitrecords');
         Route::get('/enrolledstudents', CscEnrolledStudents::class)->name('csc-enrolledstudents');
         Route::get('/students', CscStudents::class)->name('csc-students');

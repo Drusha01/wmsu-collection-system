@@ -183,7 +183,7 @@
                         <span class="ms-3">Remittance</span>
                     </a>
                 </li>
-                <li>
+                <!-- <li>
                     <a  href="{{ route('usc-remitrecords')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group
                         {{ Route::is('usc-remitrecords')  ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">
@@ -192,7 +192,7 @@
 
                         <span class="ms-3">Remit Records</span>
                     </a>
-                </li>
+                </li> -->
             @elseif ($user_details->role_name == 'csc-admin')
                 @if($user_details->postion_name != 'Collector')
                     <li>
@@ -239,16 +239,6 @@
                             </svg>
 
                             <span class="ms-3">Remittance</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a  href="{{ route('csc-remitrecords')}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group
-                            {{  Route::is('csc-remitrecords')   ? 'bg-red-200 hover:bg-red-200 ' : '' }}">
-                            <svg class="flex-shrink-0 w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 17V2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M5 15V1m8 18v-4"/>
-                             </svg>
-
-                            <span class="ms-3">Remit Records</span>
                         </a>
                     </li>
                     <li>
