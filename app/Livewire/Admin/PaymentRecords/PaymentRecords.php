@@ -12,8 +12,37 @@ class PaymentRecords extends Component
     use WithPagination;
     public $title = "Payments";
     
+    public $filters = [
+        'department_id'=>NULL,
+        'semester_id' => NULL,
+        'year_level_id' => NULL,
+        'school_year_id'=> NULL,
+        'college_id' => NULL,
+        'student_code_search'=> NULL,
+        'prevdepartment_id'=>NULL,
+        'prevsemester_id' => NULL,
+        'prevyear_level_id' => NULL,
+        'prevcollege_id' => NULL,
+        'prevstudent_code_search'=> NULL,
+        'prev_school_year_id'=> NULL,
+        
+    ];
+    public $school_years;
+
     public function render()
     {
+        if($this->filters['school_year_id'] != $this->filters['prev_school_year_id']){
+            $this->filters['prev_school_year_id'] =$this->filters['school_year_id'];
+            $this->resetPage();
+        }
+        if($this->filters['student_code_search'] != $this->filters['prevstudent_code_search']){
+            $this->filters['prevstudent_code_search'] =$this->filters['student_code_search'];
+            $this->resetPage();
+        }
+        $this->school_years = DB::table('school_years')
+        ->orderBy('id','desc')
+        ->get()
+        ->toArray();
         $payment_records_data = DB::table('payment_items as pi')
             ->select(
                 "pi.id as id",
@@ -39,6 +68,8 @@ class PaymentRecords extends Component
             ->join('fees as f','f.id','pi.fee_id')
             ->rightjoin('fee_types as ft','ft.id','f.fee_type_id')
             ->where('es.college_id','<>',0)
+            ->where('f.school_year_id','like',$this->filters['school_year_id'] .'%')
+            ->where('s.student_code','like',$this->filters['student_code_search'] .'%')
             ->orderBy('pi.date_created','desc')
             ->groupBy('pi.id')
             ->paginate(10);
