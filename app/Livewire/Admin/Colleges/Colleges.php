@@ -27,6 +27,11 @@ class Colleges extends Component
         'name' => NULL,
         'is_active' => NULL
     ];
+    public $filters = [
+        'college_name'=>NULL,
+        'prev_college_name'=>NULL,
+      
+    ];
     public function boot(Request $request ){
         $session = $request->session()->all();
         if(isset($session['id']) && $user_details = DB::table('users as u')
@@ -58,9 +63,14 @@ class Colleges extends Component
     }
 
     public function render(){
-        $colleges_data = DB::table('colleges')
+        if($this->filters['college_name'] != $this->filters['prev_college_name']){
+            $this->filters['prev_college_name'] =$this->filters['college_name'];
+            $this->resetPage();
+        }
+        $colleges_data = DB::table('colleges as c')
             // ->where('is_active','=',1)
-            ->orderBy('is_active','desc')
+            ->where('c.name','like',$this->filters['college_name'] .'%')
+            ->orderBy('c.is_active','desc')
             ->paginate(10);
         return view('livewire.admin.colleges.colleges',
             ['college_data'=>$colleges_data])
