@@ -173,6 +173,16 @@ class Remittance extends Component
                     timer             									: '1000',
                     link              									: '#'
                 );
+                DB::table('logs')
+                ->insert([
+                    'id' =>NULL,
+                    'log_type_id' =>2,
+                    'school_year_id'=>$this->remit['school_year_id'],
+                    'created_by' =>$this->user_details->id,
+                    'college_id'=>$this->user_details->college_id,
+                    'log_details' =>'has approved a remit with the total amount of  ('.$this->remit['amount'].') to University Student Council',
+                    'link' =>route('admin-remitrecords'),
+                ]);
                 $this->dispatch('closeModal',$modal_id);
             }
         }
@@ -196,6 +206,16 @@ class Remittance extends Component
                     timer             									: '1000',
                     link              									: '#'
                 );
+                DB::table('logs')
+                ->insert([
+                    'id' =>NULL,
+                    'log_type_id' =>2,
+                    'school_year_id'=>$this->remit['school_year_id'],
+                    'created_by' =>$this->user_details->id,
+                    'college_id'=>$this->user_details->college_id,
+                    'log_details' =>'has cancelled a remit with the total amount of  ('.$this->remit['amount'].') to University Student Council',
+                    'link' =>route('admin-remitrecords'),
+                ]);
                 $this->dispatch('closeModal',$modal_id);
             }
         }
