@@ -55,9 +55,11 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                    <input type="text" id="simple-search"
+                                    <form wire:click.prevent="search()">
+                                        <input type="text" id="simple-search" wire:model.live="filters.fee_name"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        placeholder="Search" required="">
+                                        placeholder="Search fee name" required="">
+                                    </form>
                                 </div>
                             </form>
                         </div>
@@ -345,9 +347,9 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-4 py-3">ID</th>
+                                    <th scope="col" class="px-4 py-3">Fee Name</th>
                                     <th scope="col" class="px-4 py-3">Fee Type</th>
                                     <th scope="col" class="px-4 py-3">Fee Code</th>
-                                    <th scope="col" class="px-4 py-3">Fee Name</th>
                                     <th scope="col" class="px-4 py-3">Semester</th>
                                     <th scope="col" class="px-4 py-3">Amount</th>
                                     <th scope="col" class="px-4 py-3">Academic Year</th>
@@ -361,10 +363,10 @@
                             <tbody>
                                 @foreach($local_fees_data as $key =>$value)
                                     <tr class="border-b dark:border-gray-700">
-                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($local_fees_data->currentPage()-1)*$local_fees_data->perPage()+$key+1 }}</th>
+                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($local_fees_data->currentPage()-1)*$local_fees_data->perPage()+$key+1 }}</th>
+                                        <td class="px-4 py-3">{{$value->name}}</td>
                                         <td class="px-4 py-3">Local Fee</td>
                                         <td class="px-4 py-3">{{$value->code}}</td>
-                                        <td class="px-4 py-3">{{$value->name}}</td>
                                         <td class="px-4 py-3">{{$value->semester}}</td>
                                         <td class="px-4 py-3">{{$value->amount}}</td>
                                         <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>

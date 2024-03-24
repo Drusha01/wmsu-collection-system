@@ -25,6 +25,7 @@ class Students extends Component
         'prevcollege_id' => NULL,
     ];
     public $colleges_data = [];
+    public $departments;
     public $months = [
         0=>['month_name'=> 'January','month_number'=>1,'max_date'=>31],
         1=>['month_name'=> 'February','month_number'=>2,'max_date'=>28],
@@ -75,8 +76,8 @@ class Students extends Component
             $this->prevstudent_id_search = $this->student_id_search;
             $this->resetPage();
         }
-        if($this->filters['college_id'] != $this->filters['prevcollege_id']){
-            $this->filters['prevcollege_id'] = $this->filters['college_id'];
+        if($this->filters['department_id'] != $this->filters['prevdepartment_id']){
+            $this->filters['prevdepartment_id'] = $this->filters['department_id'];
             $this->resetPage();
         }
       
@@ -101,13 +102,14 @@ class Students extends Component
             )
             ->join('colleges as c','s.college_id','c.id')
             ->join('departments as d','s.department_id','d.id')
-            ->where('s.college_id','like',$this->filters['college_id'].'%')
+            ->where('s.department_id','like',$this->filters['department_id'].'%')
             ->where('s.student_code','like',$this->student_id_search.'%')
             ->where('s.college_id','=',$this->user_details->college_id)
             ->paginate(10);
         
     
-        $this->colleges_data = DB::table('colleges')
+        $this->departments = DB::table('departments')
+            ->where('college_id','=',$this->user_details->college_id)
             ->get()
             ->toArray();
             
