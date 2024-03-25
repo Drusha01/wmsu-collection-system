@@ -53,7 +53,7 @@
                             </form>
                         </div>
                         <div class="flex items-center space-x-3 w-full md:w-auto">
-                           
+
                             <button style="display:none" id="activateStudentModalToggler" data-modal-target="activateStudentModal" data-modal-toggle="activateStudentModal">asdf</button>
                             <button style="display:none" id="deleteStudentModalToggler" data-modal-target="deleteStudentModal" data-modal-toggle="deleteStudentModal">asdf</button>
                             <button style="display:none" id="viewStudentModalToggler" data-modal-target="viewStudentModal" data-modal-toggle="viewStudentModal">asdf</button>
@@ -461,7 +461,7 @@
                                             </div>
                                         </div>
                                         <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2">
-                                            <button type="button" data-modal-toggle="addStudentModal"
+                                            <button type="button" data-modal-toggle="viewStudentModal"
                                                 class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
                                                 Back
                                             </button>
