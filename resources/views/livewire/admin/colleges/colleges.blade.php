@@ -217,6 +217,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveEditCollege({{$college['id']}},'editCollegeModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-5 grid-cols-2">
@@ -246,12 +247,14 @@
                                         </div>
                                         <div class="flex justify-end items-center mt-2">
 
+                                            <button type="button" data-modal-toggle="editCollegeModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                                                Close
+                                            </button>
                                             <button type="submit" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
                                                 Save College
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -274,6 +277,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" >
                                         @csrf
                                         <div class="grid gap-4 mb-5 grid-cols-2">
@@ -298,16 +302,15 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        <div id="courses-container">
+                                            <!-- Dynamic Input for Courses -->
+                                        </div>
+                                        <div class="flex justify-end items-center mt-2" data-modal-toggle="viewCollegeModal">
+                                            <button type="button"  class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800" data-modal-target="viewCollegeModal">
+                                                Close
+                                            </button>
+                                        </div>
                                     </form>
-                                    @endif
-                                    <div id="courses-container">
-                                        <!-- Dynamic Input for Courses -->
-                                    </div>
-                                    <div class="flex justify-end items-center mt-2" data-modal-toggle="viewCollegeModal">
-                                        <button type="button"  class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800" data-modal-target="viewCollegeModal">
-                                            Close
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -328,8 +331,9 @@
                                             <span class="sr-only">Close modal</span>
                                         </button>
                                     </div>
-                                    <!-- Modal body -->
+                                    <!-- Modal body FIRST DEACTIVATION-->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveDeleteCollege({{$college['id']}},'deleteCollegeModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-5">
@@ -340,15 +344,14 @@
                                         </div>
                                         <div class="flex justify-end items-center mt-2">
 
-                                            {{-- <button type="button" data-modal-toggle="deleteCollegeModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                                            <button type="button" data-modal-toggle="deleteCollegeModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
                                                 Close
-                                            </button> --}}
+                                            </button>
                                             <button type="submit" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
                                                 Deactivate College
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -370,6 +373,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveActivateCollege({{$college['id']}},'activateCollegeModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-5 grid-cols-2">
@@ -379,7 +383,6 @@
                                             <!-- Dynamic Input for Courses -->
                                         </div>
                                         <div class="flex justify-end items-center mt-2">
-
                                             <button type="button" data-modal-toggle="activateCollegeModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
                                                 Close
                                             </button>
@@ -388,7 +391,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -412,6 +414,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" >
                                         @csrf
                                         @forelse($departments as $key => $value)
@@ -427,17 +430,15 @@
                                                 </div>
                                             </div>
                                         @endforelse
-
+                                        <div id="courses-container">
+                                            <!-- Dynamic Input for Courses -->
+                                        </div>
+                                        <div class="flex justify-end items-center mt-2" data-modal-toggle="viewDepartmentModal">
+                                            <button type="button"  class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                                                Close
+                                            </button>
+                                        </div>
                                     </form>
-                                    @endif
-                                    <div id="courses-container">
-                                        <!-- Dynamic Input for Courses -->
-                                    </div>
-                                    <div class="flex justify-end items-center mt-2" data-modal-toggle="viewDepartmentModal">
-                                        <button type="button"  class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
-                                            Close
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -460,6 +461,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveAddDepartment('addDepartmentModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-5 grid-cols-2">
@@ -488,23 +490,17 @@
                                             <!-- Dynamic Input for Courses -->
                                         </div>
                                         <div class="flex justify-end items-center mt-2">
-                                            {{-- <button type="button" data-modal-toggle="editCollegeModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+
+                                            <button type="button" data-modal-toggle="addDepartmentModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
                                                 Close
-                                            </button> --}}
+                                            </button>
                                             <button type="submit" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
                                                 Add Department
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
-                            <script>
-                                function toggleModal(modalId) {
-                                    const modal = document.getElementById(modalId);
-                                    modal.classList.toggle('hidden');
-                                }
-                            </script>
                         </div>
                     </div>
                     <!--End Table-->
