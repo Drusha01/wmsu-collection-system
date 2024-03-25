@@ -246,16 +246,19 @@
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Semester</label>
                                                         <select id="semester" wire:model.defer="fee.semester_id" required
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                                            <option selected="">Select Semester</option>
                                                             @foreach($semesters as $key =>$value)
                                                                 @if($fee['semester_id'] == $value->id)
-                                                                    <option selected value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
-                                                                @else
                                                                     <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                                                @else
+                                                                    <option selected value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
                                                                 @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
+                                                </div>
+                                                <div class="flex items-center ps-4">
+                                                    <input wire:model.defer="fee.for_muslim" id="editformuslim" type="checkbox" value=""  name="bordered-checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="bordered-checkbox-2" class="p-5  w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">For Muslim Student</label>
                                                 </div>
                                             </div>
                                         </div>

@@ -89,9 +89,11 @@ class Remittance extends Component
                 'sy.year_start',
                 'sy.year_end',
                 's.semester',
-                'r.appoved_by'
+                'r.appoved_by',
+                'c.name as college_name'
             )
             ->join('users as rbyu','rbyu.id','r.remitted_by')
+            ->leftjoin('colleges as c','c.id','rbyu.college_id')
             ->join('school_years as sy','sy.id','r.school_year_id')
             ->join('semesters as s','s.id','r.semester_id')
             ->leftjoin('users as u','u.id','r.appoved_by')
@@ -114,7 +116,7 @@ class Remittance extends Component
             'u.first_name as approved_by_first_name',
             'u.middle_name as approved_by_middle_name',
             'u.last_name as approved_by_last_name',
-            'rbyu.username as remitted_by_',
+            'rbyu.username as remitted_by_username',
             'rbyu.first_name as remitted_by_first_name',
             'rbyu.middle_name as remitted_by_middle_name',
             'rbyu.last_name as remitted_by_last_name',
@@ -132,6 +134,7 @@ class Remittance extends Component
             'r.appoved_by'
         )
         ->join('users as rbyu','rbyu.id','r.remitted_by')
+       
         ->join('school_years as sy','sy.id','r.school_year_id')
         ->join('semesters as s','s.id','r.semester_id')
         ->leftjoin('users as u','u.id','r.appoved_by')

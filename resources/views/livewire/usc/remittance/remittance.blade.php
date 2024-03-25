@@ -64,14 +64,16 @@
                                 <tr>
                                     <th scope="col" class="px-4 py-3">#</th>
                                     <th scope="col" class="px-4 py-3">Remitted By</th>
+                                    <th scope="col" class="px-4 py-3">College</th>
                                     <th scope="col" class="px-4 py-3">School Year</th>
                                     <th scope="col" class="px-4 py-3">Semester</th>
                                     <th scope="col" class="px-4 py-3">Date</th>
-                                    <th scope="col" class="px-4 py-3">Proof</th>
                                     <th scope="col" class="px-4 py-3">Approval Status</th>
                                     <th scope="col" class="px-4 py-3">Approved By</th>
                                     <th scope="col" class="px-4 py-3">Amount</th>
+                                    <th scope="col" class="px-4 py-3">Proof</th>
                                     <th scope="col" class="px-4 py-3">Action</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,9 +81,13 @@
                                 <tr class="border-b dark:border-gray-700">
                                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($remittance_data->currentPage()-1)*$remittance_data->perPage()+$key+1 }}</th>
                                     <td class="px-4 py-3">{{ $value->remitted_by_first_name. ' ' .$value->remitted_by_middle_name.' ' .$value->remitted_by_last_name }}</td>
+                                    <td class="px-4 py-3">{{$value->college_name}}</td>
                                     <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
                                     <td class="px-4 py-3">{{$value->semester}}</td>
                                     <td class="px-4 py-3">{{date_format(date_create($value->remitted_date),"M d, Y")}}</td>
+                                    <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) Approved @else Pending @endif</td>
+                                    <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) {{ $value->approved_by_first_name. ' ' .$value->approved_by_middle_name.' ' .$value->approved_by_last_name }} @else Pending @endif</td>
+                                    <td class="px-4 py-3">{{$value->amount}}</td>
                                     <td class="px-4 py-3">
                                         <a href="{{asset('storage/content/remit_photo/'.$value->remit_photo)}}" target="_blank">
                                             <button class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 font-bold py-2 px-3 rounded">
@@ -89,9 +95,6 @@
                                             </button>
                                         </a>
                                     </td>
-                                    <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) Approved @else Pending @endif</td>
-                                    <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) {{ $value->approved_by_first_name. ' ' .$value->approved_by_middle_name.' ' .$value->approved_by_last_name }} @else Pending @endif</td>
-                                    <td class="px-4 py-3">{{$value->amount}}</td>
                                     <td class="px-4 py-3">
                                         @if(strlen($value->appoved_by)>0)
                                             <button wire:click="editRemit({{$value->id}},'CancelRemitModalToggle')"class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">

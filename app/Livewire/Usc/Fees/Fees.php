@@ -332,7 +332,9 @@ class Fees extends Component
             'code' => $this->fee['code'],
             'amount' => $this->fee['amount'],
             'semester_id' => $this->fee['semester_id'],
+            'for_muslim' => $this->fee['for_muslim'],
         ])){
+        }
             $this->dispatch('swal:redirect',
                 position         									: 'center',
                 icon              									: 'success',
@@ -360,8 +362,6 @@ class Fees extends Component
                 'for_muslim' => NULL,
             ];
             $this->dispatch('closeModal',$modal_id);
-            return;
-        }
     }
     public function saveDeleteFees($id,$modal_id){
         $fee_type = DB::table('fee_types')
