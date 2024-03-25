@@ -100,9 +100,9 @@
                                         <td class="px-4 py-3">{{$value->fee_type_name}}</td>
                                         <td class="px-4 py-3">{{$value->fee_code}}</td>
                                         <td class="px-4 py-3">{{$value->fee_name}}</td>
-                                        <td class="px-4 py-3">{{$value->amount}}</td>
-                                        <td class="px-4 py-3">@if(intval($value->paid_amount)){{$value->paid_amount}}@else 0 @endif</td>
-                                        <td class="px-4 py-3">{{$value->amount - $value->paid_amount}}</td>
+                                        <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
+                                        <td class="px-4 py-3">@if(intval($value->paid_amount)){{number_format($value->paid_amount, 2, '.', ',')}}@else 0 @endif</td>
+                                        <td class="px-4 py-3">{{number_format($value->amount - $value->paid_amount, 2, '.', ',')}}</td>
                                         <td class="px-4 py-3">
                                             @if(intval($value->paid_amount) && intval($value->paid_amount) < $value->amount)
                                                 <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-blue-400 border border-blue-100 dark:border-blue-500">
@@ -131,9 +131,9 @@
                                     <td class="px-4 py-3"></td>
                                     <td class="px-4 py-3"></td>
                                     <th class="px-4 py-3">Total</th>
-                                    <th class="px-4 py-3"> {{$total['total_amount']}}</th>
-                                    <th class="px-4 py-3"> {{$total['total_amount_paid']}}</th>
-                                    <th class="px-4 py-3"> {{$total['total_balance']}}</th>
+                                    <th class="px-4 py-3"> {{number_format($total['total_amount'], 2, '.', ',')}}</th>
+                                    <th class="px-4 py-3"> {{number_format($total['total_amount_paid'], 2, '.', ',')}}</th>
+                                    <th class="px-4 py-3"> {{number_format($total['total_balance'], 2, '.', ',')}}</th>
                                     <th class="px-4 py-3">
                                         @if($total['total_amount'] == $total['total_amount_paid'])
                                         <span class="bg-green-900 text-green-100 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">

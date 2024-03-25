@@ -96,7 +96,7 @@
                                     <td class="px-4 py-3">{{date_format(date_create($value->remitted_date),"M d, Y")}}</td>
                                     <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) Approved @else Pending @endif</td>
                                     <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) {{ $value->approved_by_first_name. ' ' .$value->approved_by_middle_name.' ' .$value->approved_by_last_name }} @else Pending @endif</td>
-                                    <td class="px-4 py-3">{{$value->amount}}</td>
+                                    <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
                                     <td class="px-4 py-3">
                                         <a href="{{asset('storage/content/remit_photo/'.$value->remit_photo)}}" target="_blank">
                                             <button class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 font-bold py-2 px-3 rounded">

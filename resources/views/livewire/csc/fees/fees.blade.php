@@ -367,7 +367,7 @@
                                         <td class="px-4 py-3">Local Fee</td>
                                         <td class="px-4 py-3">{{$value->code}}</td>
                                         <td class="px-4 py-3">{{$value->semester}}</td>
-                                        <td class="px-4 py-3">{{$value->amount}}</td>
+                                        <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
                                         <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
                                         <td class="px-4 py-3">{{$value->semester}}</td>
                                         <td class="px-4 py-3">{{$value->department_name}}</td>

@@ -104,7 +104,7 @@
                                     </td>
                                     <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) Approved @else Pending @endif</td>
                                     <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) {{ $value->approved_by_first_name. ' ' .$value->approved_by_middle_name.' ' .$value->approved_by_last_name }} @else Pending @endif</td>
-                                    <td class="px-4 py-3">{{$value->amount}}</td>
+                                    <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
                                     <td class="px-4 py-3">
                                         @if(strlen($value->appoved_by)>0)
                                         @else 

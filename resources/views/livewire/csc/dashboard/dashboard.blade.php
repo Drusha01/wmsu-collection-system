@@ -67,6 +67,16 @@
             </div>
 
         </div>             -->
+        <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-4 mt-4 max-w-full">
+            @foreach ($paid_per_department as $key=>$value)
+            <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="w-full">
+                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collection for {{$value->department_code}}</h3>
+                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php {{number_format($value->paid_per_department, 2, '.', ',')}}</span>
+                </div>
+            </div>
+            @endforeach
+        </div>
         @persist('chart_script')
         <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4 max-w-full">
             <div class="items-center flex justify-around p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
