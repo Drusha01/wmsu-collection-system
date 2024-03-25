@@ -129,7 +129,7 @@ class EnrolledStudents extends Component
             ->join('semesters as sm','es.semester_id','sm.id')
             ->join('school_years as sy','es.school_year_id','sy.id')
             ->join('year_levels as yl','es.year_level_id','yl.id')
-            ->where('es.college_id','like',$this->filters['college_id'].'%')
+            ->where('es.college_id','=',$this->filters['college_id'])
             ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
             ->where('es.department_id','like',$this->filters['department_id'].'%')
             ->where('es.semester_id','like',$this->filters['semester_id'].'%')
