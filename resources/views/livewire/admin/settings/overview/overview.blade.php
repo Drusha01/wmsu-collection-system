@@ -28,7 +28,7 @@
                     <!--End Breadcrumb -->
                     <!--Table Header -->
                     <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
-                        
+
                         <button  id="Semester" style="display:none" type="button" data-modal-target="SemesterModal" data-modal-toggle="SemesterModal" class="flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
                             1st Semester Span
                         </button>
@@ -94,9 +94,9 @@
                                         <div class="mb-2">
                                             <label for="start-date"
                                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                Start Date 
+                                                Start Date
                                             </label>
-                                            
+
                                             @if($semester['date_start_month'] >0)
                                             <select id="month" required wire:model.defer="semester.date_start_date"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 @for($i = 0 ; $i< $months[$semester['date_start_month']]['max_date']; $i++)
@@ -124,9 +124,9 @@
                                         <div class="mb-2">
                                             <label for="start-date"
                                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                                End Date 
+                                                End Date
                                             </label>
-                                            
+
                                             @if($semester['date_end_month'] >0)
                                             <select id="month" required wire:model.defer="semester.date_end_date"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                                 @for($i = 0 ; $i< $months[$semester['date_end_month']-1]['max_date']; $i++)
@@ -151,7 +151,7 @@
                         </div>
                     </div>
 
-                    
+
                     <!--End Table Header -->
                     <!--Table-->
                     <div class="overflow-x-auto">
@@ -162,7 +162,7 @@
                                     <th scope="col" class="px-4 py-3">School Year</th>
                                     <th scope="col" class="px-4 py-3">Start Date</th>
                                     <th scope="col" class="px-4 py-3">End Date</th>
-                                    <th scope="col" class="text-center px-4 py-3">Actions</th>
+                                    {{-- <th scope="col" class="text-center px-4 py-3">Actions</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -170,9 +170,9 @@
                                 <tr class="border-b dark:border-gray-700">
                                 <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($school_years->currentPage()-1)*$school_years->perPage()+$key+1 }}</th>
                                     <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
-                                    <td scope="col" class="px-4 py-3">{{date_format(date_create($value->date_start),"M d, Y")}}</td> 
-                                    <td scope="col" class="px-4 py-3">{{date_format(date_create($value->date_end),"M d, Y")}}</td> 
-                                    <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <td scope="col" class="px-4 py-3">{{date_format(date_create($value->date_start),"M d, Y")}}</td>
+                                    <td scope="col" class="px-4 py-3">{{date_format(date_create($value->date_end),"M d, Y")}}</td>
+                                    {{-- <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div class="flex justify-center items-center space-x-4">
                                             <button type="button" class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -182,7 +182,7 @@
                                                 Edit
                                             </button>
                                         </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                                 @endforeach
                             </tbody>
