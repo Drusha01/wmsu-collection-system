@@ -42,6 +42,15 @@ class SystemLogs extends Component
     public function render()
     {
         $system_logs = DB::table('logs as l')
+            ->select(
+                'u.username',
+                'u.first_name',
+                'u.middle_name',
+                'u.middle_name',
+                'l.log_details',
+                'l.date_created',
+                'l.link'
+            )
             ->join('users as u','u.id','l.created_by')
             ->where('log_type_id','=',1)
             ->orderBy('l.date_created','desc')
