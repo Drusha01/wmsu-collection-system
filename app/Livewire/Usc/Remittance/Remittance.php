@@ -15,9 +15,24 @@ class Remittance extends Component
     use WithFileUploads;
     public $title = "Remittance";
     public $user_details;
+    public $college_data = [];
     public $filters = [
-        'college_id'=>NULL,
-    ]; 
+        'department_id'=>NULL,
+        'semester_id' => NULL,
+        'year_level_id' => NULL,
+        'school_year_id'=> NULL,
+        'college_id' => NULL,
+        'student_code_search'=> NULL,
+        'username'=> NULL,
+        'prevdepartment_id'=>NULL,
+        'prevsemester_id' => NULL,
+        'prevyear_level_id' => NULL,
+        'prevcollege_id' => NULL,
+        'prevstudent_code_search'=> NULL,
+        'prev_school_year_id'=> NULL,
+        'prev_username'=> NULL,
+        
+    ];
     public $remit = [
         'id' => NULL,
         'school_year_id'=> NULL,
@@ -56,6 +71,11 @@ class Remittance extends Component
             return redirect()->route('login');
         }
     }
+    public function mount(){
+        $this->college_data = DB::table('colleges')
+            ->get()
+            ->toArray();
+    }
     public function render()
     {
         $page_info = DB::table('users as u')
@@ -78,7 +98,7 @@ class Remittance extends Component
                 'u.first_name as approved_by_first_name',
                 'u.middle_name as approved_by_middle_name',
                 'u.last_name as approved_by_last_name',
-                'rbyu.username as remitted_by_',
+                'rbyu.username as remitted_by_username',
                 'rbyu.first_name as remitted_by_first_name',
                 'rbyu.middle_name as remitted_by_middle_name',
                 'rbyu.last_name as remitted_by_last_name',
@@ -98,7 +118,9 @@ class Remittance extends Component
             ->join('semesters as s','s.id','r.semester_id')
             ->leftjoin('users as u','u.id','r.appoved_by')
             ->where('r.school_year_id','=',$this->user_details->school_year_id)
-            ->where('r.college_id','like',$this->filters['college_id'].'%')
+            ->where('r.college_id','=',$this->filters['college_id'])
+            ->where('rbyu.username','like',$this->filters['username'].'%')
+            ->orderby('r.date_created','desc')
             ->paginate(10);
         return view('livewire.usc.remittance.remittance',[
             'page_info'=>$page_info,
