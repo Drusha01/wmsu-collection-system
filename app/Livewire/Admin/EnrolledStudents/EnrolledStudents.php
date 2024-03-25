@@ -99,44 +99,83 @@ class EnrolledStudents extends Component
             $this->resetPage();
             $this->prevstudent_id_search = $this->student_id_search;
         }
-        $enrolled_students_data = DB::table('enrolled_students as es')
-            ->select(
-                "es.id",
-                "s.id as student_id",
-                "s.student_code",
-                "s.first_name",
-                "s.middle_name",
-                "s.last_name",
-                "s.email",
-                "es.college_id",
-                "es.department_id",
-                "es.date_created",
-                "es.date_updated",
-                "c.code as college_code",
-                "c.name as college_name",
-                "d.name as department_name",
-                "d.code as department_code",
-                's.is_muslim',
-                's.is_active',
-                'sm.semester',
-                'sy.year_start',
-                'sy.year_end',
-                'yl.year_level'
-            )
-            ->join('students as s','es.student_id','s.id')
-            ->join('colleges as c','es.college_id','c.id')
-            ->join('departments as d','es.department_id','d.id')
-            ->join('semesters as sm','es.semester_id','sm.id')
-            ->join('school_years as sy','es.school_year_id','sy.id')
-            ->join('year_levels as yl','es.year_level_id','yl.id')
-            ->where('es.college_id','=',$this->filters['college_id'])
-            ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
-            ->where('es.department_id','like',$this->filters['department_id'].'%')
-            ->where('es.semester_id','like',$this->filters['semester_id'].'%')
-            ->where('s.student_code','like',$this->student_id_search.'%')
-            ->paginate(10);
+        if($this->filters['college_id']){
+            $enrolled_students_data = DB::table('enrolled_students as es')
+                ->select(
+                    "es.id",
+                    "s.id as student_id",
+                    "s.student_code",
+                    "s.first_name",
+                    "s.middle_name",
+                    "s.last_name",
+                    "s.email",
+                    "es.college_id",
+                    "es.department_id",
+                    "es.date_created",
+                    "es.date_updated",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    's.is_muslim',
+                    's.is_active',
+                    'sm.semester',
+                    'sy.year_start',
+                    'sy.year_end',
+                    'yl.year_level'
+                )
+                ->join('students as s','es.student_id','s.id')
+                ->join('colleges as c','es.college_id','c.id')
+                ->join('departments as d','es.department_id','d.id')
+                ->join('semesters as sm','es.semester_id','sm.id')
+                ->join('school_years as sy','es.school_year_id','sy.id')
+                ->join('year_levels as yl','es.year_level_id','yl.id')
+                ->where('es.college_id','=',$this->filters['college_id'])
+                ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
+                ->where('es.department_id','like',$this->filters['department_id'].'%')
+                ->where('es.semester_id','like',$this->filters['semester_id'].'%')
+                ->where('s.student_code','like',$this->student_id_search.'%')
+                ->paginate(10);
+        }else{
+            $enrolled_students_data = DB::table('enrolled_students as es')
+                ->select(
+                    "es.id",
+                    "s.id as student_id",
+                    "s.student_code",
+                    "s.first_name",
+                    "s.middle_name",
+                    "s.last_name",
+                    "s.email",
+                    "es.college_id",
+                    "es.department_id",
+                    "es.date_created",
+                    "es.date_updated",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    's.is_muslim',
+                    's.is_active',
+                    'sm.semester',
+                    'sy.year_start',
+                    'sy.year_end',
+                    'yl.year_level'
+                )
+                ->join('students as s','es.student_id','s.id')
+                ->join('colleges as c','es.college_id','c.id')
+                ->join('departments as d','es.department_id','d.id')
+                ->join('semesters as sm','es.semester_id','sm.id')
+                ->join('school_years as sy','es.school_year_id','sy.id')
+                ->join('year_levels as yl','es.year_level_id','yl.id')
+                ->where('es.college_id','like',$this->filters['college_id'].'%')
+                ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
+                ->where('es.department_id','like',$this->filters['department_id'].'%')
+                ->where('es.semester_id','like',$this->filters['semester_id'].'%')
+                ->where('s.student_code','like',$this->student_id_search.'%')
+                ->paginate(10);
+        }
+       
   
-      
             return view('livewire.admin.enrolled-students.enrolled-students',[
             'colleges_data'=>$colleges_data,
             'enrolled_students_data'=>$enrolled_students_data,
