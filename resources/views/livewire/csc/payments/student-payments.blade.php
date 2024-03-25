@@ -158,56 +158,50 @@
 
 
 
-                        <!-- Partial Payment Section -->
-                        
-                        <button style="display:none"  data-modal-target="confirmPayment" data-modal-toggle="confirmPayment" id="confirmPaymentToggle"></button>
-                        <button style="display:none" data-modal-target="confirmVoidModal" data-modal-toggle="confirmVoidModal" id="confirmVoidModalToggle"></button>
-                        <button style="display:none" data-modal-target="confirmPartialModal" data-modal-toggle="confirmPartialModal" id="confirmPartialModalToggle"></button>
-                        
-                    @if($total['total_amount'] > $total['total_amount_paid'])
-                        <div class="mx-5 px-3 border-b rounded-t dark:border-gray-600">
-                            <div class="mx-5 px-3 mb-5 mt-5 border-t border-gray-300">
-                                <div class="flex items-center justify-between">
-                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Partial Payment</h2>
-                                    <div class="flex items-center space-x-4 mt-2">
-                                        <button wire:click="confirmPartialDefault('confirmPartialModalToggle')"  type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-800">
-                                            Partial Payment
-                                        </button>
+                   
+                    
+                    <!-- Partial Payment Section -->
+                    <button style="display:none" data-modal-target="confirmPayment" data-modal-toggle="confirmPayment" id="confirmPaymentToggle"></button>
+                    <button style="display:none" data-modal-target="confirmVoidModal" data-modal-toggle="confirmVoidModal" id="confirmVoidModalToggle"></button>
+                    <button style="display:none" data-modal-target="confirmPartialModal" data-modal-toggle="confirmPartialModal" id="confirmPartialModalToggle"></button>
+                                
+                            @if($total['total_amount'] > $total['total_amount_paid'])
+                                <div class="mx-5 px-3 border-b rounded-t dark:border-gray-600">
+                                    <div class="mx-5 px-3 mb-5 mt-5 border-t border-gray-300">
+                                        <div class="flex items-center justify-between">
+                                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Partial Payment</h2>
+                                            <div class="flex items-center space-x-4 mt-2">
+                                                <button wire:click="confirmPartialDefault('confirmPartialModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-800">
+                                                    Partial Payment
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- <hr class="my-2">
-                                <div class="flex items-center justify-between">
-                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Payment History</h2>
-                                    <div class="flex items-center space-x-4">
-                                        <button wire:click="confirmVoidDefault('confirmPartialModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-600 dark:focus:ring-offset-gray-800">
-                                            View History
-                                        </button>
-                                    </div>
-                                </div> -->
-                            </div>
                             @endif
                             @if($total['total_amount_paid'] > 0)
                             <!-- Void Payment Section -->
-                            <div class="mx-5 px-3 mb-5 mt-5 border-t border-gray-300">
-                                <div class="flex items-center mb-5 mt-2 justify-between">
-                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Void Payment</h2>
-                                    <div class="flex items-center space-x-4">
+                            <div class="mx-5 px-3 border-b rounded-t dark:border-gray-600">
+                                <div class="mx-5 px-3 mb-5 mt-5 border-t border-gray-300">
+                                    <div class="flex items-center mb-5 mt-2 justify-between">
+                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Void Payment</h2>
+                                        <div class="flex items-center space-x-4">
                                             <button wire:click="confirmVoidDefault('confirmVoidModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-red-500 rounded-lg 
                                             hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
                                             focus:ring-offset-white dark:bg-red-600 dark:focus:ring-offset-gray-800">
-                                            Void Payment
-                                        </button>
+                                                Void Payment
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
                 </div>    
             </div>
 
-            <!-- payment history modal -->
-            <div>
 
+            <div>
+            <!-- payment history modal -->
                 <div id="PaymentHistory" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
@@ -437,6 +431,8 @@
                     </div>
                 </div>
                 
+
+                <!-- modals -->
                 <div wire:ignore.self id="confirmPartialModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
@@ -470,7 +466,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- modals -->
                 <div wire:ignore.self id="confirmVoidModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
@@ -501,7 +497,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- modals -->
                 <div wire:ignore.self id="confirmPayment" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -529,7 +525,7 @@
                         </div>
                     </div>
                 </div>
-
+                <!-- modals -->
                 <div id="receipt-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -555,6 +551,7 @@
                 </div> 
 
             </div>
+
 
         </section>
     </main>
