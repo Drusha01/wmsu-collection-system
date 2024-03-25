@@ -14,7 +14,7 @@ class StudentSeeders extends Seeder
     public function run(): void
     {
         DB::statement('INSERT INTO students VALUES(NULL,"2018-02518","Hanrickson","Etrone","Dumapit","bg201802518@wmsu.edu.ph",15,1,0,1,NOW(),NOW());');
-        DB::statement('INSERT INTO students VALUES(NULL,"2015-03664","Bryan Christian","Calabria","Sevilla","sl201503664@wmsu.edu.ph",15,1,1,1,NOW(),NOW());');
+        DB::statement('INSERT INTO students VALUES(NULL,"2015-03664","Bryan Christian","Calabria","Sevilla","sl201503664@wmsu.edu.ph",15,2,1,1,NOW(),NOW());');
         DB::statement('INSERT INTO students VALUES(NULL,"2020-01294","Alvin","John ","Romblon","xt202001294@wmsu.edu.ph",15,1,1,1,NOW(),NOW());');
         DB::statement('INSERT INTO students VALUES(NULL,"2020-01494","Aj ","Lowkey ","Roblox","xt202001494@wmsu.edu.ph",15,1,1,1,NOW(),NOW());');
         DB::statement('INSERT INTO students VALUES(NULL,"2020-01295","John","Doe","Legaspi","xt202001295@wmsu.edu.ph",15,1,0,1,NOW(),NOW());');
