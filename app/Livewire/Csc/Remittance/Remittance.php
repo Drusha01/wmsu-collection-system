@@ -81,6 +81,7 @@ class Remittance extends Component
             ->leftjoin('users as u','u.id','r.appoved_by')
             ->where('r.school_year_id','=',$this->user_details->school_year_id)
             ->where('r.college_id','=',$this->user_details->college_id)
+            ->orderby('r.date_created','desc')
             ->paginate(10);
         $page_info = DB::table('users as u')
         ->select(
