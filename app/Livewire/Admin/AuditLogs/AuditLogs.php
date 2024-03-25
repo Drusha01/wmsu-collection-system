@@ -49,7 +49,7 @@ class AuditLogs extends Component
                 'u.username',
                 'u.first_name',
                 'u.middle_name',
-                'u.middle_name',
+                'u.last_name',
                 'l.log_details',
                 'l.date_created',
                 'l.link'
