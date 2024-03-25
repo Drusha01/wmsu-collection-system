@@ -10,8 +10,23 @@ use Livewire\WithPagination;
 
 class Paymentrecords extends Component
 {
+    use WithPagination;
     public $title = "PaymentRecords";
-
+    public $filters = [
+        'department_id'=>NULL,
+        'semester_id' => NULL,
+        'year_level_id' => NULL,
+        'school_year_id'=> NULL,
+        'college_id' => NULL,
+        'student_code_search'=> NULL,
+        'prevdepartment_id'=>NULL,
+        'prevsemester_id' => NULL,
+        'prevyear_level_id' => NULL,
+        'prevcollege_id' => NULL,
+        'prevstudent_code_search'=> NULL,
+        'prev_school_year_id'=> NULL,
+        
+    ];
     public function boot(Request $request ){
 
         $session = $request->session()->all();
@@ -39,6 +54,12 @@ class Paymentrecords extends Component
     }
     public function render()
     {
+        if($this->filters['student_code_search'] != $this->filters['prevstudent_code_search']){
+            $this->filters['prevstudent_code_search'] =$this->filters['student_code_search'];
+            $this->resetPage();
+        }
+
+        $this->filters['school_year_id'] = $this->user_details->school_year_id;
         $page_info = DB::table('users as u')
         ->select(
             'c.name as college_name',
@@ -74,9 +95,12 @@ class Paymentrecords extends Component
             ->join('fees as f','f.id','pi.fee_id')
             ->rightjoin('fee_types as ft','ft.id','f.fee_type_id')
             ->where('es.college_id','=',$this->user_details->college_id)
+            ->where('f.school_year_id','like',$this->filters['school_year_id'] .'%')
+            ->where('s.student_code','like',$this->filters['student_code_search'] .'%')
             ->orderBy('pi.date_created','desc')
             ->groupBy('pi.id')
             ->paginate(10);
+            
         return view('livewire.csc.paymentrecords.paymentrecords',[
             'payment_records_data'=>$payment_records_data,
             'page_info'=>$page_info

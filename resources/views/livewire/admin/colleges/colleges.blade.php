@@ -38,7 +38,11 @@
                                             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                    <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Search" required="">
+                                    <form >
+                                        <input type="text" id="simple-search" wire:model.live.debounce.250ms="filters.college_name"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                        placeholder="Search college name" required="">
+                                    </form>
                                 </div>
                             </form>
                         </div>
@@ -62,8 +66,8 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-4 py-3">#</th>
-                                    <th scope="col" class="px-4 py-3">College Code</th>
                                     <th scope="col" class="px-4 py-3">College Name</th>
+                                    <th scope="col" class="px-4 py-3">College Code</th>
                                     <th scope="col" class="text-center px-4 py-3">Department</th>
                                     <th scope="col" class="text-center px-4 py-3">Actions</th>
                                 </tr>
@@ -72,8 +76,8 @@
                                 @forelse($college_data as $key => $value)
                                     <tr class="border-b dark:border-gray-700">
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($college_data->currentPage()-1)*$college_data->perPage()+$key+1 }}</th>
-                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$value->code}}</th>
                                         <td class="px-4 py-3">{{$value->name}}</td>
+                                        <th class="px-4 py-3 ">{{$value->code}}</th>
                                         <td>
                                             <div class="flex justify-center items-center space-x-4">
                                                 <button type="button" wire:click="ViewDepartment({{$value->id}},'viewDepartmentModaltoggler')" class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
@@ -81,7 +85,7 @@
                                                         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
                                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" />
                                                     </svg>
-                                                        View Department      
+                                                        View Department
                                                 </button>
                                                 <button wire:click="addDepartment({{$value->id}},'addDepartmentModaltoggler')" type="button"class="py-2 px-3 flex items-center text-sm font-medium text-center text-blue-900 focus:outline-none bg-white rounded-lg border border-blue-200 hover:bg-blue-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-700 dark:bg-blue-800 dark:text-blue-400 dark:border-blue-600 dark:hover:text-white dark:hover:bg-blue-700" >
                                                     <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -92,10 +96,10 @@
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            
+
 
                                             <div class="flex justify-center items-center space-x-4">
-                                              
+
                                                 <button wire:click="editCollege({{$value->id}},'viewCollegeModaltoggler')" type="button"class="py-2 px-3 flex items-center text-sm font-medium text-center text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 -ml-0.5">
                                                         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
@@ -165,7 +169,7 @@
                                                 <span class="text-sm font-thin text-gray-500 dark:text-gray-400">Enter the full name of the college</span>
                                                 @error('name')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{$message}}</p>
-                                                @enderror 
+                                                @enderror
                                             </div>
                                             <div class="col-span-6">
                                                 <label for="college_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College Code</label>
@@ -175,7 +179,7 @@
                                                 <span class="text-sm font-thin text-gray-500 dark:text-gray-400">Enter the code for the college  </span>
                                                 @error('college_code')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{$message}}</p>
-                                                @enderror 
+                                                @enderror
                                             </div>
                                         </div>
                                         <div id="courses-container">
@@ -213,6 +217,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveEditCollege({{$college['id']}},'editCollegeModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-5 grid-cols-2">
@@ -224,7 +229,7 @@
                                                 <span class="text-sm font-thin text-gray-500 dark:text-gray-400">Enter the full name of the college</span>
                                                 @error('name')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{$message}}</p>
-                                                @enderror 
+                                                @enderror
                                             </div>
                                             <div class="col-span-6">
                                                 <label for="college_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College Code</label>
@@ -234,7 +239,7 @@
                                                 <span class="text-sm font-thin text-gray-500 dark:text-gray-400">Enter the code for the college  </span>
                                                 @error('college_code')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{$message}}</p>
-                                                @enderror 
+                                                @enderror
                                             </div>
                                         </div>
                                         <div id="courses-container">
@@ -250,7 +255,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -273,6 +277,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" >
                                         @csrf
                                         <div class="grid gap-4 mb-5 grid-cols-2">
@@ -284,7 +289,7 @@
                                                 <span class="text-sm font-thin text-gray-500 dark:text-gray-400">Enter the full name of the college</span>
                                                 @error('name')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{$message}}</p>
-                                                @enderror 
+                                                @enderror
                                             </div>
                                             <div class="col-span-6">
                                                 <label for="college_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">College Code</label>
@@ -294,7 +299,7 @@
                                                 <span class="text-sm font-thin text-gray-500 dark:text-gray-400">Enter the code for the college  </span>
                                                 @error('college_code')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{$message}}</p>
-                                                @enderror 
+                                                @enderror
                                             </div>
                                         </div>
                                         <div id="courses-container">
@@ -306,7 +311,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -327,8 +331,9 @@
                                             <span class="sr-only">Close modal</span>
                                         </button>
                                     </div>
-                                    <!-- Modal body -->
+                                    <!-- Modal body FIRST DEACTIVATION-->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveDeleteCollege({{$college['id']}},'deleteCollegeModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-5">
@@ -347,7 +352,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -369,6 +373,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveActivateCollege({{$college['id']}},'activateCollegeModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-5 grid-cols-2">
@@ -378,7 +383,6 @@
                                             <!-- Dynamic Input for Courses -->
                                         </div>
                                         <div class="flex justify-end items-center mt-2">
-
                                             <button type="button" data-modal-toggle="activateCollegeModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
                                                 Close
                                             </button>
@@ -387,7 +391,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -411,6 +414,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" >
                                         @csrf
                                         @forelse($departments as $key => $value)
@@ -419,7 +423,7 @@
                                                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{$value->name.' ('.$value->code.')'}}</label>
                                             </div>
                                         </div>
-                                        @empty 
+                                        @empty
                                             <div class="grid gap-4 grid-cols-2">
                                                 <div class="col-span-6">
                                                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NO DATA</label>
@@ -435,7 +439,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -458,6 +461,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     @if(isset($college['id']))
+                                    @endif
                                     <form class="p-7 md:p-5" wire:submit.prevent="saveAddDepartment('addDepartmentModal')">
                                         @csrf
                                         <div class="grid gap-4 mb-5 grid-cols-2">
@@ -469,7 +473,7 @@
                                                 <span class="text-sm font-thin text-gray-500 dark:text-gray-400">Enter the full name of the college</span>
                                                 @error('name')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{$message}}</p>
-                                                @enderror 
+                                                @enderror
                                             </div>
                                             <div class="col-span-6">
                                                 <label for="college_code" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Department Code</label>
@@ -479,7 +483,7 @@
                                                 <span class="text-sm font-thin text-gray-500 dark:text-gray-400">Enter the code for the college  </span>
                                                 @error('college_code')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{$message}}</p>
-                                                @enderror 
+                                                @enderror
                                             </div>
                                         </div>
                                         <div id="courses-container">
@@ -487,7 +491,7 @@
                                         </div>
                                         <div class="flex justify-end items-center mt-2">
 
-                                            <button type="button" data-modal-toggle="editCollegeModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                                            <button type="button" data-modal-toggle="addDepartmentModal" class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
                                                 Close
                                             </button>
                                             <button type="submit" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
@@ -495,7 +499,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                    @endif
                                 </div>
                             </div>
                         </div>

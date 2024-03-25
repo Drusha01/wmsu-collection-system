@@ -27,6 +27,11 @@ class Colleges extends Component
         'name' => NULL,
         'is_active' => NULL
     ];
+    public $filters = [
+        'college_name'=>NULL,
+        'prev_college_name'=>NULL,
+
+    ];
     public function boot(Request $request ){
         $session = $request->session()->all();
         if(isset($session['id']) && $user_details = DB::table('users as u')
@@ -58,9 +63,14 @@ class Colleges extends Component
     }
 
     public function render(){
-        $colleges_data = DB::table('colleges')
+        if($this->filters['college_name'] != $this->filters['prev_college_name']){
+            $this->filters['prev_college_name'] =$this->filters['college_name'];
+            $this->resetPage();
+        }
+        $colleges_data = DB::table('colleges as c')
             // ->where('is_active','=',1)
-            ->orderBy('is_active','desc')
+            ->where('c.name','like',$this->filters['college_name'] .'%')
+            ->orderBy('c.is_active','desc')
             ->paginate(10);
         return view('livewire.admin.colleges.colleges',
             ['college_data'=>$colleges_data])
@@ -82,7 +92,7 @@ class Colleges extends Component
         if(strlen($this->college['name'])<=0){
             return;
         }
-       
+
         if(DB::table('colleges')
             ->where('name','=',$this->college['name'])
             ->first()){
@@ -157,7 +167,7 @@ class Colleges extends Component
         if(strlen($this->college['name'])<=0){
             return;
         }
-       
+
         if(DB::table('colleges')
             ->where('name','=',$this->college['name'])
             ->where('id','!=',$id)
@@ -231,7 +241,7 @@ class Colleges extends Component
                 'id' =>NULL,
                 'log_type_id' =>1,
                 'created_by' =>$this->user_details->id,
-                'log_details' =>'has deleted a college ('.$this->college['code'].') '.$this->college['name'],
+                'log_details' =>'has deactivate a college ('.$this->college['code'].') '.$this->college['name'],
                 'link' =>route('admin-colleges'),
             ]);
             $this->dispatch('closeModal',$modal_id);
@@ -273,14 +283,14 @@ class Colleges extends Component
                 'name' => $college->name,
                 'is_active' => $college->is_active
             ];
-             
+
             $this->departments = DB::table('departments')
             ->where('college_id','=',$id)
             ->get()
             ->toArray();
             $this->dispatch('openModal',$modal_id);
         }
-     
+
     }
     public function addDepartment($id,$modal_id){
         if($college = DB::table('colleges')
@@ -292,7 +302,7 @@ class Colleges extends Component
                 'name' => $college->name,
                 'is_active' => $college->is_active
             ];
-            
+
             $this->department = [
                 'id' => NULL,
                 'college_id'=> $college->id,
@@ -304,14 +314,14 @@ class Colleges extends Component
         }
     }
     public function saveAddDepartment($modal_id){
-       
+
         if(strlen($this->department['code'])<=0){
             return;
         }
         if(strlen($this->department['name'])<=0){
             return;
         }
-       
+
         if(DB::table('departments')
             ->where('name','=',$this->department['name'])
             ->first()){
@@ -375,7 +385,7 @@ class Colleges extends Component
                     link              									: '#'
                 );
            }
-            
+
         }else{
             $this->dispatch('swal:redirect',
                 position         									: 'center',

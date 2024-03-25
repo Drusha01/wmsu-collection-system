@@ -21,6 +21,13 @@ class Overview extends Component
         'date_end_date' => NULL,
         'date_end_month' => NULL,
     ];
+    public $school_year = [
+        'id' => NULL,
+        'year_start'=> NULL,
+        'year_end' => NULL,
+        'date_start' => NULL,
+        'date_end' => NULL,
+    ];
     public $months = [
         0=>['month_name'=> 'January','month_number'=>1,'max_date'=>31],
         1=>['month_name'=> 'February','month_number'=>2,'max_date'=>28],
@@ -180,6 +187,34 @@ class Overview extends Component
         $latest_school_year = DB::table('school_years')
             ->orderBy('id','desc')
             ->first();
-        dd($latest_school_year);
+        $first_semester = DB::table('semesters')
+            ->where('semester','=','1st semester')
+            ->first();
+        $second_semester = DB::table('semesters')
+            ->where('semester','=','2nd semester')
+            ->first();
+        $this->school_year = [
+            'id' => NULL,
+            'year_start'=> $latest_school_year->year_start+1,
+            'year_end' => $latest_school_year->year_end+1,
+            'date_start' => ($latest_school_year->year_start+1).'-'.$first_semester->date_start_month.'-'.$first_semester->date_start_date,
+            'date_end' => ($latest_school_year->year_end+1).'-'.$second_semester->date_end_month.'-'.$second_semester->date_end_date,
+        ];
+        if(DB::table('school_years')
+            ->insert([
+                'year_start'=>$this->school_year['year_start'],
+                'year_end' => $this->school_year['year_end'],
+                'date_start' => $this->school_year['date_start'],
+                'date_end' => $this->school_year['date_end'],
+        ])){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Successfully added',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+        }
     }
 }

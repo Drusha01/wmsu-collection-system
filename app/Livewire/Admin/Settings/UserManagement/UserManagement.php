@@ -26,6 +26,11 @@ class UserManagement extends Component
         'role_name' => 'usc-admin',
         'position_id' =>NULL,
     ];
+    public $filters = [
+        'username'=>NULL,
+        'prev_username'=>NULL,
+      
+    ];
     public $school_years = [];
     public $colleges = [];
     public $roles = [];
@@ -61,6 +66,10 @@ class UserManagement extends Component
         }
     }
     public function render(){
+        if($this->filters['username'] != $this->filters['prev_username']){
+            $this->filters['prev_username'] =$this->filters['username'];
+            $this->resetPage();
+        }
         $users_data = [];
       
         $users_data = DB::table('users as u')
@@ -89,6 +98,7 @@ class UserManagement extends Component
             ->leftjoin('school_years as sy','sy.id','u.school_year_id')
             ->join('positions as p','p.id','u.position_id')
             ->where('r.name','<>','admin')
+            ->where('u.username','like',$this->filters['username'] .'%')
             ->orderBy('u.date_created')
             ->paginate(10);
        

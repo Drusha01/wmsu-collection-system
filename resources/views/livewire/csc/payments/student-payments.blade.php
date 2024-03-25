@@ -81,7 +81,7 @@
                                 <span class="ml-2">Download Receipt</span>
                             </button>
                             @if($total['total_amount'] > $total['total_amount_paid'])
-                                <button data-modal-target="confirmPayment" data-modal-toggle="confirmPayment" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg 
+                                <button wire:click="confirmPaymentDefault('confirmPaymentToggle')"type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg 
                                 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 
                                 focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-8000">
                                     Confirm
@@ -159,26 +159,30 @@
 
 
                         <!-- Partial Payment Section -->
+                        
+                        <button style="display:none"  data-modal-target="confirmPayment" data-modal-toggle="confirmPayment" id="confirmPaymentToggle"></button>
+                        <button style="display:none" data-modal-target="confirmVoidModal" data-modal-toggle="confirmVoidModal" id="confirmVoidModalToggle"></button>
+                        <button style="display:none" data-modal-target="confirmPartialModal" data-modal-toggle="confirmPartialModal" id="confirmPartialModalToggle"></button>
                     @if($total['total_amount'] > $total['total_amount_paid'])
                         <div class="mx-5 px-3 mb-5 mt-5 border-b rounded-t dark:border-gray-600">
                             <div class="mx-5 px-3 mb-5 mt-5 border-t border-gray-300">
                                 <div class="flex items-center justify-between">
                                     <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Partial Payment</h2>
                                     <div class="flex items-center space-x-4 mt-2">
-                                        <button wire:click="confirmPartialDefault()" data-modal-target="confirmPartialModal" data-modal-toggle="confirmPartialModal" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-800">
+                                        <button wire:click="confirmPartialDefault('confirmPartialModalToggle')"  type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-800">
                                             Partial Payment
                                         </button>
                                     </div>
                                 </div>
-                                <hr class="my-2">
+                                <!-- <hr class="my-2">
                                 <div class="flex items-center justify-between">
                                     <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Payment History</h2>
                                     <div class="flex items-center space-x-4">
-                                        <button data-modal-target="PaymentHistory" data-modal-toggle="PaymentHistory" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-600 dark:focus:ring-offset-gray-800">
+                                        <button wire:click="confirmVoidDefault('confirmPartialModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-600 dark:focus:ring-offset-gray-800">
                                             View History
                                         </button>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             @endif
                             @if($total['total_amount_paid'] > 0)
@@ -186,7 +190,7 @@
                             <div class="mx-5 px-3 mb-5 mt-5">
                                 <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Void Payment</h2>
                                 <div class="flex items-center space-x-4">
-                                        <button wire:click="confirmVoidDefault()" data-modal-target="confirmVoidModal" data-modal-toggle="confirmVoidModal" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-red-500 rounded-lg 
+                                        <button wire:click="confirmVoidDefault('confirmVoidModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-red-500 rounded-lg 
                                         hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
                                         focus:ring-offset-white dark:bg-red-600 dark:focus:ring-offset-gray-800">
                                         Void Payment
@@ -206,7 +210,8 @@
                 <div id="PaymentHistory" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
-                            <button type="button" data-modal-hide="" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+                            <button type="button"  class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
+                            data-modal-hide="PaymentHistory">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                 </svg>
@@ -431,11 +436,10 @@
                     </div>
                 </div>
                 
-                {{-- Modal partial --}}
                 <div wire:ignore.self id="confirmPartialModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
-                            <button type="button" data-modal-hide="confirmPartialModal" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+                            <button type="button" data-modal-hide="confirmPartialModal" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" >
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                 </svg>
@@ -469,7 +473,7 @@
                 <div wire:ignore.self id="confirmVoidModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
-                            <button type="button" data-modal-hide="confirmVoidModal" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+                            <button type="button" data-modal-hide="confirmVoidModal" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" >
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                 </svg>
@@ -497,12 +501,11 @@
                     </div>
                 </div>
 
-                {{-- Modal partial --}}
-                <div id="confirmPayment" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div wire:ignore.self id="confirmPayment" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                             <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
-                            data-modal-hide="popup-modal">
+                            data-modal-hide="confirmPayment">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                 </svg>
@@ -526,11 +529,11 @@
                     </div>
                 </div>
 
-                {{-- Modal Receipt --}}
                 <div id="receipt-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                            <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal">
+                            <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                             data-modal-hide="receipt-modal">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                                 </svg>

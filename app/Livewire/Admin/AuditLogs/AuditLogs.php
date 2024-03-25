@@ -45,6 +45,15 @@ class AuditLogs extends Component
     public function render()
     {
         $audit_logs = DB::table('logs as l')
+            ->select(
+                'u.username',
+                'u.first_name',
+                'u.middle_name',
+                'u.last_name',
+                'l.log_details',
+                'l.date_created',
+                'l.link'
+            )
             ->join('users as u','u.id','l.created_by')
             ->where('log_type_id','=',2)
             ->orderBy('l.date_created','desc')

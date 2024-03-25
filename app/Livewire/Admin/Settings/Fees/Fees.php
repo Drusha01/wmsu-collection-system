@@ -6,9 +6,11 @@ use Livewire\Component;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
 
 class Fees extends Component
 {
+    use WithPagination;
     public $title = "Fees";
     public $term = [];
 
@@ -23,6 +25,22 @@ class Fees extends Component
         'semester_id' => NULL,
         'created_by' => NULL,
         'for_muslim' => NULL,
+    ];
+    public $filters = [
+        'department_id'=>NULL,
+        'semester_id' => NULL,
+        'year_level_id' => NULL,
+        'college_id' => NULL,
+        'student_code_search'=> NULL,
+        'fee_name'=>NULL,
+        'school_year_id'=>NULL,
+        'prevdepartment_id'=>NULL,
+        'prevsemester_id' => NULL,
+        'prevyear_level_id' => NULL,
+        'prevcollege_id' => NULL,
+        'prevstudent_code_search'=> NULL,
+        'prev_fee_name'=>NULL,
+        'prev_school_year_id'=>NULL,
     ];
     public $months = [
         0=>['month_name'=> 'January','month_number'=>1,'max_date'=>31],
@@ -42,13 +60,19 @@ class Fees extends Component
     public $school_years = [];
     public $semesters = [];
     public $school_year = 0;
-    public function render()
-    {
+    public function render(){
+        if($this->filters['fee_name'] != $this->filters['prev_fee_name']){
+            $this->filters['prev_fee_name'] =$this->filters['fee_name'];
+            $this->resetPage();
+        }
+        if($this->filters['school_year_id'] != $this->filters['prev_school_year_id']){
+            $this->filters['prev_school_year_id'] = $this->filters['school_year_id'];
+            $this->resetPage();
+        }
         $this->school_years = DB::table('school_years')
             ->orderBy('id','desc')
             ->get()
             ->toArray();
-        $this->school_year = NULL;
        
    
         $fees_data = DB::table('fees as f')
@@ -78,7 +102,8 @@ class Fees extends Component
             ->join('school_years as sy','sy.id','f.school_year_id')
             ->join('semesters as s','s.id','f.semester_id')
             ->leftjoin('departments as d','d.id','f.department_id')
-            ->where('f.school_year_id','like',$this->school_year.'%')
+            ->where('f.school_year_id','like',$this->filters['school_year_id'].'%')
+            ->where('f.name','like',$this->filters['fee_name'] .'%')
             ->paginate(10);
 
         return view('livewire.admin.settings.fees.fees',[

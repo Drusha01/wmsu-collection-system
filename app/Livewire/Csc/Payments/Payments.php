@@ -16,6 +16,13 @@ class Payments extends Component
         'department_id'=>NULL,
         'semester_id' => NULL,
         'year_level_id' => NULL,
+        'college_id' => NULL,
+        'student_code_search'=> NULL,
+        'prevdepartment_id'=>NULL,
+        'prevsemester_id' => NULL,
+        'prevyear_level_id' => NULL,
+        'prevcollege_id' => NULL,
+        'prevstudent_code_search'=> NULL,
     ];
     public $semesters;
     public $colleges_data;
@@ -65,6 +72,10 @@ class Payments extends Component
     }
     public function render()
     {
+        if($this->filters['student_code_search'] != $this->filters['prevstudent_code_search']){
+            $this->filters['prevstudent_code_search'] =$this->filters['student_code_search'];
+            $this->resetPage();
+        }
         $this->semesters = DB::table('semesters')
         ->get()
         ->toArray();
@@ -91,6 +102,7 @@ class Payments extends Component
             )
             ->rightjoin('enrolled_students as es','es.student_id','s.id')
             ->where('es.college_id','=', $this->user_details->college_id)
+            ->where('s.student_code','like',$this->filters['student_code_search'] .'%')
             ->groupBy('s.id')
             ->paginate(10);
         // $enrolled_students_data = DB::table('enrolled_students as es')
