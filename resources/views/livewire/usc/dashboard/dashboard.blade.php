@@ -2,19 +2,35 @@
 <main class="p-9 sm:ml-64 pt-20 sm:pt-8 h-auto">
     <div class="p-4">
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-
-            <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-4 mt-4 max-w-full">
-
-                <!-- First Section -->
-                <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                    <div class="w-full">
-                        <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collection</h3>
-                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 100,000</span>
+            <div class="mt-6 flex justify-end mr-6">
+                <button id="dropdownYearButton" data-dropdown-toggle="dropdownYear" class="inline-flex items-center px-4 py-2 mb-3 font-medium text-center
+                text-white bg-green-600 rounded-lg md:mb-0 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600
+                 green:hover:bg-green-700 dark:green:ring-green-800" type="button"> School Year
+                 <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+    
+                    <!-- Dropdown menu -->
+                    <div id="dropdownYear" class="z-10 hidden bg-white divide-y divide-gray-300 rounded-lg shadow-md w-40 dark:bg-gray-800 dark:divide-gray-700 dark:shadow-md">
+                        <ul class="py-2 text-sm text-center text-gray-800 dark:text-gray-200" aria-labelledby="dropdownYearButton">
+                            <li>
+                                <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2023-2024</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2024-2025</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2025-2026</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
+    
+            <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4 max-w-full">
 
                 <!-- Second Section -->
-                <div class="col-span-1 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="col-span-1 ml-4 mb-4 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="w-full">
                     <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">University Fee</h3>
                     <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 50,000</span>
@@ -25,10 +41,10 @@
                             Amount Collected
                     </p>
                 </div>
-            </div>
+            </div>  
 
             <!-- Third Section -->
-            <div class="col-span-1 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <div class="col-span-1 mr-4 mb-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="w-full">
                     <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Local Fee</h3>
                     <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 20,000</span>
@@ -43,15 +59,18 @@
 
         </div>
 
+        <div class="mr-4 max-w-full">
+             <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                 <div class="w-full">
+                   <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collection</h3>
+                 <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 100,000</span>
+                </div>
+            </div>
+        </div>
+
         <div class="px-4 pt-6 2xl:px-0 max-w-screen-xl mx-auto">
             <div class="mr-4">
 
-            <!-- College Bar Chart -->
-            <div class="sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 ml-4 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 dark:bg-gray-800">
-                <div class="items-center justify-between lg:flex mb-10">
-                    <canvas id="myChart"></canvas>
-            </div>
-        </div>
 
     </div>
 </main>

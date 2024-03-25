@@ -27,18 +27,12 @@
                 </div>
             </div>
 
-            <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-6 mt-6 max-w-full">
+            <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-6 mt-6 max-w-full">
 
-                <!-- First Section -->
-                <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                    <div class="w-full">
-                        <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collection</h3>
-                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 100,000</span>
-                    </div>
-                </div>
+
 
                 <!-- Second Section -->
-                <div class="col-span-1 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="col-span-1 ml-4 mb-4 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="w-full">
                     <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">University Fee</h3>
                     <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 50,000</span>
@@ -52,7 +46,7 @@
             </div>
 
             <!-- Third Section -->
-            <div class="col-span-1 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 mr-4">
+            <div class="col-span-1 mr-4 mb-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="w-full">
                     <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 r">Local Fee</h3>
                     <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 20,000</span>
@@ -66,16 +60,15 @@
             </div>
 
         </div>
-
-        <div class="px-4 pt-6 2xl:px-0 max-w-screen-xl mx-auto">
-            <div class="mr-4">
-
-            <!-- College Bar Chart -->
-            <div class="sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 ml-4 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 dark:bg-gray-800">
-                <div class="items-center justify-between lg:flex mb-10">
-                    <canvas id="myChart2"></canvas>
+        <!-- First Section -->
+        <div class="col-span-1 mr-4  items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <div class="w-full">
+                <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collection</h3>
+                <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 100,000</span>
             </div>
         </div>
+        <div class="px-4 pt-6 2xl:px-0 max-w-screen-xl mx-auto">
+            <div class="mr-4">
 
     </div>
 </main>
