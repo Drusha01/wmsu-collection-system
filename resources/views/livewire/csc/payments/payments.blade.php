@@ -57,36 +57,7 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
-                            <div class="flex items-center space-x-3 w-full md:w-auto">
-                                <select id="course" name="course" wire:model.live="filters.year_level_id"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    <option selected value="" >Filter Year</option>
-                                    @foreach($year_levels as $key =>$value)
-                                            <option value="{{$value->id}}">{{$value->year_level}}</option>
-                                    @endforeach
-                                </select>
-                            </div>    
-                            <div class="flex items-center space-x-3 w-full md:w-auto">
-                                <select id="course" name="course" wire:model.live="filters.department_id"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    <option selected value="" >Filter course</option>
-                                    @foreach ( $department_data as $department)
-                                        <option value="{{ $department->id }}">{{ $department->code }}</option>
-                                    @endforeach
-                                </select>
-                            </div>    
-                            <div class="flex items-center space-x-3 w-full md:w-auto">
-                                <select id="course" name="course" wire:model.live="filters.semester_id"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    <option selected value="" >Select semester</option>
-                                    @foreach($semesters as $key =>$value)
-                                            <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
-                                    @endforeach
-                                </select>
-                            </div>    
-
-                        </div>
+                        
                     </div>
                     <!--End Table Header -->
                     <!--Table-->
