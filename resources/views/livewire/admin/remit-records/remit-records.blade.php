@@ -75,7 +75,6 @@
                                     <th scope="col" class="px-4 py-3">Approved By</th>
                                     <th scope="col" class="px-4 py-3">Amount</th>
                                     <th scope="col" class="px-4 py-3">Proof</th>
-                                    <th scope="col" class="px-4 py-3">Action</th>
                                     
                                 </tr>
                             </thead>
@@ -98,13 +97,6 @@
                                                 View Proof
                                             </button>
                                         </a>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        @if(strlen($value->appoved_by)>0)
-                                                Approved
-                                        @else 
-                                                Pending
-                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
