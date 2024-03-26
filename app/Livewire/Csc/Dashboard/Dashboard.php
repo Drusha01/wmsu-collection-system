@@ -141,6 +141,7 @@ class Dashboard extends Component
             )
             ->where('r.school_year_id','=',$this->user_details->school_year_id)
             ->where('r.college_id','=',$this->user_details->college_id)
+            ->where('r.semester_id','=',$this->filters['semester_id'])
             ->where('appoved_by','>',0)
             ->first();
         if($total_collected){

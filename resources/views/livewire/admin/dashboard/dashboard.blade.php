@@ -1,76 +1,142 @@
 
 <main class="p-9 sm:ml-64 pt-20 sm:pt-8 h-auto">
     <div class="p-4">
-        <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+        <!-- <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
             <div class="mt-6 flex justify-end mr-6">
-            <button id="dropdownYearButton" data-dropdown-toggle="dropdownYear" class="inline-flex items-center px-4 py-2 mb-3 font-medium text-center
-            text-white bg-green-600 rounded-lg md:mb-0 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600
-             green:hover:bg-green-700 dark:green:ring-green-800" type="button"> School Year
-             <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-            </button>
-
-                <!-- Dropdown menu -->
-                <div id="dropdownYear" class="z-10 hidden bg-white divide-y divide-gray-300 rounded-lg shadow-md w-40 dark:bg-gray-800 dark:divide-gray-700 dark:shadow-md">
-                    <ul class="py-2 text-sm text-center text-gray-800 dark:text-gray-200" aria-labelledby="dropdownYearButton">
-                        <li>
-                            <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2023-2024</a>
-                        </li>
-                        <li>
-                            <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2024-2025</a>
-                        </li>
-                        <li>
-                            <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2025-2026</a>
-                        </li>
-                    </ul>
+                <button id="dropdownYearButton" data-dropdown-toggle="dropdownYear" class="inline-flex items-center px-4 py-2 mb-3 font-medium text-center
+                text-white bg-green-600 rounded-lg md:mb-0 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600
+                 green:hover:bg-green-700 dark:green:ring-green-800" type="button"> School Year
+                 <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                    </svg>
+                </button>
+    
+                    <div id="dropdownYear" class="z-10 hidden bg-white divide-y divide-gray-300 rounded-lg shadow-md w-40 dark:bg-gray-800 dark:divide-gray-700 dark:shadow-md">
+                        <ul class="py-2 text-sm text-center text-gray-800 dark:text-gray-200" aria-labelledby="dropdownYearButton">
+                            <li>
+                                <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2023-2024</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2024-2025</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-2 py-2 hover:bg-gray-200 rounded dark:hover:bg-gray-900 dark:hover:text-white">2025-2026</a>
+                            </li>
+                        </ul>
+                    </div>
+            </div> -->
+                <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+           
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="flex flex-wrap items-center justify-end mt-3 px-4 p-2">
+                                <div class="col-6 flex">
+                                    <select id="course" name="course" wire:model.live="filters.school_year_id" 
+                                        class=" mx-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        @foreach($school_years as $key =>$value)
+                                                <option value="{{$value->id}}">{{$value->year_start.' - '.$value->year_end}}</option>
+                                        @endforeach
+                                    </select>
+                                    <select id="course" name="course" wire:model.live="filters.semester_id" 
+                                        class="mx-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                        @foreach($semesters as $key =>$value)
+                                                <option value="{{$value->id}}">{{$value->semester}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>  
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                        <div class="w-full">
+                            <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collected </h3>
+                            <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['total_collected'], 2, '.', ',')}} </span>
+                        </div>
+                    </div>
+                    <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4 max-w-full">
+                    
+                        <div class="col-span-1 ml-4 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                            <div class="w-full">
+                                <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">USC shares</h3>
+                                <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['usc_shares'], 2, '.', ',')}} </span>
+                            </div>
+                        </div>
+                        <div class="col-span-1 mr-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                            <div class="w-full">
+                                <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">CSC shares</h3>
+                                <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['csc_shares'], 2, '.', ',')}} </span>
+                            </div>
+                        </div>
+                        
                 </div>
-            </div>
-
-            <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-6 mt-6 max-w-full">
-
-
-
-                <!-- Second Section -->
-                <div class="col-span-1 ml-4 mb-4 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                <div class="w-full">
-                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">University Fee</h3>
-                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 50,000</span>
-                    <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
-                        <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.998 511.998" xml:space="preserve" width="16px" height="16px" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path style="fill:#507C5C;" d="M156.747,488.732c-9.848,0-24.224-4.823-56.16-40.563c-16.231-18.165-29.533-36.035-30.091-36.787 c-0.376-0.507-0.717-1.036-1.023-1.587c-6.073-10.932-9.283-23.321-9.283-35.827v-90.892c0-7.925,6.424-14.35,14.35-14.35h116.075 c16.624,0,32.305,6.421,44.155,18.082l59.433,58.485c8.383,8.382,12.955,19.419,12.955,31.159s-4.572,22.777-12.873,31.078 c-17.234,17.231-45.115,17.231-62.253,0.095l-59.37-59.372c-5.898-0.044-15.48-0.089-23.134-0.123l-10.82-0.052 c-7.925-0.042-14.317-6.499-14.275-14.424c0.042-7.899,6.457-14.275,14.348-14.275c0.026,0,0.05,0,0.076,0l10.802,0.052 c6.79,0.03,14.055,0.065,19.632,0.099c2.814,0.019,5.202,0.036,6.891,0.056c4.177,0.047,8.495,0.095,12.659,4.259l63.486,63.486 c5.946,5.948,15.624,5.948,21.569,0c2.976-2.976,4.563-6.806,4.563-10.88c0-4.074-1.586-7.904-4.467-10.784l-59.353-58.403 c-6.447-6.344-14.98-9.838-24.026-9.838H88.889v76.542c0,7.337,1.808,14.608,5.236,21.088c2.615,3.468,13.585,17.858,26.469,32.423 c25.476,28.797,35.211,32.208,36.504,32.554l155.149-0.03c10.576,0,22.902-5.538,34.621-11.21 c9.893-4.786,83.334-54.602,127.303-84.877c0.24-0.165,0.485-0.323,0.735-0.474c8.199-4.939,10.853-15.631,5.915-23.833 c-2.392-3.972-6.189-6.774-10.69-7.892c-4.417-1.096-8.99-0.442-12.912,1.842l-107.184,71.082c-6.605,4.379-15.51,2.576-19.89-4.028 c-4.379-6.605-2.576-15.509,4.028-19.89l107.483-71.28c0.174-0.115,0.349-0.227,0.528-0.333 c21.76-13.104,50.119-6.063,63.223,15.694c13.019,21.622,6.147,49.766-15.287,62.975c-13.295,9.152-115.768,79.597-130.749,86.847 c-14.716,7.122-30.476,14.076-47.121,14.076l-155.494,0.03C156.752,488.732,156.748,488.732,156.747,488.732z"></path> <rect x="14.35" y="265.452" style="fill:#CFF09E;" width="84.146" height="189.587"></rect> <g> <path style="fill:#507C5C;" d="M98.49,469.381H14.35c-7.925,0-14.35-6.424-14.35-14.35V265.45c0-7.925,6.424-14.35,14.35-14.35 h84.14c7.925,0,14.35,6.424,14.35,14.35v189.581C112.84,462.956,106.415,469.381,98.49,469.381z M28.699,440.681H84.14V279.799 H28.699V440.681z"></path> <path style="fill:#507C5C;" d="M273.037,237.471c-59.056,0-107.103-48.045-107.103-107.103S213.98,23.265,273.037,23.265 S380.14,71.311,380.14,130.368S332.093,237.471,273.037,237.471z M273.037,51.966c-43.231,0-78.403,35.171-78.403,78.403 s35.171,78.403,78.403,78.403s78.403-35.171,78.403-78.403S316.268,51.966,273.037,51.966z"></path> </g> <circle style="fill:#CFF09E;" cx="348.925" cy="201.869" r="92.756"></circle> <g> <path style="fill:#507C5C;" d="M348.932,308.969c-59.056,0-107.103-48.045-107.103-107.103S289.875,94.764,348.932,94.764 s107.103,48.045,107.103,107.103S407.988,308.969,348.932,308.969z M348.932,123.463c-43.231,0-78.403,35.171-78.403,78.403 s35.171,78.403,78.403,78.403s78.403-35.171,78.403-78.403S392.164,123.463,348.932,123.463z"></path> <path style="fill:#507C5C;" d="M345.377,248.147c-15.513-0.517-28.181-8.532-28.181-16.805c0-4.395,3.879-10.858,8.791-10.858 c5.43,0,9.825,7.627,19.391,9.307v-20.942c-11.893-4.524-25.855-10.083-25.855-26.63c0-16.417,12.151-24.304,25.855-26.243v-3.619 c0-1.809,2.068-3.49,4.912-3.49c2.455,0,4.912,1.68,4.912,3.49v3.232c8.014,0.258,23.14,2.327,23.14,11.246 c0,3.491-2.328,10.602-8.016,10.602c-4.266,0-6.723-4.137-15.125-4.783v18.874c11.764,4.395,25.466,10.471,25.466,27.923 c0,16.03-10.342,25.726-25.466,28.181v3.75c0,1.809-2.457,3.49-4.912,3.49c-2.844,0-4.912-1.68-4.912-3.49L345.377,248.147 L345.377,248.147z M346.669,188.422v-15.384c-5.817,1.164-8.274,4.137-8.274,7.239 C338.397,184.027,341.758,186.354,346.669,188.422z M353.909,212.337v17.323c4.395-1.035,7.887-3.491,7.887-8.145 C361.795,217.251,358.562,214.536,353.909,212.337z"></path> </g> </g></svg>
-                        </span>
-                            Amount Collected
-                    </p>
+                @foreach($this->dashboard_data['total_remitted'] as $key =>$value)
+                <div class="mr-4 max-w-full mb-5">
+                    <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                        <div class="w-full">
+                        <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Remitted by {{$value->college_code}}</h3>
+                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php {{number_format($value->total_remitted, 2, '.', ',')}} </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                @endforeach
+                <div class="sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 mr-4 ml-4 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 dark:bg-gray-800">
+                    <div class="items-center justify-between lg:flex mb-10">
+                        <div class="mb-4 lg:mb-0">
+                            <h3 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">Recent Collection</h3>
+                            <span class="text-base font-normal text-gray-500 dark:text-gray-400">This is a list of the latest collection this semester</span>
+                        </div>
+                    </div>
 
-            <!-- Third Section -->
-            <div class="col-span-1 mr-4 mb-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                <div class="w-full">
-                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400 r">Local Fee</h3>
-                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 20,000</span>
-                    <p class="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
-                        <span class="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
-                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.998 511.998" xml:space="preserve" width="16px" height="16px" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path style="fill:#507C5C;" d="M156.747,488.732c-9.848,0-24.224-4.823-56.16-40.563c-16.231-18.165-29.533-36.035-30.091-36.787 c-0.376-0.507-0.717-1.036-1.023-1.587c-6.073-10.932-9.283-23.321-9.283-35.827v-90.892c0-7.925,6.424-14.35,14.35-14.35h116.075 c16.624,0,32.305,6.421,44.155,18.082l59.433,58.485c8.383,8.382,12.955,19.419,12.955,31.159s-4.572,22.777-12.873,31.078 c-17.234,17.231-45.115,17.231-62.253,0.095l-59.37-59.372c-5.898-0.044-15.48-0.089-23.134-0.123l-10.82-0.052 c-7.925-0.042-14.317-6.499-14.275-14.424c0.042-7.899,6.457-14.275,14.348-14.275c0.026,0,0.05,0,0.076,0l10.802,0.052 c6.79,0.03,14.055,0.065,19.632,0.099c2.814,0.019,5.202,0.036,6.891,0.056c4.177,0.047,8.495,0.095,12.659,4.259l63.486,63.486 c5.946,5.948,15.624,5.948,21.569,0c2.976-2.976,4.563-6.806,4.563-10.88c0-4.074-1.586-7.904-4.467-10.784l-59.353-58.403 c-6.447-6.344-14.98-9.838-24.026-9.838H88.889v76.542c0,7.337,1.808,14.608,5.236,21.088c2.615,3.468,13.585,17.858,26.469,32.423 c25.476,28.797,35.211,32.208,36.504,32.554l155.149-0.03c10.576,0,22.902-5.538,34.621-11.21 c9.893-4.786,83.334-54.602,127.303-84.877c0.24-0.165,0.485-0.323,0.735-0.474c8.199-4.939,10.853-15.631,5.915-23.833 c-2.392-3.972-6.189-6.774-10.69-7.892c-4.417-1.096-8.99-0.442-12.912,1.842l-107.184,71.082c-6.605,4.379-15.51,2.576-19.89-4.028 c-4.379-6.605-2.576-15.509,4.028-19.89l107.483-71.28c0.174-0.115,0.349-0.227,0.528-0.333 c21.76-13.104,50.119-6.063,63.223,15.694c13.019,21.622,6.147,49.766-15.287,62.975c-13.295,9.152-115.768,79.597-130.749,86.847 c-14.716,7.122-30.476,14.076-47.121,14.076l-155.494,0.03C156.752,488.732,156.748,488.732,156.747,488.732z"></path> <rect x="14.35" y="265.452" style="fill:#CFF09E;" width="84.146" height="189.587"></rect> <g> <path style="fill:#507C5C;" d="M98.49,469.381H14.35c-7.925,0-14.35-6.424-14.35-14.35V265.45c0-7.925,6.424-14.35,14.35-14.35 h84.14c7.925,0,14.35,6.424,14.35,14.35v189.581C112.84,462.956,106.415,469.381,98.49,469.381z M28.699,440.681H84.14V279.799 H28.699V440.681z"></path> <path style="fill:#507C5C;" d="M273.037,237.471c-59.056,0-107.103-48.045-107.103-107.103S213.98,23.265,273.037,23.265 S380.14,71.311,380.14,130.368S332.093,237.471,273.037,237.471z M273.037,51.966c-43.231,0-78.403,35.171-78.403,78.403 s35.171,78.403,78.403,78.403s78.403-35.171,78.403-78.403S316.268,51.966,273.037,51.966z"></path> </g> <circle style="fill:#CFF09E;" cx="348.925" cy="201.869" r="92.756"></circle> <g> <path style="fill:#507C5C;" d="M348.932,308.969c-59.056,0-107.103-48.045-107.103-107.103S289.875,94.764,348.932,94.764 s107.103,48.045,107.103,107.103S407.988,308.969,348.932,308.969z M348.932,123.463c-43.231,0-78.403,35.171-78.403,78.403 s35.171,78.403,78.403,78.403s78.403-35.171,78.403-78.403S392.164,123.463,348.932,123.463z"></path> <path style="fill:#507C5C;" d="M345.377,248.147c-15.513-0.517-28.181-8.532-28.181-16.805c0-4.395,3.879-10.858,8.791-10.858 c5.43,0,9.825,7.627,19.391,9.307v-20.942c-11.893-4.524-25.855-10.083-25.855-26.63c0-16.417,12.151-24.304,25.855-26.243v-3.619 c0-1.809,2.068-3.49,4.912-3.49c2.455,0,4.912,1.68,4.912,3.49v3.232c8.014,0.258,23.14,2.327,23.14,11.246 c0,3.491-2.328,10.602-8.016,10.602c-4.266,0-6.723-4.137-15.125-4.783v18.874c11.764,4.395,25.466,10.471,25.466,27.923 c0,16.03-10.342,25.726-25.466,28.181v3.75c0,1.809-2.457,3.49-4.912,3.49c-2.844,0-4.912-1.68-4.912-3.49L345.377,248.147 L345.377,248.147z M346.669,188.422v-15.384c-5.817,1.164-8.274,4.137-8.274,7.239 C338.397,184.027,341.758,186.354,346.669,188.422z M353.909,212.337v17.323c4.395-1.035,7.887-3.491,7.887-8.145 C361.795,217.251,358.562,214.536,353.909,212.337z"></path> </g> </g></svg>
-                        </span>
-                        Amount Collected
-                    </p>
+                    <!-- Table -->
+                    <div class="flex flex-col mt-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3">#</th>
+                                        <th scope="col" class="px-4 py-3">Student Code</th>
+                                        <th scope="col" class="px-4 py-3">Student Name</th>
+                                        <th scope="col" class="px-4 py-3">Fee Type</th>
+                                        <th scope="col" class="px-4 py-3">Fee Code</th>
+                                        <th scope="col" class="px-4 py-3">Fee Name</th>
+                                        <th scope="col" class="px-4 py-3">Amount Collected</th>
+                                        <th scope="col" class="px-4 py-3">Collected By</th>
+                                        <th scope="col" class="px-4 py-3">Collected at</th>
+                                    </tr>
+                                </thead>
+                                <tbody>         
+                                    @foreach ($payment_records_data as $key =>$value)              
+                                        <tr class="border-b dark:border-gray-700">
+                                            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{(intval($key)+1) }}</th>
+                                            <td scope="col" class="px-4 py-3">{{$value->student_code}}</td>
+                                            <td class="px-4 py-3">{{ $value->student_first_name. ' ' .$value->student_middle_name.' ' .$value->student_last_name }}</td>
+                                            <td scope="col" class="px-4 py-3">{{$value->fee_type_name}}</td>
+                                            <td scope="col" class="px-4 py-3">{{$value->fee_code}}</td>
+                                            <td scope="col" class="px-4 py-3">{{$value->fee_name}}</td>
+                                            <td scope="col" class="px-4 py-3">{{$value->amount}}</td>
+                                            <td class="px-4 py-3">{{ $value->collector_first_name. ' ' .$value->collector_middle_name.' ' .$value->collector_last_name }}</td>
+                                            <td scope="col" class="px-4 py-3">{{date_format(date_create($value->date_created),"M d, Y h:i a")}}</td>
+                                            
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                    
+                        </div>
+                    </div>
                 </div>
-            </div>
-
         </div>
-        <!-- First Section -->
-        <div class="col-span-1 mr-4  items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div class="w-full">
-                <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collection</h3>
-                <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php 100,000</span>
-            </div>
-        </div>
+
+   
+
         <div class="px-4 pt-6 2xl:px-0 max-w-screen-xl mx-auto">
             <div class="mr-4">
+
 
     </div>
 </main>
 
 <script src="{{ asset('js/app.js') }}"></script>
+
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script> --}}

@@ -132,12 +132,18 @@ class Dashboard extends Component
             ->first();
         $total_remitted = DB::table('remits as r')
             ->select(
+                'c.name as college_name',
+                'c.code as college_code',
+                'r.college_id',
                 DB::raw('sum(amount) as total_remitted')
             )
+            ->join('colleges as c','c.id','r.college_id')
             ->where('r.school_year_id','=',$this->user_details->school_year_id)
-            ->where('r.college_id','=',$this->user_details->college_id)
+            ->where('r.semester_id','=',$this->filters['semester_id'])
+            ->groupBy('r.college_id')
             ->where('appoved_by','>',0)
-            ->first();
+            ->get()
+            ->toArray();
         if($total_collected){
             $this->dashboard_data['total_collected'] = $total_collected->total_collected;
         }
@@ -150,9 +156,9 @@ class Dashboard extends Component
         if($number_of_enrolled_students){
             $this->dashboard_data['number_of_enrolled_students'] = $number_of_enrolled_students->number_of_enrolled_students;
         }
-
+        $this->dashboard_data['total_remitted'] = [];
         if($total_remitted){
-            $this->dashboard_data['total_remitted'] = $total_remitted->total_remitted;
+            $this->dashboard_data['total_remitted'] = $total_remitted;
         }
         $payment_records_data = DB::table('payment_items as pi')
             ->select(
