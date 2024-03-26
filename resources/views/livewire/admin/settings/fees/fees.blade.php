@@ -106,7 +106,7 @@
                                         <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' ,'.$value->year_start}}</td>
                                         <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.' ,'.$value->year_end}}</td>
                                         <td class="px-4 py-3">{{$value->first_name.' '.$value->middle_name.' '.$value->last_name}}</td>
-                                        <td class="px-4 py-3">{{$value->amount}}</td>
+                                        <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
                                       
                                     </tr>
                                 @endforeach

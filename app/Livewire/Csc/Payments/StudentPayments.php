@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use App\Http\Controllers\export\export as ExporterController;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StudentPayments extends Component
 {
@@ -28,6 +31,13 @@ class StudentPayments extends Component
             "last_name" => NULL,
             "email" => NULL,
     ];
+    public $export_types = [
+        0=>['name'=>'EXCEL'],
+        1=>['name'=>'CSV'],
+        2=>['name'=>'PDF'],
+
+    ];
+    public $export_selected = 'EXCEL';
     public $student_id;
     public $semesters;
     public $colleges_data;
@@ -37,6 +47,9 @@ class StudentPayments extends Component
     public $prevstudent_id_search;
     public $current_enrolled_student;
     public $enrolled_student;
+    public $payment_history = [
+        'payment_history'=>[],
+    ];
     public $partial = [
         'promisory_note' => NULL,
         'amount'=>NULL,
@@ -917,6 +930,313 @@ class StudentPayments extends Component
         }
         $this->dispatch('closeModal',$modal_id);
     }
+    public function PaymentHistory($modal_id){
+        $payment_history =  DB::table('payment_items as pi')
+        ->select(
+            "pi.id as id",
+            "u.id as user_id",
+            "u.first_name as collector_first_name",
+            "u.middle_name as collector_middle_name",
+            "u.last_name as collector_last_name",
+            "u.username as collector_username",
+            "s.id as student_id",
+            "s.student_code as student_code",
+            "s.first_name as student_first_name",
+            "s.middle_name as student_middle_name",
+            "s.last_name as student_last_name",
+            "f.name as fee_name",
+            "f.code as fee_code",
+            "ft.name as fee_type_name",
+            "pi.amount",
+            'pi.date_created as date_created'
+        )
+        ->join('students as s','s.id','pi.student_id')
+        ->join('enrolled_students as es','s.id','es.student_id')
+        ->join('users as u','u.id','pi.collected_by')
+        ->join('fees as f','f.id','pi.fee_id')
+        ->rightjoin('fee_types as ft','ft.id','f.fee_type_id')
+        ->where('es.college_id','=',$this->user_details->college_id)
+        ->where('s.id','=',$this->student_id)
+        ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
+        ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+        ->orderBy('pi.date_created','asc')
+        ->groupBy('pi.id')
+        ->get()
+        ->toArray();
+
+        $this->payment_history = [
+            'payment_history'=> $payment_history,
+        ];
+        $this->dispatch('openModal',$modal_id);
+    }
+    public function downloadReceipt(){
+        $payment_history =  DB::table('payment_items as pi')
+        ->select(
+            "pi.id as id",
+            "u.id as user_id",
+            "u.first_name as collector_first_name",
+            "u.middle_name as collector_middle_name",
+            "u.last_name as collector_last_name",
+            "u.username as collector_username",
+            "s.id as student_id",
+            "s.student_code as student_code",
+            "s.first_name as student_first_name",
+            "s.middle_name as student_middle_name",
+            "s.last_name as student_last_name",
+            "f.name as fee_name",
+            "f.code as fee_code",
+            "ft.name as fee_type_name",
+            "pi.amount",
+            'pi.date_created as date_created'
+        )
+        ->join('students as s','s.id','pi.student_id')
+        ->join('enrolled_students as es','s.id','es.student_id')
+        ->join('users as u','u.id','pi.collected_by')
+        ->join('fees as f','f.id','pi.fee_id')
+        ->rightjoin('fee_types as ft','ft.id','f.fee_type_id')
+        ->where('es.college_id','=',$this->user_details->college_id)
+        ->where('s.id','=',$this->student_id)
+        ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
+        ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+        ->orderBy('pi.date_created','asc')
+        ->groupBy('pi.id')
+        ->get()
+        ->toArray();
+
+        if($this->enrolled_student){
+            $this->total = [
+                'total_amount'=>0,
+                'total_amount_paid'=>0,
+                'total_balance'=>0,
+            ];
+            $university_fees =DB::table('enrolled_students as es')
+                ->select(
+                    'f.id',
+                    'f.name as fee_name',
+                    'f.code as fee_code',
+                    'ft.name as fee_type_name',
+                    'f.fee_type_id',
+                    'f.for_muslim',
+                    'f.department_id',
+                    'f.amount',
+                    DB::raw('sum(pi.amount) as paid_amount'),
+                )
+                ->join('students as s','es.student_id','s.id')
+                ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+                ->join('fee_types as ft','f.fee_type_id','ft.id')
+                ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+                ->where('s.id','=',$this->student_id)
+                ->where('f.college_id','=',0)
+                ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
+                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->groupBy('f.id')
+                ->get()
+                ->toArray();
+
+            $local_fees =DB::table('enrolled_students as es')
+                ->select(
+                    'f.id',
+                    'f.name as fee_name',
+                    'f.code as fee_code',
+                    'ft.name as fee_type_name',
+                    'f.fee_type_id',
+                    'f.for_muslim',
+                    'f.department_id',
+                    'f.amount',
+                    DB::raw('sum(pi.amount) as paid_amount'),
+                )
+                ->join('students as s','es.student_id','s.id')
+                ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+                ->join('fee_types as ft','f.fee_type_id','ft.id')
+                ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+                ->where('s.id','=',$this->student_id)
+                ->where('f.college_id','=',$this->user_details->college_id)
+                ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
+                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->groupBy('f.id')
+                ->get()
+                ->toArray();
+            
+            // preprocess
+            if($university_fees || $local_fees){
+                $fees = [];
+                $university_fee_type_id = DB::table('fee_types')
+                    ->select('id')
+                    ->where('name','=','University Fee')
+                    ->first()->id;
+                $local_fee_type_id = DB::table('fee_types')
+                    ->select('id')
+                    ->where('name','=','Local Fee')
+                    ->first()->id;
+                foreach ($university_fees as $key => $value) {
+                    if($value->fee_type_id == $university_fee_type_id ){
+                        // for muslim only
+                        if($value->for_muslim == 1){
+                            if($this->student['is_muslim'] == 1){
+                                array_push($fees,$value);
+                            }
+                        }else{
+                            // for everyone
+                            array_push($fees,$value);
+                        }
+                    }elseif( $value->fee_type_id == $local_fee_type_id ){
+                        if(intval($value->department_id) > 0 && $value->department_id == $this->current_enrolled_student->department_id){
+                            array_push($fees,$value);
+                        }elseif(intval($value->department_id) == 0){
+                            array_push($fees,$value);
+                        } 
+                    }
+                }
+                foreach ($local_fees as $key => $value) {
+                    if($value->fee_type_id == $university_fee_type_id ){
+                        // for muslim only
+                        if($value->for_muslim == 1){
+                            if($this->student['is_muslim'] == 1){
+                                array_push($fees,$value);
+                            }
+                        }else{
+                            // for everyone
+                            array_push($fees,$value);
+                        }
+                    }elseif( $value->fee_type_id == $local_fee_type_id ){
+                        if(intval($value->department_id) > 0 && $value->department_id == $this->current_enrolled_student->department_id){
+                            array_push($fees,$value);
+                        }elseif(intval($value->department_id) == 0){
+                            array_push($fees,$value);
+                        } 
+                    }
+                }
+
+                foreach ($fees as $key => $value) {
+                    $this->total['total_amount'] = $this->total['total_amount']+$value->amount;
+                    $this->total['total_amount_paid'] = $this->total['total_amount_paid']+$value->paid_amount;
+                    $this->total['total_balance'] = $this->total['total_balance']+($value->amount - $value->paid_amount);
+                }
+            }
+        }
+
+        $student_info  = DB::table('students')
+            ->where('id','=', $this->student_id)
+            ->first();
+        $file_name = $student_info->student_code.' - '.$student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name;
+        $this->payment_history = [
+            'payment_history'=> $payment_history,
+        ];
+        $type = $this->export_selected;
+        $header = [];
+        $content = [];
+        array_push($content,['Summaries']);
+        array_push($content,[
+            '#',
+            'Fee Type',
+            'Fee Code',
+            'Fee Name',
+            'Amount',
+            'Amount Paid',
+            'Balance',
+            'Status',
+        ]);
+            
+        foreach ($fees as $key => $value) {
+            $content_item = [];   
+            $status = NULL;   
+            if(intval($value->paid_amount) && intval($value->paid_amount) < $value->amount){
+                $status = 'Partial';
+            }elseif(intval($value->paid_amount) && intval($value->paid_amount) == $value->amount){
+                $status = 'Paid';
+            }elseif(!(intval($value->paid_amount))){
+                $status = 'Unpaid';
+            }  
+            array_push($content_item,$key+1);
+            array_push($content_item,$value->fee_type_name);
+            array_push($content_item,$value->fee_code);
+            array_push($content_item,$value->fee_name);
+            array_push($content_item,$value->amount);
+            array_push($content_item,$value->paid_amount);
+            array_push($content_item,($value->amount - $value->paid_amount));
+            array_push($content_item, $status );
+            array_push($content,$content_item);
+        }
+        array_push($content,[]);
+        array_push($content,[]);
+
+        array_push($content, ['Payment History']);
+        array_push($content, [
+            '#',
+            'Student Code',
+            'Student Name',
+            'Fee Type',
+            'Fee Code',
+            'Fee Name',
+            'Amount Collected',
+            'Collected By',
+            'Collected at'
+        ]);
+        
+        foreach ($payment_history as $key =>$value){
+            $content_item = [];          
+            array_push($content_item,$key+1);
+            array_push($content_item,$value->student_code);
+            array_push($content_item,$value->student_first_name. ' ' .$value->student_middle_name.' ' .$value->student_last_name );
+            array_push($content_item,$value->fee_type_name);
+            array_push($content_item,$value->fee_code);
+            array_push($content_item,$value->fee_name);
+            array_push($content_item,$value->amount);
+            array_push($content_item,$value->collector_first_name. ' ' .$value->collector_middle_name.' ' .$value->collector_last_name );
+            array_push($content_item,date_format(date_create($value->date_created),"M d, Y h:i a"));
+            array_push($content,$content_item);
+        }
+        array_push($content,[]);
+        array_push($content,[]);
+       
+        if($type == 'EXCEL'){
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            return Excel::download($export, $file_name.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        }elseif($type == 'CSV'){
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+        }elseif($type == 'PDF'){
+            $data = [
+                'title'=>$file_name,
+                'content'=> $content
+            ];
+            $data = self::convert_from_latin1_to_utf8_recursively($data);
+            $pdf = Pdf::loadView('livewire.csc.export.exportpdf',  array( 
+                'title'=> $file_name,
+                'content'=> $content)
+            );
+            // return $pdf->setPaper('a4', 'landscape')->download( $file_name.'.pdf');
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->setPaper('a4', 'landscape')->stream();
+            },  $file_name.'.pdf');
+        }else{
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+        }
+    }
+    public function convert_from_latin1_to_utf8_recursively($dat){
+      if (is_string($dat)) {
+         return utf8_encode($dat);
+      } elseif (is_array($dat)) {
+         $ret = [];
+         foreach ($dat as $i => $d) $ret[ $i ] = self::convert_from_latin1_to_utf8_recursively($d);
+         return $ret;
+      } elseif (is_object($dat)) {
+         foreach ($dat as $i => $d) $dat->$i = self::convert_from_latin1_to_utf8_recursively($d);
+         return $dat;
+      } else {
+         return $dat;
+      }
+   }
     public function save_image($image_file,$folder_name,$table_name,$column_name){
         if($image_file && file_exists(storage_path().'/app/livewire-tmp/'.$image_file->getfilename())){
             $file_extension =$image_file->getClientOriginalExtension();

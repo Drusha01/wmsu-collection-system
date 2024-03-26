@@ -21,8 +21,7 @@
                     </div>
                 </div>
             </div> 
-            
-            <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-4 mt-4 max-w-full">
+            <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4 max-w-full">
             
                 <!-- First Section -->
                 <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
@@ -32,22 +31,29 @@
                     </div>
                 </div>
 
+                <div class="col-span-1 mr-4 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">    
+                    <div class="w-full mr-4">
+                        <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Remitted</h3>
+                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['total_remitted'], 2, '.', ',')}} </span>
+                    </div>
+                </div>
+
                 <!-- Second Section -->
-                <div class="col-span-1 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                <div class="w-full">
-                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">USC shares</h3>
-                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['usc_shares'], 2, '.', ',')}} </span>
+                <div class="col-span-1 ml-4 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                    <div class="w-full">
+                        <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">USC shares</h3>
+                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['usc_shares'], 2, '.', ',')}} </span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Third Section -->
-            <div class="col-span-1 mr-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                <div class="w-full">
-                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">CSC shares</h3>
-                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['csc_shares'], 2, '.', ',')}} </span>
+                <!-- Third Section -->
+                <div class="col-span-1 mr-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                    <div class="w-full">
+                        <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">CSC shares</h3>
+                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['csc_shares'], 2, '.', ',')}} </span>
+                    </div>
                 </div>
-            </div>
-
+                
         </div>
         <!-- <div class="px-4 pt-6 2xl:px-0 max-w-screen-xl mx-auto -mt-8">
             <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4 max-w-full">
@@ -67,31 +73,18 @@
             </div>
 
         </div>             -->
-        @persist('chart_script')
-        <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4 max-w-full">
-            <div class="items-center flex justify-around p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                <div class="items-center content-center lg:flex mb-10">
-                    <canvas id="cscChart1" width="400" height="400"></canvas>
-                 </div>
-            </div>
-            <div class="col-span-1 items-center flex justify-around p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800 mr-4">
-                <div class="items-center content-center lg:flex mb-10">
-                    <canvas id="cscChart2" width="400" height="400"></canvas>
-                 </div>
-            </div>
-            <div class="col-span-1 items-center flex justify-around p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-                <div class="mt-5 w-full">
-                    <canvas id="FeeChart" width="400" height="400"></canvas>
+        <div class="mb-10 mr-4 content-center w-50">
+            @foreach ($paid_per_department as $key=>$value)
+            <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="w-full">
+                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collection for {{$value->department_code}}</h3>
+                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php {{number_format($value->paid_per_department, 2, '.', ',')}}</span>
                 </div>
             </div>
-            <div class="col-span-1 items-center flex justify-around p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800 mr-4">
-                <div class="mt-5 w-full">
-                    <canvas id="semesterRemittedChart" width="400" height="400"></canvas>
-                </div>
-            </div>
+            @endforeach
         </div>
-        @endpersist
-        <div class="sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 ml-4 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 dark:bg-gray-800">
+        
+        <div class="sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 mr-4 ml-4 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 dark:bg-gray-800">
             <div class="items-center justify-between lg:flex mb-10">
                 <div class="mb-4 lg:mb-0">
                     <h3 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">Recent Collection</h3>

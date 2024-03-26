@@ -82,7 +82,7 @@
                                         <td scope="col" class="px-4 py-3">{{$value->fee_type_name}}</td>
                                         <td scope="col" class="px-4 py-3">{{$value->fee_code}}</td>
                                         <td scope="col" class="px-4 py-3">{{$value->fee_name}}</td>
-                                        <td scope="col" class="px-4 py-3">{{$value->amount}}</td>
+                                        <td scope="col" class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
                                         <td class="px-4 py-3">{{ $value->collector_first_name. ' ' .$value->collector_middle_name.' ' .$value->collector_last_name }}</td>
                                         <td scope="col" class="px-4 py-3">{{date_format(date_create($value->date_created),"M d, Y h:i a")}}</td>
                                         

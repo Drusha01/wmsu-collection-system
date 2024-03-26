@@ -349,7 +349,7 @@
                                         <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date}}</td>
                                         <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
                                         <td class="px-4 py-3">{{$value->first_name.' '.$value->middle_name.' '.$value->last_name}}</td>
-                                        <td class="px-4 py-3">{{$value->amount}}</td>
+                                        <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
                                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class="flex justify-center items-center space-x-4">
                                                 <button type="button" wire:click="editFees({{$value->id}},'EditFeeToggle')"
