@@ -68,27 +68,17 @@
                   
                     <!--Table-->
                     <div class="overflow-x-auto">
-                        <div class="py-2 px-2 flex items-center justify-end">
-                            
-                            @if($total['total_amount'] > $total['total_amount_paid'])
-                                <button wire:click="confirmPaymentDefault('confirmPaymentToggle')"type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg 
-                                hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 
-                                focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-8000">
-                                    Confirm
-                                </button>
-                            @endif
-                        </div>
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-4 py-3">#</th>
-                                    <th scope="col" class="px-4 py-3">Fee Type</th>
-                                    <th scope="col" class="px-4 py-3">Fee Code</th>
-                                    <th scope="col" class="px-4 py-3">Fee Name</th>
-                                    <th scope="col" class="px-4 py-3">Amount</th>
-                                    <th scope="col" class="px-4 py-3">Amount Paid</th>
-                                    <th scope="col" class="px-4 py-3">Balance</th>
-                                    <th scope="col" class="px-4 py-3">Status</th>
+                                    <th scope="col" class="px-4 py-3 text-base">#</th>
+                                    <th scope="col" class="px-4 py-3 text-base">Fee Type</th>
+                                    <th scope="col" class="px-4 py-3 text-base">Fee Code</th>
+                                    <th scope="col" class="px-4 py-3 text-base">Fee Name</th>
+                                    <th scope="col" class="px-4 py-3 text-base">Amount</th>
+                                    <th scope="col" class="px-4 py-3 text-base">Amount Paid</th>
+                                    <th scope="col" class="px-4 py-3 text-base">Balance</th>
+                                    <th scope="col" class="px-4 py-3 text-base">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -97,23 +87,23 @@
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {{$key+1}}
                                         </th>
-                                        <td class="px-4 py-3">{{$value->fee_type_name}}</td>
-                                        <td class="px-4 py-3">{{$value->fee_code}}</td>
-                                        <td class="px-4 py-3">{{$value->fee_name}}</td>
-                                        <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
-                                        <td class="px-4 py-3">@if(intval($value->paid_amount)){{number_format($value->paid_amount, 2, '.', ',')}}@else 0 @endif</td>
-                                        <td class="px-4 py-3">{{number_format($value->amount - $value->paid_amount, 2, '.', ',')}}</td>
-                                        <td class="px-4 py-3">
+                                        <td class="px-4 py-3 text-base">{{$value->fee_type_name}}</td>
+                                        <td class="px-4 py-3 text-base">{{$value->fee_code}}</td>
+                                        <td class="px-4 py-3 text-base">{{$value->fee_name}}</td>
+                                        <td class="px-4 py-3 text-base">{{number_format($value->amount, 2, '.', ',')}}</td>
+                                        <td class="px-4 py-3 text-base">@if(intval($value->paid_amount)){{number_format($value->paid_amount, 2, '.', ',')}}@else 0 @endif</td>
+                                        <td class="px-4 py-3 text-base">{{number_format($value->amount - $value->paid_amount, 2, '.', ',')}}</td>
+                                        <td class="px-4 py-3 text-base">
                                             @if(intval($value->paid_amount) && intval($value->paid_amount) < $value->amount)
-                                                <span class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-blue-400 border border-blue-100 dark:border-blue-500">
+                                                <span class="bg-blue-100 text-blue-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-blue-400 border border-blue-100 dark:border-blue-500">
                                                     Partial
                                                 </span>
                                             @elseif(intval($value->paid_amount) && intval($value->paid_amount) == $value->amount)
-                                                <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">
+                                                <span class="bg-green-100 text-green-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">
                                                     Paid
                                                 </span>
                                             @elseif(!(intval($value->paid_amount)))
-                                                <span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">
+                                                <span class="bg-red-100 text-red-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">
                                                     Unpaid
                                                 </span>
                                             @endif
@@ -128,13 +118,13 @@
                                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         
                                     </th>
-                                    <td class="px-4 py-3"></td>
-                                    <td class="px-4 py-3"></td>
-                                    <th class="px-4 py-3">Total</th>
-                                    <th class="px-4 py-3"> {{number_format($total['total_amount'], 2, '.', ',')}}</th>
-                                    <th class="px-4 py-3"> {{number_format($total['total_amount_paid'], 2, '.', ',')}}</th>
-                                    <th class="px-4 py-3"> {{number_format($total['total_balance'], 2, '.', ',')}}</th>
-                                    <th class="px-4 py-3">
+                                    <td class="px-4 py-3 text-base"></td>
+                                    <td class="px-4 py-3 text-base"></td>
+                                    <th class="px-4 py-3 text-base">Total</th>
+                                    <th class="px-4 py-3 text-base"> {{number_format($total['total_amount'], 2, '.', ',')}}</th>
+                                    <th class="px-4 py-3 text-base"> {{number_format($total['total_amount_paid'], 2, '.', ',')}}</th>
+                                    <th class="px-4 py-3 text-base"> {{number_format($total['total_balance'], 2, '.', ',')}}</th>
+                                    <th class="px-4 py-3 text-base">
                                         @if($total['total_amount'] == $total['total_amount_paid'])
                                         <span class="bg-green-900 text-green-100 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">
                                             Fully Paid
@@ -157,13 +147,23 @@
                         @if($total['total_amount'] > $total['total_amount_paid'])
                             <div class="mx-5 px-3 border-b rounded-t dark:border-gray-600">
                                 <div class="mx-5 px-3 mb-5 mt-5 border-t border-gray-300">
-                                    <div class="flex items-center justify-between">
+                                    <div class="flex items-center mt-4 justify-between">
                                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Partial Payment</h2>
-                                        <div class="flex items-center space-x-4 mt-2">
-                                            <button wire:click="confirmPartialDefault('confirmPartialModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-800">
-                                                Partial Payment
-                                            </button>
+                                        <div class="py-2 px-2 flex items-center justify-end">
+                            
+                                            @if($total['total_amount'] > $total['total_amount_paid'])
+                                                <button wire:click="confirmPaymentDefault('confirmPaymentToggle')"type="button" class="py-2 px-4 flex items-center justify-center text-sm font-semibold text-white bg-green-500 rounded-lg 
+                                                hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 
+                                                focus:ring-offset-white dark:bg-green-600 dark:focus:ring-offset-gray-8000">
+                                                    Pay full balance
+                                                </button>
+                                            @endif
                                         </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4 mt-2">
+                                        <button wire:click="confirmPartialDefault('confirmPartialModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:bg-blue-600 dark:focus:ring-offset-gray-800">
+                                            Partial Payment
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -171,30 +171,30 @@
                         @if($total['total_amount_paid'] > 0)
                             <div class="mx-5 px-3 border-b rounded-t dark:border-gray-600">
                                 <div class="mx-5 px-3 mb-5 mt-5 border-t border-gray-300">
-                                    <div class="flex items-center mb-5 mt-2 justify-between">
+                                    <div class="flex items-center mt-4 justify-between">
                                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Void Payment</h2>
-                                        <div class="flex items-center space-x-4">
-                                            <button wire:click="confirmVoidDefault('confirmVoidModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-red-500 rounded-lg 
-                                            hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
-                                            focus:ring-offset-white dark:bg-red-600 dark:focus:ring-offset-gray-800">
-                                                Void Payment
-                                            </button>
-                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <button wire:click="confirmVoidDefault('confirmVoidModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-red-500 rounded-lg 
+                                        hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 
+                                        focus:ring-offset-white dark:bg-red-600 dark:focus:ring-offset-gray-800">
+                                            Void Payment
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         @endif
                         <div class="mx-5 px-3 border-b rounded-t dark:border-gray-600">
                                 <div class="mx-5 px-3 mb-5 mt-5 border-t border-gray-300">
-                                    <div class="flex items-center mb-5 mt-2 justify-between">
+                                    <div class="flex items-center mt-4">
                                         <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Payment History</h2>
-                                        <div class="flex items-center space-x-4">
-                                            <button wire:click="PaymentHistory('PaymentHistoryModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-yellow-500 rounded-lg 
-                                            hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 
-                                            focus:ring-offset-white dark:bg-yellow-600 dark:focus:ring-offset-gray-800">
-                                                Payment History
-                                            </button>
-                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <button wire:click="PaymentHistory('PaymentHistoryModalToggle')" type="button" class="py-2 px-4 flex items-center justify-center text-sm font-medium text-white bg-yellow-400 rounded-lg 
+                                        hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 
+                                        focus:ring-offset-white dark:bg-yellow-500 dark:focus:ring-offset-gray-800">
+                                            Payment History
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +243,7 @@
                                             <tbody>         
                                                 @foreach ($payment_history['payment_history'] as $key =>$value)              
                                                     <tr class="border-b dark:border-gray-700">
-                                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($key+1) }}</th>
+                                                        <th scope="row" class="px-4 py-3 font-xlg text-gray-900 whitespace-nowrap dark:text-white">{{($key+1) }}</th>
                                                         <td scope="col" class="px-4 py-3">{{$value->student_code}}</td>
                                                         <td class="px-4 py-3">{{ $value->student_first_name. ' ' .$value->student_middle_name.' ' .$value->student_last_name }}</td>
                                                         <td scope="col" class="px-4 py-3">{{$value->fee_type_name}}</td>
@@ -306,12 +306,26 @@
                                         Partial Payment
                                     </h3>
                                 </div>
-                                <label class="block mt-5 mb-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size">Promisory Note</label>
-                                <input required wire:model.defer="partial.promisory_note" class="block w-50 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
+                                <h3 class="mb-4 mt-4 font-semibold text-gray-900 dark:text-white">Choose fee to pay</h3>
+                                <ul class="w-96 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                                        <div class="flex items-center ps-3">
+                                            <input id="university-fee" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label for="university-fee" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">University Fee</label>
+                                        </div>
+                                    </li>
+                                    <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                                        <div class="flex items-center ps-3">
+                                            <input id="local-fee" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label for="local-fee" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Local Fee</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <h3 class="mb-4 font-semibold text-gray-900 dark:text-white mt-4">Amount</h3>
+                                <input required max="{{$total['total_balance']}}" wire:model.defer="partial.amount" type="number" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                <h3 class="mb-4 font-semibold text-gray-900 dark:text-white mt-4">Promisory Note</h3>
+                                <input required wire:model.defer="partial.promisory_note" class="block w-96 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
                                 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file">
-                                <label class="block mt-5 mb-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size">Amount</label>
-                                <input required max="{{$total['total_balance']}}" wire:model.defer="partial.amount" type="number" placeholder="Enter Amount" class=" w-50 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
-                                
                                 <div class="flex justify-center mt-10">
                                     <button type="submit" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                                         Confirm
@@ -370,9 +384,9 @@
                                 <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
-                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to confirm?</h3>
+                                <h3 class="mb-5 text-lg font-bold text-gray-500 dark:text-gray-400">Are you sure you to pay your balance?</h3>
                                 <button type="submit" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                    Confirm
+                                    Yes, I want to pay
                                 </button>
                                 <button type="button" data-modal-hide="confirmPayment" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                     No, cancel
