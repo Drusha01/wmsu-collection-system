@@ -28,6 +28,29 @@ class Remittance extends Component
         'remit_photo' => NULL,
         'remit_photo_id'=>NULL,
     ];
+    public $filters = [
+        'department_id'=>NULL,
+        'semester_id' => NULL,
+        'year_level_id' => NULL,
+        'school_year_id'=> NULL,
+        'college_id' => NULL,
+        'fee_id' => NULL,
+        'search'=> NULL,
+        'search_by' => 'Student code',
+        'prevdepartment_id'=>NULL,
+        'prevsemester_id' => NULL,
+        'prevyear_level_id' => NULL,
+        'prevcollege_id' => NULL,
+        'prev_search'=> NULL,
+        'prev_school_year_id'=> NULL,
+        'prev_fee_id' => NULL,
+        
+    ];
+    public $search_by = [
+        0=>'Student code',
+        1=>'Student name',
+        2=>'Collector name',
+    ];
     public function boot(Request $request ){
 
         $session = $request->session()->all();
@@ -55,6 +78,10 @@ class Remittance extends Component
     }
     public function render()
     {
+        if($this->filters['search'] != $this->filters['prev_search']){
+            $this->filters['prev_search'] =$this->filters['search'];
+            $this->resetPage();
+        }
         $remittance_data = DB::table('remits as r')
             ->select(
                 'r.id',
@@ -62,7 +89,7 @@ class Remittance extends Component
                 'u.first_name as approved_by_first_name',
                 'u.middle_name as approved_by_middle_name',
                 'u.last_name as approved_by_last_name',
-                'rbyu.username as remitted_by_',
+                'rbyu.username as remitted_by_username',
                 'rbyu.first_name as remitted_by_first_name',
                 'rbyu.middle_name as remitted_by_middle_name',
                 'rbyu.last_name as remitted_by_last_name',
@@ -81,6 +108,7 @@ class Remittance extends Component
             ->leftjoin('users as u','u.id','r.appoved_by')
             ->where('r.school_year_id','=',$this->user_details->school_year_id)
             ->where('r.college_id','=',$this->user_details->college_id)
+            ->where(DB::raw("CONCAT(rbyu.first_name,' ',rbyu.middle_name,' ',rbyu.last_name)"),'like',$this->filters['search'] .'%')
             ->orderby('r.date_created','desc')
             ->paginate(10);
         $page_info = DB::table('users as u')
