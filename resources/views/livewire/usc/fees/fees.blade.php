@@ -76,7 +76,7 @@
                         </div>
                     </div>
 
-                    <div wire:ignore.self id="AddUniversityFeeModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
+                    <div wire:ignore.self id="AddUniversityFeeModal" tabindex="-1" aria-hidden="true" data-modal-backdrop="static" data-keyboard="false" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
                         <div class="relative w-8/12 max-w-6xl p-8 max-h-screen flex flex-col">
                             <!-- Modal content -->
                             <form action="#" wire:submit.prevent="saveAddFees('AddUniversityFeeModal')">
