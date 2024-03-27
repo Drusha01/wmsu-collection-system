@@ -30,7 +30,6 @@
                         <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['total_collected'], 2, '.', ',')}} </span>
                     </div>
                 </div>
-
                 <div class="col-span-1 mr-4 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">    
                     <div class="w-full mr-4">
                         <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Remitted</h3>
@@ -42,7 +41,7 @@
                 <div class="col-span-1 ml-4 items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                     <div class="w-full">
                         <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">USC shares</h3>
-                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['usc_shares'], 2, '.', ',')}} </span>
+                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['usc_shares']*.3, 2, '.', ',')}} </span>
                     </div>
                 </div>
 
@@ -50,7 +49,7 @@
                 <div class="col-span-1 mr-4 p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                     <div class="w-full">
                         <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">CSC shares</h3>
-                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['csc_shares'], 2, '.', ',')}} </span>
+                        <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['usc_shares']*0.7, 2, '.', ',')}} </span>
                     </div>
                 </div>
                 
@@ -74,15 +73,40 @@
 
         </div>             -->
         <div class="mb-10 mr-4 content-center w-50">
-            @foreach ($paid_per_department as $key=>$value)
             <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                 <div class="w-full">
+                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total USC Collection</h3>
+                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['usc_shares'], 2, '.', ',')}} </span>
+                </div>
+            </div>
+        </div>
+        <div class="mb-10 mr-4 content-center w-50">
+            <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="w-full">
+                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total MSA Collection</h3>
+                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['msa_shares'], 2, '.', ',')}} </span>
+                </div>
+            </div>
+        </div>
+        <div class="mb-10 mr-4 content-center w-50">
+            <div class="col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="w-full">
+                    <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total CSC Collection</h3>
+                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($dashboard_data['csc_shares'], 2, '.', ',')}} </span>
+                </div>
+            </div>
+        </div>
+        <div class="mb-10 mr-4 content-center w-50">
+            @foreach ($paid_per_department as $key=>$value)
+            <div class="mb-5 col-span-1 items-center justify-between p-4 bg-white border ml-4 border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                <div class="w-full">
                     <h3 class="text-base font-normal text-gray-500 dark:text-gray-400">Total Collection for {{$value->department_code}}</h3>
-                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">Php {{number_format($value->paid_per_department, 2, '.', ',')}}</span>
+                    <span class="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">PHP {{number_format($value->paid_per_department, 2, '.', ',')}}</span>
                 </div>
             </div>
             @endforeach
         </div>
+
         
         <div class="sm:p-6 md:p-8 lg:p-10 xl:p-12 2xl:p-16 mr-4 ml-4 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 dark:bg-gray-800">
             <div class="items-center justify-between lg:flex mb-10">
