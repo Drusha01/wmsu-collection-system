@@ -291,7 +291,7 @@
             </div>
             <!-- modals -->
             <div wire:ignore.self id="confirmPartialModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative p-4 w-full max-w-md max-h-full">
+                <div class="relative p-4 w-8/12 max-h-full">
                     <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
                         <button type="button" data-modal-hide="confirmPartialModal" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" >
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -299,6 +299,7 @@
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
+                        
                         <div class="p-4 md:p-5">
                             <form wire:submit.prevent="confirmPartial('confirmPartialModal')">
                                 <div class="flex items-center p-4 md:p-5 border-b rounded-t dark:border-gray-600">
@@ -307,25 +308,77 @@
                                     </h3>
                                 </div>
                                 <h3 class="mb-4 mt-4 font-semibold text-gray-900 dark:text-white">Choose fee to pay</h3>
-                                <ul class="w-96 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                    <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                        <div class="flex items-center ps-3">
-                                            <input id="university-fee" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="university-fee" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">University Fee</label>
-                                        </div>
-                                    </li>
-                                    <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
-                                        <div class="flex items-center ps-3">
-                                            <input id="local-fee" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="local-fee" class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Local Fee</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <h3 class="mb-4 font-semibold text-gray-900 dark:text-white mt-4">Amount</h3>
-                                <input required max="{{$total['total_balance']}}" wire:model.defer="partial.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
-                                <h3 class="mb-4 font-semibold text-gray-900 dark:text-white mt-4">Promisory Note</h3>
-                                <input required wire:model.defer="partial.promisory_note" class="block w-96 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
-                                dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file">
+                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3"></th>
+                                            <th scope="col" class="px-4 py-3">#</th>
+                                            <th scope="col" class="px-4 py-3">Fee Type</th>
+                                            <th scope="col" class="px-4 py-3">Fee Name</th>
+                                            <th scope="col" class="px-4 py-3">Amount</th>
+                                            <th scope="col" class="px-4 py-3">Balance</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>         
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td scope="col" class="px-4 py-3">
+
+                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                    
+                                                </td>
+                                                <td scope="col" class="px-4 py-3">1</td>
+                                                <td scope="col" class="px-4 py-3">Local Fee</td>
+                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
+                                                <td scope="col" class="px-4 py-3">300</td>
+                                                <td scope="col" class="px-4 py-3">250</td>
+
+                                            </tr>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td scope="col" class="px-4 py-3">
+
+                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                    
+                                                </td>
+                                                <td scope="col" class="px-4 py-3">2</td>
+                                                <td scope="col" class="px-4 py-3">Local Fee</td>
+                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
+                                                <td scope="col" class="px-4 py-3">300</td>
+                                                <td scope="col" class="px-4 py-3">250</td>
+
+                                            </tr>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td scope="col" class="px-4 py-3">
+
+                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                    
+                                                </td>
+                                                <td scope="col" class="px-4 py-3">3</td>
+                                                <td scope="col" class="px-4 py-3">Local Fee</td>
+                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
+                                                <td scope="col" class="px-4 py-3">300</td>
+                                                <td scope="col" class="px-4 py-3">250</td>
+
+                                            </tr>
+
+                                    </tbody>
+                                </table>
+
+                                
+                                <div class="flex flex-wrap mt-6">
+                                    <div class="flex flex-col mb-4 mr-4">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Amount</h3>
+                                        <input required max="{{$total['total_balance']}}" wire:model.defer="partial.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-full md:w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                    </div>
+                                    <div class="flex flex-col mb-4">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Promissory Note</h3>
+                                        <input required wire:model.defer="partial.promissory_note" class="w-full md:w-96 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file">
+                                    </div>
+                                </div>
+
                                 <div class="flex justify-center mt-10">
                                     <button type="submit" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                                         Confirm
@@ -339,7 +392,7 @@
             </div>
             <!-- modals -->
             <div wire:ignore.self id="confirmVoidModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative p-4 w-full max-w-md max-h-full">
+                <div class="relative p-4 w-8/12 max-h-full">
                     <div class="relative bg-white rounded-lg shadow dark:bg-gray-400">
                         <button type="button" data-modal-hide="confirmVoidModal" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" >
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -354,6 +407,66 @@
                                         Void Payment
                                     </h3>
                                 </div>
+
+                                <h3 class="mb-4 mt-4 font-semibold text-gray-900 dark:text-white">Choose fee to void</h3>
+                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3"></th>
+                                            <th scope="col" class="px-4 py-3">#</th>
+                                            <th scope="col" class="px-4 py-3">Fee Type</th>
+                                            <th scope="col" class="px-4 py-3">Fee Name</th>
+                                            <th scope="col" class="px-4 py-3">Amount</th>
+                                            <th scope="col" class="px-4 py-3">Balance</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>         
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td scope="col" class="px-4 py-3">
+
+                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                    
+                                                </td>
+                                                <td scope="col" class="px-4 py-3">1</td>
+                                                <td scope="col" class="px-4 py-3">Local Fee</td>
+                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
+                                                <td scope="col" class="px-4 py-3">300</td>
+                                                <td scope="col" class="px-4 py-3">250</td>
+
+                                            </tr>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td scope="col" class="px-4 py-3">
+
+                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                    
+                                                </td>
+                                                <td scope="col" class="px-4 py-3">2</td>
+                                                <td scope="col" class="px-4 py-3">Local Fee</td>
+                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
+                                                <td scope="col" class="px-4 py-3">300</td>
+                                                <td scope="col" class="px-4 py-3">250</td>
+
+                                            </tr>
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td scope="col" class="px-4 py-3">
+
+                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                    
+                                                </td>
+                                                <td scope="col" class="px-4 py-3">3</td>
+                                                <td scope="col" class="px-4 py-3">Local Fee</td>
+                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
+                                                <td scope="col" class="px-4 py-3">300</td>
+                                                <td scope="col" class="px-4 py-3">250</td>
+
+                                            </tr>
+
+                                    </tbody>
+                                </table>
                                 <label class="block mt-5 mb-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size">Amount</label>
                                 <input required max="{{$total['total_amount_paid']}}" wire:model.defer="void.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                 
