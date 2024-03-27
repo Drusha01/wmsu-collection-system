@@ -37,7 +37,7 @@
                     </div>
                     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                         <div class="w-full md:w-1/4 flex">
-                            <form class="flex items-center">
+                            <div class="flex items-center">
                                 <label for="simple-search" class="sr-only">Search</label>
                                 <div class="relative w-full">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -45,19 +45,18 @@
                                             <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                        <input type="text" id="simple-search" wire:model.live.debounce.250ms="filters.student_code_search"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        placeholder="Search " required="">
+                                    <input type="text" id="simple-search" wire:model.live.debounce.500ms="filters.search"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Search " required="">
                                 </div>
-                            </form>
+                            </div>
                             <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
                                     <div class="flex items-center space-x-3 w-full md:w-auto">
-                                        <select id="filterFee" name="filterFee"
+                                        <select id="filterFee" name="filterFee" wire:model.live="filters.search_by" wire:change="updateSearchDefault()"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                            <option selected value="" >Student Code</option>
-                                            <option  value="" >Student name</option>
-                                            <option  value="" >Collector name</option>
-
+                                            @foreach ($search_by as $key=> $value)
+                                                <option  value="{{$value}}" >{{$value}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -68,11 +67,12 @@
                         </div>
                         <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
                             <div class="flex items-center space-x-3 w-full md:w-auto">
-                                <select id="filterFee" name="filterFee"
+                                <select id="filterFee" name="filterFee" wire:model.live="filters.fee_id"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     <option selected value="" >Filter Fees</option>
-                                    <option  value="" >Univerity Fee</option>
-                                    <option  value="" >Local Fee</option>
+                                    @foreach($fees as $key =>$value)
+                                        <option  value="{{$value->id}}" >{{$value->name}}</option>
+                                    @endforeach
 
                                 </select>
                             </div>
