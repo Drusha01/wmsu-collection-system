@@ -490,14 +490,14 @@ class StudentPayments extends Component
             }
                        
             foreach ($fees as $key => $value) {
-                if( intval($value->amount) - intval($value->paid_amount) > 0){
+                if( floatval($value->amount) - floatval($value->paid_amount) > 0){
                     DB::table('payment_items')
                     ->insert([
                         'id' => NULL,
                         'payment_id' => $payment_id,
                         'fee_id' => $value->id,
                         'student_id' => $payment['student_id'],
-                        'amount' => intval($value->amount) - intval($value->paid_amount) ,
+                        'amount' => floatval($value->amount) - floatval($value->paid_amount) ,
                         'collected_by' => $payment['collected_by'],
                     ]);
                 }
@@ -643,7 +643,7 @@ class StudentPayments extends Component
                     link              									: '#'
                 );
                 return;
-            }elseif(intval($this->partial['amount']) > 0 && $total['total_balance'] > 0 && ( $this->partial['amount'] <= $total['total_balance'])){
+            }elseif(floatval($this->partial['amount']) > 0 && $total['total_balance'] > 0 && ( $this->partial['amount'] <= $total['total_balance'])){
                 if($this->partial['promisory_note']){
                     $partial['promisory_note'] = self::save_image($this->partial['promisory_note'],'promisory_note','payments','promisory_note');
                     if($partial['promisory_note'] == 0){
@@ -701,8 +701,8 @@ class StudentPayments extends Component
                        
             foreach ($fees as $key => $value) {
                 if($payment['amount'] > 0){
-                    if( intval($value->amount) - intval($value->paid_amount) > 0){
-                        $amount = intval($value->amount) - intval($value->paid_amount);
+                    if( floatval($value->amount) - floatval($value->paid_amount) > 0){
+                        $amount = floatval($value->amount) - floatval($value->paid_amount);
                         if($payment['amount'] >= $amount ){
                             DB::table('payment_items')
                             ->insert([
@@ -710,7 +710,7 @@ class StudentPayments extends Component
                                 'payment_id' => $payment_id,
                                 'fee_id' => $value->id,
                                 'student_id' => $payment['student_id'],
-                                'amount' => intval($value->amount) - intval($value->paid_amount) ,
+                                'amount' => floatval($value->amount) - floatval($value->paid_amount) ,
                                 'collected_by' => $payment['collected_by'],
                             ]);
                         }else{
@@ -902,15 +902,15 @@ class StudentPayments extends Component
                     
         foreach ($fees as $key => $value) {
             if($payment['amount'] < 0){
-                if(intval($value->paid_amount) > 0){
-                    if($payment['amount']  < (-(intval($value->paid_amount) )) ){
+                if(floatval($value->paid_amount) > 0){
+                    if($payment['amount']  < (-(floatval($value->paid_amount) )) ){
                         DB::table('payment_items')
                         ->insert([
                             'id' => NULL,
                             'payment_id' => $payment_id,
                             'fee_id' => $value->id,
                             'student_id' => $payment['student_id'],
-                            'amount' =>-(intval($value->paid_amount)),
+                            'amount' =>-(floatval($value->paid_amount)),
                             'collected_by' => $payment['collected_by'],
                         ]);
                     }else{
@@ -1140,11 +1140,11 @@ class StudentPayments extends Component
         foreach ($fees as $key => $value) {
             $content_item = [];   
             $status = NULL;   
-            if(intval($value->paid_amount) && intval($value->paid_amount) < $value->amount){
+            if(floatval($value->paid_amount) && floatval($value->paid_amount) < $value->amount){
                 $status = 'Partial';
-            }elseif(intval($value->paid_amount) && intval($value->paid_amount) == $value->amount){
+            }elseif(floatval($value->paid_amount) && floatval($value->paid_amount) == $value->amount){
                 $status = 'Paid';
-            }elseif(!(intval($value->paid_amount))){
+            }elseif(!(floatval($value->paid_amount))){
                 $status = 'Unpaid';
             }  
             array_push($content_item,$key+1);

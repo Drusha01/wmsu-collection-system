@@ -22,6 +22,7 @@ return new class extends Migration
         );');
 
         DB::statement('CREATE INDEX idx_college_code ON colleges(code(10));');
+        DB::statement('CREATE INDEX idx_college_name ON colleges(name(10));');
     }
 
     /**

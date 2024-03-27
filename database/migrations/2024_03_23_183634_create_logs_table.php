@@ -22,6 +22,10 @@ return new class extends Migration
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
+        DB::statement('CREATE INDEX idx_logs_log_type_id ON logs(log_type_id);');
+        DB::statement('CREATE INDEX idx_logs_created_by ON logs(created_by);');
+        DB::statement('CREATE INDEX idx_logs_school_year_id ON logs(school_year_id);');
+        DB::statement('CREATE INDEX idx_logs_college_id ON logs(college_id);');
 
     }
 

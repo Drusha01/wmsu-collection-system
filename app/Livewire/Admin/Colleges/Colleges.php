@@ -69,7 +69,8 @@ class Colleges extends Component
         }
         $colleges_data = DB::table('colleges as c')
             // ->where('is_active','=',1)
-            ->where('c.name','like',$this->filters['college_name'] .'%')
+            ->where('c.code','like',$this->filters['college_name'] .'%')
+            // ->where('c.name','like',$this->filters['college_name'] .'%')
             ->orderBy('c.is_active','desc')
             ->paginate(10);
         return view('livewire.admin.colleges.colleges',
