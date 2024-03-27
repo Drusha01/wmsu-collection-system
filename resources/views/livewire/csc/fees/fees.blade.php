@@ -127,7 +127,7 @@
                                                     <div class="mb-4">
                                                         <label for="amount"
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount</label>
-                                                        <input type="number" wire:model.defer="fee.amount" required
+                                                        <input type="number" step="0.01" wire:model.defer="fee.amount" required
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                     focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                     dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -232,7 +232,7 @@
                                                     <div class="mb-4">
                                                         <label for="amount"
                                                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Amount</label>
-                                                        <input type="number" wire:model.defer="fee.amount" required
+                                                        <input type="number" step="0.01" wire:model.defer="fee.amount" required
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                     focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                     dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
