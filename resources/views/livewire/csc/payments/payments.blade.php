@@ -40,7 +40,6 @@
                     <!--Table Header -->
                     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                         <div class="w-full md:w-1/4">
-                            <form class="flex items-center">
                                 <label for="simple-search" class="sr-only">Search</label>
                                 <div class="relative w-full">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -52,12 +51,39 @@
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                         placeholder="Search student code" required="">
                                 </div>
-                            </form>
-                        </div>
+                        </div> 
                         
                     </div>
-                    <!--End Table Header -->
-                    <!--Table-->
+                    <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-4">
+                        <div class="flex items-center space-x-3 w-full md:w-auto">
+                            <select id="course" name="course" wire:model.live="filters.year_level_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="" >Filter Year</option>
+                                @foreach($year_levels as $key =>$value)
+                                        <option value="{{$value->id}}">{{$value->year_level}}</option>
+                                @endforeach
+                            </select>
+                        </div>    
+                        <div class="flex items-center space-x-3 w-full md:w-auto">
+                            <select id="course" name="course" wire:model.live="filters.department_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="" >Filter course</option>
+                                @foreach ( $department_data as $department)
+                                    <option value="{{ $department->id }}">{{ $department->code }}</option>
+                                @endforeach
+                            </select>
+                        </div>    
+                        <div class="flex items-center space-x-3 w-full md:w-auto">
+                            <select id="course" name="course" wire:model.live="filters.semester_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="" >Select semester</option>
+                                @foreach($semesters as $key =>$value)
+                                        <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                @endforeach
+                            </select>
+                        </div>    
+
+                    </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -65,6 +91,10 @@
                                     <th scope="col" class="px-4 py-3">#</th>
                                     <th scope="col" class="px-4 py-3">Student ID</th>
                                     <th scope="col" class="px-4 py-3">Student Name</th>
+                                    <th scope="col" class="px-4 py-3">Department</th>
+                                    <th scope="col" class="px-4 py-3">Semester</th>
+                                    <th scope="col" class="px-4 py-3">Yr. Level</th>
+                                    <th scope="col" class="px-4 py-3 text-center">Payment Status</th>
                                     <th scope="col" class="px-4 py-3 text-center">Actions</th>
                                 </tr>
                             </thead>
@@ -74,10 +104,27 @@
                                     <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($enrolled_students_data->currentPage()-1)*$enrolled_students_data->perPage()+$key+1 }}</th>
                                         <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$value->student_code}}</th>
                                         <td class="px-4 py-3">{{ $value->first_name. ' ' .$value->middle_name.' ' .$value->last_name }}</td>
-                                   
+                                        <td class="px-4 py-3"> {{$value->department_code}}</td>
+                                        <td class="px-4 py-3"> {{$value->semester}}</td>
+                                        <td class="px-4 py-3"> {{$value->year_level}}</td>
+                                        <td class="px-4 py-3 text-center"> 
+                                            @if($value->payment_status == 'Partial')
+                                                <span class="bg-blue-100 text-blue-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-blue-400 border border-blue-100 dark:border-blue-500">
+                                                    Partial
+                                                </span>
+                                            @elseif($value->payment_status == 'Paid')
+                                                <span class="bg-green-100 text-green-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 border border-green-100 dark:border-green-500">
+                                                    Paid
+                                                </span>
+                                            @elseif($value->payment_status == 'Unpaid')
+                                                <span class="bg-red-100 text-red-800 text-base font-medium mr-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-red-400 border border-red-100 dark:border-red-500">
+                                                    Unpaid
+                                                </span>
+                                            @endif
+                                        </td>
                                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <div class="flex justify-center items-center space-x-4">
-                                                <a href="@if(Route::is('csc-student-payments'))  /csc/payments/{{$value->id}} @else /csc/collector/payments/{{$value->id}} @endif  ">
+                                                <a href="@if(Route::is('csc-payments'))  /csc/payments/{{$value->id}}/{{$value->semester_id}} @else /csc/collector/payments/{{$value->id}}/{{$value->semester_id}} @endif  ">
                                                     <button type="button" 
                                                     class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none
                                                      focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
