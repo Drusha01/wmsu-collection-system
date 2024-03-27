@@ -322,7 +322,7 @@
                                     </li>
                                 </ul>
                                 <h3 class="mb-4 font-semibold text-gray-900 dark:text-white mt-4">Amount</h3>
-                                <input required max="{{$total['total_balance']}}" wire:model.defer="partial.amount" type="number" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                <input required max="{{$total['total_balance']}}" wire:model.defer="partial.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                 <h3 class="mb-4 font-semibold text-gray-900 dark:text-white mt-4">Promisory Note</h3>
                                 <input required wire:model.defer="partial.promisory_note" class="block w-96 mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50
                                 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file">
@@ -355,7 +355,7 @@
                                     </h3>
                                 </div>
                                 <label class="block mt-5 mb-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size">Amount</label>
-                                <input required max="{{$total['total_amount_paid']}}" wire:model.defer="void.amount" type="number" placeholder="Enter Amount" class=" w-50 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                <input required max="{{$total['total_amount_paid']}}" wire:model.defer="void.amount" type="number" step="0.01" placeholder="Enter Amount" class=" w-50 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                 
                                 <div class="flex justify-center mt-10">
                                     <button type="submit" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
