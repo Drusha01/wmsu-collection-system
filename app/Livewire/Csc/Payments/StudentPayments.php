@@ -72,7 +72,7 @@ class StudentPayments extends Component
         11=>['month_name'=> 'December','month_number'=>12,'max_date'=>31],
 
     ];
-    public function mount(Request $request,$student_id){
+    public function mount(Request $request,$student_id,$semester = 0){
         $session = $request->session()->all();
         $user_id = $session['id'];
         if(isset($session['id']) && $user_details = DB::table('users as u')
@@ -95,6 +95,7 @@ class StudentPayments extends Component
         }else{
             return redirect()->route('login');
         }
+     
         
         $this->student_id = $student_id;
         $student = DB::table('students as s')
@@ -145,21 +146,15 @@ class StudentPayments extends Component
             ->where('es.student_id','=',$this->student_id)
             ->where('es.school_year_id','=',$this->user_details->school_year_id)
             ->where('es.college_id','=',$this->user_details->college_id)
-            ->orderBy('sm.id','desc')
-            ->get()
-            ->toArray();
+            ->orderBy('sm.id','asc')
+            ->first();
             if($this->enrolled_student){
-                foreach ($this->enrolled_student as $key => $value) {
-                    $this->current_enrolled_student = $value;
-                    $this->filters['semester_id'] = $value->semester_id;
-                    if( $fees = DB::table('fees as f')
-                    ->where('f.school_year_id','=',$value->school_year_id)
-                    ->where('f.semester_id','=',$value->semester_id)
-                    ->join('fee_types as ft','ft.id','f.fee_type_id')
-                    ->first()){
-                        break;
-                    }
-                }
+                $this->current_enrolled_student = $this->enrolled_student;
+                $this->filters['semester_id'] = $this->enrolled_student->semester_id;
+                    
+            }
+            if($semester){
+                $this->filters['semester_id'] = $semester;
             }
         }else{
             return redirect()->route('csc-payments');
@@ -194,6 +189,7 @@ class StudentPayments extends Component
             return redirect()->route('login');
         }
     }
+    
     public function render(){
         $fees = [];
         if($this->enrolled_student){
@@ -221,7 +217,7 @@ class StudentPayments extends Component
                 ->where('s.id','=',$this->student_id)
                 ->where('f.college_id','=',0)
                 ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
                 ->groupBy('f.id')
                 ->get()
                 ->toArray();
@@ -245,7 +241,7 @@ class StudentPayments extends Component
                 ->where('s.id','=',$this->student_id)
                 ->where('f.college_id','=',$this->user_details->college_id)
                 ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
                 ->groupBy('f.id')
                 ->get()
                 ->toArray();
@@ -330,7 +326,7 @@ class StudentPayments extends Component
             'title'=>$this->title]);
     }
     public function updateSemester(){
-        $this->current_enrolled_student->semester_id = $this->filters['semester_id'];
+        $this->filters['semester_id'] = $this->filters['semester_id'];
     }
     public function confirmPayment($modal_id){
         // check if we have partial
@@ -358,7 +354,7 @@ class StudentPayments extends Component
                 ->where('s.id','=',$this->student_id)
                 ->where('f.college_id','=',0)
                 ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
                 ->groupBy('f.id')
                 ->get()
                 ->toArray();
@@ -382,7 +378,7 @@ class StudentPayments extends Component
                 ->where('s.id','=',$this->student_id)
                 ->where('f.college_id','=',$this->user_details->college_id)
                 ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
                 ->groupBy('f.id')
                 ->get()
                 ->toArray();
@@ -448,7 +444,7 @@ class StudentPayments extends Component
                 'id' => NULL,
                 'student_id' => $this->student['id'],
                 'school_year_id' => $this->current_enrolled_student->school_year_id,
-                'semester_id' => $this->current_enrolled_student->semester_id,
+                'semester_id' => $this->filters['semester_id'],
                 'amount' =>  $total['total_amount'] - $total['total_amount_paid'] ,
                 'collected_by' =>$this->user_details->id
             ];
@@ -502,6 +498,17 @@ class StudentPayments extends Component
                     ]);
                 }
             }
+            $payment_status = DB::table('status')
+                ->where('name','=','Paid')
+                ->first();
+            DB::table('enrolled_students as es')
+                ->where('es.student_id','=',$this->student_id)
+                ->where('es.school_year_id','=',$this->user_details->school_year_id)
+                ->where('es.college_id','=',$this->user_details->college_id)
+                ->where('es.semester_id','=',$payment['semester_id'])
+                ->update([
+                    'payment_status' => $payment_status->id
+                ]);
             
         $this->dispatch('closeModal',$modal_id);
     }
@@ -547,7 +554,7 @@ class StudentPayments extends Component
                 ->where('s.id','=',$this->student_id)
                 ->where('f.college_id','=',0)
                 ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
                 ->groupBy('f.id')
                 ->get()
                 ->toArray();
@@ -571,7 +578,7 @@ class StudentPayments extends Component
                 ->where('s.id','=',$this->student_id)
                 ->where('f.college_id','=',$this->user_details->college_id)
                 ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
                 ->groupBy('f.id')
                 ->get()
                 ->toArray();
@@ -656,7 +663,7 @@ class StudentPayments extends Component
                 'id' => NULL,
                 'student_id' => $this->student['id'],
                 'school_year_id' => $this->current_enrolled_student->school_year_id,
-                'semester_id' => $this->current_enrolled_student->semester_id,
+                'semester_id' => $this->filters['semester_id'],
                 'amount' => $this->partial['amount']  ,
                 'promisory_note'=> $partial['promisory_note'],
                 'collected_by' =>$this->user_details->id
@@ -728,6 +735,25 @@ class StudentPayments extends Component
                     }
                 }
             }
+            if( $this->partial['amount'] == $total['total_amount']){
+                $payment_status = DB::table('status')
+                    ->where('name','=','Paid')
+                    ->first();
+            }elseif($this->partial['amount'] < $total['total_amount']){
+                $payment_status = DB::table('status')
+                    ->where('name','=','Partial')
+                    ->first();
+            }
+           
+           
+            DB::table('enrolled_students as es')
+                ->where('es.student_id','=',$this->student_id)
+                ->where('es.school_year_id','=',$this->user_details->school_year_id)
+                ->where('es.college_id','=',$this->user_details->college_id)
+                ->where('es.semester_id','=',$payment['semester_id'])
+                ->update([
+                    'payment_status' => $payment_status->id
+                ]);
             
         $this->dispatch('closeModal',$modal_id);
     }
@@ -757,7 +783,7 @@ class StudentPayments extends Component
             ->where('s.id','=',$this->student_id)
             ->where('f.college_id','=',0)
             ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-            ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+            ->where('f.semester_id','=',$this->filters['semester_id'])
             ->groupBy('f.id')
             ->get()
             ->toArray();
@@ -781,7 +807,7 @@ class StudentPayments extends Component
             ->where('s.id','=',$this->student_id)
             ->where('f.college_id','=',$this->user_details->college_id)
             ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-            ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+            ->where('f.semester_id','=',$this->filters['semester_id'])
             ->groupBy('f.id')
             ->get()
             ->toArray();
@@ -857,7 +883,7 @@ class StudentPayments extends Component
             'id' => NULL,
             'student_id' => $this->student['id'],
             'school_year_id' => $this->current_enrolled_student->school_year_id,
-            'semester_id' => $this->current_enrolled_student->semester_id,
+            'semester_id' => $this->filters['semester_id'],
             'amount' => -($this->void['amount'])  ,
             'promisory_note'=> NULL,
             'collected_by' =>$this->user_details->id
@@ -928,6 +954,25 @@ class StudentPayments extends Component
                 }
             }
         }
+        if( $this->void['amount'] == $total['total_amount_paid']){
+            $payment_status = DB::table('status')
+                ->where('name','=','Unpaid')
+                ->first();
+        }elseif($this->void['amount'] < $total['total_amount_paid']){
+            $payment_status = DB::table('status')
+                ->where('name','=','Partial')
+                ->first();
+        }
+       
+       
+        DB::table('enrolled_students as es')
+            ->where('es.student_id','=',$this->student_id)
+            ->where('es.school_year_id','=',$this->user_details->school_year_id)
+            ->where('es.college_id','=',$this->user_details->college_id)
+            ->where('es.semester_id','=',$payment['semester_id'])
+            ->update([
+                'payment_status' => $payment_status->id
+            ]);
         $this->dispatch('closeModal',$modal_id);
     }
     public function PaymentHistory($modal_id){
@@ -958,7 +1003,7 @@ class StudentPayments extends Component
         ->where('es.college_id','=',$this->user_details->college_id)
         ->where('s.id','=',$this->student_id)
         ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-        ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+        ->where('f.semester_id','=',$this->filters['semester_id'])
         ->orderBy('pi.date_created','asc')
         ->groupBy('pi.id')
         ->get()
@@ -997,7 +1042,7 @@ class StudentPayments extends Component
         ->where('es.college_id','=',$this->user_details->college_id)
         ->where('s.id','=',$this->student_id)
         ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-        ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+        ->where('f.semester_id','=',$this->filters['semester_id'])
         ->orderBy('pi.date_created','asc')
         ->groupBy('pi.id')
         ->get()
@@ -1028,7 +1073,7 @@ class StudentPayments extends Component
                 ->where('s.id','=',$this->student_id)
                 ->where('f.college_id','=',0)
                 ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
                 ->groupBy('f.id')
                 ->get()
                 ->toArray();
@@ -1052,7 +1097,7 @@ class StudentPayments extends Component
                 ->where('s.id','=',$this->student_id)
                 ->where('f.college_id','=',$this->user_details->college_id)
                 ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->current_enrolled_student->semester_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
                 ->groupBy('f.id')
                 ->get()
                 ->toArray();

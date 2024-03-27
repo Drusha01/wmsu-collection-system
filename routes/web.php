@@ -120,6 +120,7 @@ Route::middleware([AccountisValid::class,isCsc::class,isCollector::class,checkTe
         Route::get('/dashboard', CscDashboard::class)->name('csc-dashboard');
         Route::get('/payments', CscPayments::class)->name('csc-payments');
         Route::get('/payments/{student_id}', CscStudentPayments::class)->name('csc-student-payments');
+        Route::get('/payments/{student_id}/{semester}', CscStudentPayments::class)->name('csc-student-payments-semester');
         Route::get('/paymentrecords', CscPaymentRecords::class)->name('csc-paymentrecords');
         Route::get('/remittance', CscRemittance::class)->name('csc-remittance');
         Route::get('/remitrecords', CscRemitRecords::class)->name('csc-remitrecords');
@@ -137,6 +138,7 @@ Route::middleware([AccountisValid::class,isCsc::class,checkTerm::class])->group(
         Route::get('/dashboard', Dashboard::class)->name('csc-collector-dashboard');
         Route::get('/payments', Payments::class)->name('csc-collector-payments');
         Route::get('/payments/{student_id}', CscStudentPayments::class)->name('csc-collector-student-payments');
+        Route::get('/payments/{student_id}/{semester}', CscStudentPayments::class)->name('csc-collector-student-payments-semester');
         Route::get('/paymentrecords', PaymentRecords::class)->name('csc-collector-paymentrecords');
         Route::get('/auditlogs', AuditLogs::class)->name('csc-collector-auditlogs');
     });

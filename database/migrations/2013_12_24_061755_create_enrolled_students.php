@@ -19,7 +19,7 @@ return new class extends Migration
             college_id INT,
             department_id INT ,
             year_level_id INT ,
-            
+            payment_status INT DEFAULT 1,
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
@@ -30,6 +30,7 @@ return new class extends Migration
         DB::statement('CREATE INDEX idx_enrolled_college_id ON enrolled_students(college_id);');
         DB::statement('CREATE INDEX idx_enrolled_department_id ON enrolled_students(department_id);');
         DB::statement('CREATE INDEX idx_enrolled_year_level_id ON enrolled_students(year_level_id);');
+        DB::statement('CREATE INDEX idx_enrolled_payment_status ON enrolled_students(payment_status);');
     }
 
     /**
