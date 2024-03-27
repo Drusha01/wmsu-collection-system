@@ -30,6 +30,13 @@ return new class extends Migration
         );');
 
         DB::statement('CREATE INDEX idx_fees_code ON fees(code(10));');
+        DB::statement('CREATE INDEX idx_fees_name ON fees(name(10));');
+        DB::statement('CREATE INDEX idx_fees_fee_type_id ON fees(fee_type_id);');
+        DB::statement('CREATE INDEX idx_fees_school_year_id ON fees(school_year_id);');
+        DB::statement('CREATE INDEX idx_fees_semester_id ON fees(semester_id);');
+        DB::statement('CREATE INDEX idx_fees_created_by ON fees(created_by);');
+        DB::statement('CREATE INDEX idx_fees_college_id ON fees(college_id);');
+        DB::statement('CREATE INDEX idx_fees_department_id ON fees(department_id);');
     }
 
     /**

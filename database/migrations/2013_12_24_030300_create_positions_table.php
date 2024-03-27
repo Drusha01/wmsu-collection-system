@@ -21,6 +21,8 @@ return new class extends Migration
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
 
+        DB::statement('CREATE INDEX idx_positions_role_id ON positions(role_id);');
+
         DB::statement('INSERT INTO positions VALUES(
             NULL,
             "University President",

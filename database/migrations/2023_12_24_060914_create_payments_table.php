@@ -22,6 +22,12 @@ return new class extends Migration
             date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
+        DB::statement('CREATE INDEX idx_payments_student_id ON payments(student_id);');
+        DB::statement('CREATE INDEX idx_payments_semester_id ON payments(semester_id);');
+        DB::statement('CREATE INDEX idx_payments_school_year_id ON payments(school_year_id);');
+        DB::statement('CREATE INDEX idx_payments_collected_by ON payments(collected_by);');
+        DB::statement('CREATE INDEX idx_payments_promisory_note ON payments(promisory_note(10));');
+        
     }
 
     /**

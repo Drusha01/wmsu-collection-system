@@ -30,6 +30,8 @@ return new class extends Migration
         
         DB::statement('CREATE INDEX idx_user_password ON users(password(10));');
         DB::statement('CREATE INDEX idx_user_username ON users(username(10));');
+        DB::statement('CREATE INDEX idx_user_fullname ON users(first_name(10),middle_name(10),last_name(10));');
+        DB::statement('CREATE INDEX idx_user_school_year_id ON users(school_year_id);');
         DB::statement('CREATE INDEX idx_user_college_id ON users(college_id);');
         DB::statement('CREATE INDEX idx_user_role_id ON users(role_id);');
         DB::statement('CREATE INDEX idx_user_position_id ON users(position_id);');

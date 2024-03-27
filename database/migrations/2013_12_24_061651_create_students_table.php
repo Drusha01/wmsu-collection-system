@@ -28,10 +28,11 @@ return new class extends Migration
             date_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );');
 
-        DB::statement('CREATE INDEX idx_user_college_id ON students(college_id);');
-        DB::statement('CREATE INDEX idx_user_department_id ON students(department_id);');
-        DB::statement('CREATE INDEX idx_user_email ON students(email(10));');
-        DB::statement('CREATE INDEX idx_user_student_code ON students(student_code(10));');
+        DB::statement('CREATE INDEX idx_students_student_code ON students(student_code(10));');
+        DB::statement('CREATE INDEX idx_students_fullname ON students(first_name(10),middle_name(10),last_name(10));');
+        DB::statement('CREATE INDEX idx_students_email ON students(email(10));');
+        DB::statement('CREATE INDEX idx_students_college_id ON students(college_id);');
+        DB::statement('CREATE INDEX idx_students_department_id ON students(department_id);');
         
       
     }
