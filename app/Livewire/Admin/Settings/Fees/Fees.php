@@ -41,6 +41,8 @@ class Fees extends Component
         'prevstudent_code_search'=> NULL,
         'prev_fee_name'=>NULL,
         'prev_school_year_id'=>NULL,
+        'prev_fee_id'=> NULL,
+        'fee_id'=> NULL,
     ];
     public $months = [
         0=>['month_name'=> 'January','month_number'=>1,'max_date'=>31],
@@ -60,6 +62,7 @@ class Fees extends Component
     public $school_years = [];
     public $semesters = [];
     public $school_year = 0;
+    public $fees;
     public function render(){
         if($this->filters['fee_name'] != $this->filters['prev_fee_name']){
             $this->filters['prev_fee_name'] =$this->filters['fee_name'];
@@ -69,11 +72,17 @@ class Fees extends Component
             $this->filters['prev_school_year_id'] = $this->filters['school_year_id'];
             $this->resetPage();
         }
+        if($this->filters['fee_id'] != $this->filters['prev_fee_id']){
+            $this->filters['prev_fee_id'] =$this->filters['fee_id'];
+            $this->resetPage();
+        }
         $this->school_years = DB::table('school_years')
             ->orderBy('id','desc')
             ->get()
             ->toArray();
-       
+        $this->fees = DB::table('fee_types')
+            ->get()
+            ->toArray();
    
         $fees_data = DB::table('fees as f')
             ->select(
@@ -95,7 +104,8 @@ class Fees extends Component
                 'u.id as user_id',
                 'f.for_muslim',
                 'u.id as user_id',
-                'd.name as department_name'
+                'd.name as department_name',
+                'ft.name as fee_type_name'
             )
             ->join('fee_types as ft','ft.id','f.fee_type_id')
             ->join('users as u','u.id','f.created_by')
@@ -103,6 +113,7 @@ class Fees extends Component
             ->join('semesters as s','s.id','f.semester_id')
             ->leftjoin('departments as d','d.id','f.department_id')
             ->where('f.school_year_id','like',$this->filters['school_year_id'].'%')
+            ->where('f.fee_type_id','like',$this->filters['fee_id'] .'%')
             ->where('f.name','like',$this->filters['fee_name'] .'%')
             ->paginate(10);
 

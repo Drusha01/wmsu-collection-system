@@ -28,9 +28,14 @@ class Colleges extends Component
         'is_active' => NULL
     ];
     public $filters = [
-        'college_name'=>NULL,
-        'prev_college_name'=>NULL,
+        'search'=> NULL,
+        'search_by' => 'College code',
+        'prev_search'=> NULL,
 
+    ];
+    public $search_by = [
+        0=>'College code',
+        1=>'College name',
     ];
     public function boot(Request $request ){
         $session = $request->session()->all();
@@ -61,18 +66,31 @@ class Colleges extends Component
             return redirect()->route('disabled-account');
         }
     }
-
+    public function updateSearchDefault(){
+        $this->filters['search'] = NULL;
+        $this->filters['prev_search'] = NULL;
+        $this->resetPage();
+    }
     public function render(){
-        if($this->filters['college_name'] != $this->filters['prev_college_name']){
-            $this->filters['prev_college_name'] =$this->filters['college_name'];
+        if($this->filters['search'] != $this->filters['prev_search']){
+            $this->filters['prev_search'] =$this->filters['search'];
             $this->resetPage();
         }
-        $colleges_data = DB::table('colleges as c')
+        $colleges_data = [];
+        if($this->filters['search_by'] == 'College code' ){
+            $colleges_data = DB::table('colleges as c')
             // ->where('is_active','=',1)
-            ->where('c.code','like',$this->filters['college_name'] .'%')
-            // ->where('c.name','like',$this->filters['college_name'] .'%')
+            ->where('c.code','like',$this->filters['search'] .'%')
             ->orderBy('c.is_active','desc')
             ->paginate(10);
+        }elseif($this->filters['search_by'] == 'College name'){
+            $colleges_data = DB::table('colleges as c')
+            // ->where('is_active','=',1)
+            ->where('c.name','like',$this->filters['search'] .'%')
+            ->orderBy('c.is_active','desc')
+            ->paginate(10);
+        }
+      
         return view('livewire.admin.colleges.colleges',
             ['college_data'=>$colleges_data])
             ->layout('components.layouts.admin',[

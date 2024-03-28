@@ -27,6 +27,10 @@ class Overview extends Component
         'year_end' => NULL,
         'date_start' => NULL,
         'date_end' => NULL,
+        'date_start_date' => NULL,
+        'date_start_month' => NULL,
+        'date_end_date'=> NULL,
+        'date_end_month' => NULL,
     ];
     public $months = [
         0=>['month_name'=> 'January','month_number'=>1,'max_date'=>31],
@@ -216,5 +220,25 @@ class Overview extends Component
                 link              									: '#'
             );
         }
+    }
+    public function editAcademicYear($id,$modal_id){
+        if($school_year = DB::table('school_years')
+            ->where('id','=',$id)
+            ->first()){
+            $this->school_year = [
+                'id' => NULL,
+                'year_start'=> $school_year->year_start,
+                'year_end' => $school_year->year_end,
+                'date_start' => $school_year->date_start,
+                'date_end' => $school_year->date_end,
+                'date_start_date' => intval(substr($school_year->date_start,8,2)),
+                'date_start_month' => intval(substr($school_year->date_start,5,2)),
+                'date_end_date' => intval(substr($school_year->date_end,8,2)),
+                'date_end_month' => intval(substr($school_year->date_end,5,2)),
+            ];
+            // dd($this->school_year);
+        }
+       
+        $this->dispatch('openModal',$modal_id);
     }
 }

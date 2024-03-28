@@ -23,10 +23,26 @@ class Students extends Component
         'college_id' => NULL,
         'department_id' => NULL,
     ];
+    public $filters = [
+        'department_id'=>NULL,
+        'semester_id' => NULL,
+        'year_level_id' => NULL,
+        'college_id' => NULL,
+        'prevdepartment_id'=>NULL,
+        'prevsemester_id' => NULL,
+        'prevyear_level_id' => NULL,
+        'prevcollege_id' => NULL,
+        'search'=> NULL,
+        'search_by' => 'Student code',
+        'prev_search'=> NULL,
+    ];
     public $departments = [];
-    public $student_id_search;
-    public $prevstudent_id_search;
-
+    public $colleges = [];
+    public $search_by = [
+        0=>'Student code',
+        1=>'Student name',
+        2=>'Student email',
+    ];
     public function boot(Request $request ){
         $session = $request->session()->all();
         if(isset($session['id']) && $user_details = DB::table('users as u')
@@ -56,48 +72,194 @@ class Students extends Component
             return redirect()->route('disabled-account');
         }
     }
-    public function render(){
-        if($this->prevstudent_id_search != $this->student_id_search){
+    public function updateSearchDefault(){
+        $this->filters['search'] = NULL;
+        $this->filters['prev_search'] = NULL;
+        $this->resetPage();
+    }
+    public function render()
+    {
+        if($this->filters['search'] != $this->filters['prev_search']){
+            $this->filters['prev_search'] = $this->filters['search'];
             $this->resetPage();
-            $this->prevstudent_id_search = $this->student_id_search;
         }
-        $student_data = DB::table('students as s')
-            ->select(
-                "s.id",
-                "student_code",
-                "first_name",
-                "middle_name",
-                "last_name",
-                "email",
-                "s.college_id",
-                "s.department_id",
-                "s.date_created",
-                "s.date_updated",
-                "c.code as college_code",
-                "c.name as college_name",
-                "d.name as department_name",
-                "d.code as department_code",
-                's.is_muslim',
-                's.is_active'
-            )
-            ->join('colleges as c','s.college_id','c.id')
-            ->join('departments as d','s.department_id','d.id')
-            ->where('s.student_code','like',$this->student_id_search.'%')
-            ->paginate(10);
-        
+        if($this->filters['college_id'] != $this->filters['prevcollege_id']){
+            $this->filters['prevcollege_id'] = $this->filters['college_id'];
+            $this->resetPage();
+        }
+       
+        $student_data = [];
+        if($this->filters['search_by'] == 'Student code' ){
+            if($this->filters['college_id']){
+                $student_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "student_code",
+                    "first_name",
+                    "middle_name",
+                    "last_name",
+                    "email",
+                    "s.college_id",
+                    "s.department_id",
+                    "s.date_created",
+                    "s.date_updated",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    's.is_muslim',
+                    's.is_active'
+                )
+                ->join('colleges as c','s.college_id','c.id')
+                ->join('departments as d','s.department_id','d.id')
+                ->where('c.id','=',$this->filters['college_id'])
+                ->where('s.student_code','like',$this->filters['search'].'%')
+                ->paginate(10);
+            }else{
+                $student_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "student_code",
+                    "first_name",
+                    "middle_name",
+                    "last_name",
+                    "email",
+                    "s.college_id",
+                    "s.department_id",
+                    "s.date_created",
+                    "s.date_updated",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    's.is_muslim',
+                    's.is_active'
+                )
+                ->join('colleges as c','s.college_id','c.id')
+                ->join('departments as d','s.department_id','d.id')
+                ->where('s.student_code','like',$this->filters['search'].'%')
+                ->paginate(10);
+            }
+        }elseif($this->filters['search_by'] == 'Student name'){
+            if($this->filters['college_id']){
+                $student_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "student_code",
+                    "first_name",
+                    "middle_name",
+                    "last_name",
+                    "email",
+                    "s.college_id",
+                    "s.department_id",
+                    "s.date_created",
+                    "s.date_updated",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    's.is_muslim',
+                    's.is_active'
+                )
+                ->join('colleges as c','s.college_id','c.id')
+                ->join('departments as d','s.department_id','d.id')
+                ->where('c.id','=',$this->filters['college_id'])
+                ->where(DB::raw("CONCAT(s.first_name,' ',s.middle_name,' ',s.last_name)"),'like',$this->filters['search'] .'%')
+                ->paginate(10);
+            }else{
+                $student_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "student_code",
+                    "first_name",
+                    "middle_name",
+                    "last_name",
+                    "email",
+                    "s.college_id",
+                    "s.department_id",
+                    "s.date_created",
+                    "s.date_updated",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    's.is_muslim',
+                    's.is_active'
+                )
+                ->join('colleges as c','s.college_id','c.id')
+                ->join('departments as d','s.department_id','d.id')
+                ->where(DB::raw("CONCAT(s.first_name,' ',s.middle_name,' ',s.last_name)"),'like',$this->filters['search'] .'%')
+                ->paginate(10);
+            }
+        }elseif($this->filters['search_by'] == 'Student email'){
+            if($this->filters['college_id']){
+                $student_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "student_code",
+                    "first_name",
+                    "middle_name",
+                    "last_name",
+                    "email",
+                    "s.college_id",
+                    "s.department_id",
+                    "s.date_created",
+                    "s.date_updated",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    's.is_muslim',
+                    's.is_active'
+                )
+                ->join('colleges as c','s.college_id','c.id')
+                ->join('departments as d','s.department_id','d.id')
+                ->where('c.id','=',$this->filters['college_id'])
+                ->where('s.email','like',$this->filters['search'].'%')
+                ->paginate(10);
+            }else{
+                $student_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "student_code",
+                    "first_name",
+                    "middle_name",
+                    "last_name",
+                    "email",
+                    "s.college_id",
+                    "s.department_id",
+                    "s.date_created",
+                    "s.date_updated",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    's.is_muslim',
+                    's.is_active'
+                )
+                ->join('colleges as c','s.college_id','c.id')
+                ->join('departments as d','s.department_id','d.id')
+                ->where('s.email','like',$this->filters['search'].'%')
+                ->paginate(10);
+            }
+        }
         
         $colleges_data = DB::table('colleges')
             ->get()
             ->toArray();
+        $this->colleges = $colleges_data ;
         $department_data = DB::table('departments')
             ->where('college_id','=',$this->student['college_id'])
+            ->get()
+            ->toArray();
+        $this->departments = DB::table('departments')
             ->get()
             ->toArray();
         return view('livewire.admin.students.students',
                 ['student_data'=>$student_data,
                 'colleges_data'=>$colleges_data,
-                'department_data'=>$department_data   ])
-            ->layout('components.layouts.admin',[
+                'department_data'=>$department_data,
+            ])->layout('components.layouts.admin',[
                 'title'=>$this->title]);
     }
     public function addStudent($modal_id){
