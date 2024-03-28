@@ -75,8 +75,9 @@
                                     <span class="sr-only">Close modal</span>
                                 </button>
 
-                                <form action="#" class="grid gap-6 grid-cols-1" wire:submit.prevent="saveSemester({{$semester['id']}},'EditAcademicYearModal')">
+                                <form  class="grid gap-6 grid-cols-1" wire:submit.prevent="saveEditAcademicYear({{$school_year['id']}},'EditAcademicYearModal')">
                                     <div class="mt-8 ">
+                                        <label class="text-md font-large">{{$school_year['year_start']}}</label>
                                         <div class="mb-2">
                                             <label for="start-date"
                                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -106,7 +107,7 @@
                                             </select>
                                             @endif
                                         </div>
-
+                                        <label class="text-md font-large">{{$school_year['year_end']}}</label>
                                         <div class="mb-2">
                                             <label for="start-date"
                                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

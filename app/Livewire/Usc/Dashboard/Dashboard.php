@@ -91,6 +91,19 @@ class Dashboard extends Component
             ->where('f.semester_id','=',$this->filters['semester_id'] )
             ->first();
             
+        $msa_shares =  DB::table('enrolled_students as es')
+            ->select(
+                DB::raw('sum(pi.amount) as msa_shares'),
+            )
+            ->join('students as s','es.student_id','s.id')
+            ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+            ->join('fee_types as ft','f.fee_type_id','ft.id')
+            ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+            ->where('f.college_id','=',0)
+            ->where('f.school_year_id','=',$this->user_details->school_year_id)
+            ->where('f.semester_id','=',$this->filters['semester_id'] )
+            ->where('f.for_muslim','=',1 )
+            ->first();
         $usc_shares =  DB::table('enrolled_students as es')
             ->select(
                 DB::raw('sum(pi.amount) as usc_shares'),
@@ -103,6 +116,7 @@ class Dashboard extends Component
             ->where('f.school_year_id','=',$this->user_details->school_year_id)
             ->where('f.semester_id','=',$this->filters['semester_id'] )
             ->first();
+        
 
         $paid_per_department =  DB::table('enrolled_students as es')
             ->select(
@@ -152,6 +166,10 @@ class Dashboard extends Component
         }
         if($csc_shares){
             $this->dashboard_data['csc_shares'] = $csc_shares->csc_shares;
+        }
+        if($msa_shares){
+            $this->dashboard_data['usc_shares'] -= $msa_shares->msa_shares;
+            $this->dashboard_data['msa_shares'] = $msa_shares->msa_shares;
         }
         if($number_of_enrolled_students){
             $this->dashboard_data['number_of_enrolled_students'] = $number_of_enrolled_students->number_of_enrolled_students;

@@ -203,6 +203,10 @@ class Overview extends Component
             'year_end' => $latest_school_year->year_end+1,
             'date_start' => ($latest_school_year->year_start+1).'-'.$first_semester->date_start_month.'-'.$first_semester->date_start_date,
             'date_end' => ($latest_school_year->year_end+1).'-'.$second_semester->date_end_month.'-'.$second_semester->date_end_date,
+            'date_start_date' => NULL,
+            'date_start_month' => NULL,
+            'date_end_date'=> NULL,
+            'date_end_month' => NULL,
         ];
         if(DB::table('school_years')
             ->insert([
@@ -226,7 +230,7 @@ class Overview extends Component
             ->where('id','=',$id)
             ->first()){
             $this->school_year = [
-                'id' => NULL,
+                'id' => $school_year->id,
                 'year_start'=> $school_year->year_start,
                 'year_end' => $school_year->year_end,
                 'date_start' => $school_year->date_start,
@@ -236,9 +240,85 @@ class Overview extends Component
                 'date_end_date' => intval(substr($school_year->date_end,8,2)),
                 'date_end_month' => intval(substr($school_year->date_end,5,2)),
             ];
-            // dd($this->school_year);
+            $this->dispatch('openModal',$modal_id);
         }
        
-        $this->dispatch('openModal',$modal_id);
+    }
+    public function saveEditAcademicYear($id,$modal_id){
+        if($this->school_year['date_start_month'] < 0 || $this->school_year['date_start_month'] > 12){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid start month',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if($this->school_year['date_start_date'] > $this->months[$this->school_year['date_start_month']-1]['max_date']  || $this->school_year['date_start_date'] < 0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid start date',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+
+        if($this->school_year['date_end_month'] < 0 || $this->school_year['date_end_month'] > 12){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid end month',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if($this->school_year['date_end_date'] > $this->months[$this->school_year['date_end_month']-1]['max_date']  || $this->school_year['date_end_date'] < 0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid end date',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if($this->school_year['date_start_month'] >= $this->school_year['date_end_month']){
+            if($this->school_year['date_start_month'] == $this->school_year['date_end_month'] && $this->school_year['date_start_date'] >= $this->school_year['date_end_date']){
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'warning',
+                    title             									: 'Start date must be previous of end date',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                return;
+            }
+        }
+        if(DB::table('school_years')
+            ->where('id','=',$id)
+            ->update([
+                'date_start' => $this->school_year['year_start'].'-'.$this->school_year['date_start_month'].'-'.$this->school_year['date_start_date'],
+                'date_end' => $this->school_year['year_end'].'-'.$this->school_year['date_end_month'].'-'.$this->school_year['date_end_date'],
+            ])){
+            
+        }
+        $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Sucessfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            $this->dispatch('closeModal',$modal_id);
     }
 }
