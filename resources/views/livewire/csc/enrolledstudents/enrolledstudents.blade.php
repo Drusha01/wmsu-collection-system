@@ -69,7 +69,7 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-1">
                             <button style="display:none" id="activateEnrolledStudentModalToggler" data-modal-target="activateEnrolledStudentModal" data-modal-toggle="activateEnrolledStudentModal">asdf</button>
                             <button style="display:none" id="deleteEnrolledStudentModalToggler" data-modal-target="deleteEnrolledStudentModal" data-modal-toggle="deleteEnrolledStudentModal">asdf</button>
                             <button style="display:none" id="viewEnrolledStudentModalToggler" data-modal-target="viewEnrolledStudentModal" data-modal-toggle="viewEnrolledStudentModal">asdf</button>
