@@ -299,11 +299,22 @@ class Remittance extends Component
                 $total['total_fees']+= floatval($enrolled_students->total_students *$value->amount);
             }
         }
-        if($this->remit['amount'] > ($total['total_paid'] - $total['total_remitted'])){
+        if(((floatval($total['total_university_fees'])) *0.3) - floatval($total['total_remitted']) <=0){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
                 icon              									: 'warning',
-                title             									: 'Amount remitting exceeds total amount collected',
+                title             									: 'You have already exceeded the remitted an amount of '.floatval($total['total_remitted']).'!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(floatval($this->remit['amount']) > ((floatval($total['total_university_fees'])) *0.3) - floatval($total['total_remitted'])){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Amount remitting exceeds total amount of '.((floatval($total['total_university_fees'])) *0.3) - floatval($total['total_remitted']),
                 showConfirmButton 									: 'true',
                 timer             									: '1000',
                 link              									: '#'
