@@ -225,16 +225,36 @@ class Remittance extends Component
         $fee_type = DB::table('fee_types')
             ->where('name','=','University Fee')
             ->first();
-        $university_fees = DB::table('fees as f')
+
+        $msa_shares =  DB::table('enrolled_students as es')
             ->select(
-                'amount',
-                'for_muslim'
+                DB::raw('sum(pi.amount) as msa_shares'),
             )
-            ->where('f.fee_type_id','=',$fee_type->id)
+            ->join('students as s','es.student_id','s.id')
+            ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+            ->join('fee_types as ft','f.fee_type_id','ft.id')
+            ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+            ->where('f.college_id','=',0)
+            ->where('es.college_id','=',$this->user_details->college_id)
             ->where('f.school_year_id','=',$this->user_details->school_year_id)
-            ->where('f.semester_id','=',$this->remit['semester_id'])
-            ->get()
-            ->toArray();
+            ->where('f.semester_id','=',$this->remit['semester_id'] )
+            ->where('f.for_muslim','=',1 )
+            ->first();
+           
+
+        $usc_shares =  DB::table('enrolled_students as es')
+            ->select(
+                DB::raw('sum(pi.amount) as usc_shares'),
+            )
+            ->join('students as s','es.student_id','s.id')
+            ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+            ->join('fee_types as ft','f.fee_type_id','ft.id')
+            ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+            ->where('f.college_id','=',0)
+            ->where('es.college_id','=',$this->user_details->college_id)
+            ->where('f.school_year_id','=',$this->user_details->school_year_id)
+            ->where('f.semester_id','=',$this->remit['semester_id'] )
+            ->first();
         $total_paid = DB::table('payment_items as pi')
             ->select(
                 DB::raw('sum(amount) as total')
@@ -266,7 +286,7 @@ class Remittance extends Component
             );
             return;
         }
-        if(!($university_fees)){
+        if(!($usc_shares)){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
                 icon              									: 'warning',
@@ -289,17 +309,14 @@ class Remittance extends Component
         }
         if($total_remitted){
             $total['total_remitted'] =  $total_remitted->total;
+        }if($usc_shares){
+            $total['total_university_fees'] = $usc_shares->usc_shares;
         }
-        foreach ($university_fees as $key => $value) {
-            if($value->for_muslim == 1){
-                $total['total_MSA_fees']+= floatval($enrolled_students->total_muslim *$value->amount);
-                $total['total_fees']+= floatval($enrolled_students->total_muslim * $value->amount);
-            }else{
-                $total['total_university_fees']+= floatval($enrolled_students->total_students *$value->amount);
-                $total['total_fees']+= floatval($enrolled_students->total_students *$value->amount);
-            }
+        if($msa_shares){
+            $total['total_university_fees'] -= $msa_shares->msa_shares;
+            $total['total_MSA_fees'] = $msa_shares->msa_shares;
         }
-        if(((floatval($total['total_university_fees'])) *0.3) - floatval($total['total_remitted']) <=0){
+        if(((floatval($total['total_university_fees'])) *0.3) - floatval($total['total_remitted']) <0){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
                 icon              									: 'warning',
