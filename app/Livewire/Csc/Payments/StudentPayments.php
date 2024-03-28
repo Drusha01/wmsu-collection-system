@@ -126,28 +126,27 @@ class StudentPayments extends Component
                 "is_muslim" => $student->is_muslim,
                 "department_name"=>$student->department_name
             ];
-        // dd($this->student );
             $this->enrolled_student = DB::table('enrolled_students as es')
-            ->select(
-                'year_start',
-                'year_end',
-                'es.school_year_id',
-                'sm.semester',
-                'sm.id as semester_id',
-                'c.id as college_id',
-                'c.name as college_name',
-                'd.name as department_name',
-                'd.id as department_id'
-            )
-            ->join('semesters as sm','sm.id','es.semester_id')
-            ->join('school_years as sy','sy.id','es.school_year_id')
-            ->join('colleges as c','c.id','es.college_id')
-            ->join('departments as d','d.id','es.department_id')
-            ->where('es.student_id','=',$this->student_id)
-            ->where('es.school_year_id','=',$this->user_details->school_year_id)
-            ->where('es.college_id','=',$this->user_details->college_id)
-            ->orderBy('sm.id','asc')
-            ->first();
+                ->select(
+                    'year_start',
+                    'year_end',
+                    'es.school_year_id',
+                    'sm.semester',
+                    'sm.id as semester_id',
+                    'c.id as college_id',
+                    'c.name as college_name',
+                    'd.name as department_name',
+                    'd.id as department_id'
+                )
+                ->join('semesters as sm','sm.id','es.semester_id')
+                ->join('school_years as sy','sy.id','es.school_year_id')
+                ->join('colleges as c','c.id','es.college_id')
+                ->join('departments as d','d.id','es.department_id')
+                ->where('es.student_id','=',$this->student_id)
+                ->where('es.school_year_id','=',$this->user_details->school_year_id)
+                ->where('es.college_id','=',$this->user_details->college_id)
+                ->orderBy('sm.id','asc')
+                ->first();
             if($this->enrolled_student){
                 $this->current_enrolled_student = $this->enrolled_student;
                 $this->filters['semester_id'] = $this->enrolled_student->semester_id;
@@ -1163,7 +1162,20 @@ class StudentPayments extends Component
         $student_info  = DB::table('students')
             ->where('id','=', $this->student_id)
             ->first();
-        $file_name = $student_info->student_code.' - '.$student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name;
+        $student_semester = DB::table('semesters')
+            ->where('id','=',$this->filters['semester_id'])
+            ->first();
+        $page_info = DB::table('users as u')
+            ->select(
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+            )
+            ->where('u.id','=',$this->user_details->id)
+            ->join('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first();
+        $file_name = $student_info->student_code.' - '.$student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name.' ('.$page_info->school_year.' '.$student_semester->semester.')';
         $this->payment_history = [
             'payment_history'=> $payment_history,
         ];
@@ -1256,7 +1268,6 @@ class StudentPayments extends Component
                 'title'=> $file_name,
                 'content'=> $content)
             );
-            // return $pdf->setPaper('a4', 'landscape')->download( $file_name.'.pdf');
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->setPaper('a4', 'landscape')->stream();
             },  $file_name.'.pdf');

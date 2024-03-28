@@ -225,7 +225,12 @@
                                     <div>
                                         <span class="font-semibold text-gray-700 uppercase ">{{$page_info->college_name}}</span>
                                         <br>
-                                        <span class="semi-semibold text-gray-700 uppercase">{{$student['department_name']}}</span>
+                                        
+                                        @foreach($semesters as $key =>$value)
+                                            @if($filters['semester_id'] == $value->id)
+                                                <span class="semi-semibold text-gray-700 uppercase">{{$value->semester}}</span>
+                                            @endif
+                                        @endforeach
                                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                                 <tr>
