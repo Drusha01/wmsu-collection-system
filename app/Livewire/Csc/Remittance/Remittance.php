@@ -36,7 +36,7 @@ class Remittance extends Component
         'college_id' => NULL,
         'fee_id' => NULL,
         'search'=> NULL,
-        'search_by' => 'Student code',
+        'search_by' => 'Username',
         'prevdepartment_id'=>NULL,
         'prevsemester_id' => NULL,
         'prevyear_level_id' => NULL,
@@ -47,9 +47,8 @@ class Remittance extends Component
         
     ];
     public $search_by = [
-        0=>'Student code',
-        1=>'Student name',
-        2=>'Collector name',
+        0=>'Username',
+        1=>'Remitter name',
     ];
     public function boot(Request $request ){
 
@@ -76,41 +75,79 @@ class Remittance extends Component
             return redirect()->route('login');
         }
     }
+    public function updateSearchDefault(){
+        $this->filters['search'] = NULL;
+        $this->filters['prev_search'] = NULL;
+        $this->resetPage();
+    }
     public function render()
     {
         if($this->filters['search'] != $this->filters['prev_search']){
             $this->filters['prev_search'] =$this->filters['search'];
             $this->resetPage();
         }
-        $remittance_data = DB::table('remits as r')
-            ->select(
-                'r.id',
-                'u.username as approved_by_username',
-                'u.first_name as approved_by_first_name',
-                'u.middle_name as approved_by_middle_name',
-                'u.last_name as approved_by_last_name',
-                'rbyu.username as remitted_by_username',
-                'rbyu.first_name as remitted_by_first_name',
-                'rbyu.middle_name as remitted_by_middle_name',
-                'rbyu.last_name as remitted_by_last_name',
-                'r.remitted_date',
-                'r.approved_date' ,
-                'r.remit_photo',
-                'r.amount',
-                'sy.year_start',
-                'sy.year_end',
-                's.semester',
-                'r.appoved_by'
-            )
-            ->join('users as rbyu','rbyu.id','r.remitted_by')
-            ->join('school_years as sy','sy.id','r.school_year_id')
-            ->join('semesters as s','s.id','r.semester_id')
-            ->leftjoin('users as u','u.id','r.appoved_by')
-            ->where('r.school_year_id','=',$this->user_details->school_year_id)
-            ->where('r.college_id','=',$this->user_details->college_id)
-            ->where(DB::raw("CONCAT(rbyu.first_name,' ',rbyu.middle_name,' ',rbyu.last_name)"),'like',$this->filters['search'] .'%')
-            ->orderby('r.date_created','desc')
-            ->paginate(10);
+        $remittance_data = [];
+        if($this->filters['search_by'] == 'Username'){
+            $remittance_data = DB::table('remits as r')
+                ->select(
+                    'r.id',
+                    'u.username as approved_by_username',
+                    'u.first_name as approved_by_first_name',
+                    'u.middle_name as approved_by_middle_name',
+                    'u.last_name as approved_by_last_name',
+                    'rbyu.username as remitted_by_username',
+                    'rbyu.first_name as remitted_by_first_name',
+                    'rbyu.middle_name as remitted_by_middle_name',
+                    'rbyu.last_name as remitted_by_last_name',
+                    'r.remitted_date',
+                    'r.approved_date' ,
+                    'r.remit_photo',
+                    'r.amount',
+                    'sy.year_start',
+                    'sy.year_end',
+                    's.semester',
+                    'r.appoved_by'
+                )
+                ->join('users as rbyu','rbyu.id','r.remitted_by')
+                ->join('school_years as sy','sy.id','r.school_year_id')
+                ->join('semesters as s','s.id','r.semester_id')
+                ->leftjoin('users as u','u.id','r.appoved_by')
+                ->where('r.school_year_id','=',$this->user_details->school_year_id)
+                ->where('r.college_id','=',$this->user_details->college_id)
+                ->where('rbyu.username','like',$this->filters['search'] .'%')
+                ->orderby('r.date_created','desc')
+                ->paginate(10);
+        }elseif($this->filters['search_by'] == 'Remitter name'){
+            $remittance_data = DB::table('remits as r')
+                ->select(
+                    'r.id',
+                    'u.username as approved_by_username',
+                    'u.first_name as approved_by_first_name',
+                    'u.middle_name as approved_by_middle_name',
+                    'u.last_name as approved_by_last_name',
+                    'rbyu.username as remitted_by_username',
+                    'rbyu.first_name as remitted_by_first_name',
+                    'rbyu.middle_name as remitted_by_middle_name',
+                    'rbyu.last_name as remitted_by_last_name',
+                    'r.remitted_date',
+                    'r.approved_date' ,
+                    'r.remit_photo',
+                    'r.amount',
+                    'sy.year_start',
+                    'sy.year_end',
+                    's.semester',
+                    'r.appoved_by'
+                )
+                ->join('users as rbyu','rbyu.id','r.remitted_by')
+                ->join('school_years as sy','sy.id','r.school_year_id')
+                ->join('semesters as s','s.id','r.semester_id')
+                ->leftjoin('users as u','u.id','r.appoved_by')
+                ->where('r.school_year_id','=',$this->user_details->school_year_id)
+                ->where('r.college_id','=',$this->user_details->college_id)
+                ->where(DB::raw("CONCAT(rbyu.first_name,' ',rbyu.middle_name,' ',rbyu.last_name)"),'like',$this->filters['search'] .'%')
+                ->orderby('r.date_created','desc')
+                ->paginate(10);
+        }
         $page_info = DB::table('users as u')
         ->select(
             'c.name as college_name',
@@ -151,7 +188,7 @@ class Remittance extends Component
 
     public function saveAddRemit($modal_id){
         $this->remit['remit_photo_id'] = rand();
-        if(intval($this->remit['amount'])<=0){
+        if(floatval($this->remit['amount'])<=0){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
                 icon              									: 'warning',
@@ -255,11 +292,11 @@ class Remittance extends Component
         }
         foreach ($university_fees as $key => $value) {
             if($value->for_muslim == 1){
-                $total['total_MSA_fees']+= intval($enrolled_students->total_muslim *$value->amount);
-                $total['total_fees']+= intval($enrolled_students->total_muslim * $value->amount);
+                $total['total_MSA_fees']+= floatval($enrolled_students->total_muslim *$value->amount);
+                $total['total_fees']+= floatval($enrolled_students->total_muslim * $value->amount);
             }else{
-                $total['total_university_fees']+= intval($enrolled_students->total_students *$value->amount);
-                $total['total_fees']+= intval($enrolled_students->total_students *$value->amount);
+                $total['total_university_fees']+= floatval($enrolled_students->total_students *$value->amount);
+                $total['total_fees']+= floatval($enrolled_students->total_students *$value->amount);
             }
         }
         if($this->remit['amount'] > ($total['total_paid'] - $total['total_remitted'])){

@@ -23,6 +23,14 @@ class Payments extends Component
         'prevyear_level_id' => NULL,
         'prevcollege_id' => NULL,
         'prevstudent_code_search'=> NULL,
+        'search'=> NULL,
+        'search_by' => 'Student code',
+        'prev_search'=> NULL,
+    ];
+    public $search_by = [
+        0=>'Student code',
+        1=>'Student name',
+        2=>'Student email',
     ];
     public $semesters;
     public $colleges_data;
@@ -73,10 +81,15 @@ class Payments extends Component
     public function mount(){
 
     }
+    public function updateSearchDefault(){
+        $this->filters['search'] = NULL;
+        $this->filters['prev_search'] = NULL;
+        $this->resetPage();
+    }
     public function render()
     {
-        if($this->filters['student_code_search'] != $this->filters['prevstudent_code_search']){
-            $this->filters['prevstudent_code_search'] =$this->filters['student_code_search'];
+        if($this->filters['search'] != $this->filters['prev_search']){
+            $this->filters['prev_search'] =$this->filters['search'];
             $this->resetPage();
         }
         $this->semesters = DB::table('semesters')
@@ -94,36 +107,98 @@ class Payments extends Component
             ->get()
             ->toArray();
 
-        $enrolled_students_data = DB::table('students as s')
-            ->select(
-                "s.id",
-                "s.student_code",
-                "s.first_name",
-                "s.middle_name",
-                "s.last_name",
-                "s.email",
-                'sm.semester',
-                'sm.id as semester_id',
-                "st.name as payment_status",
-                "c.code as college_code",
-                "c.name as college_name",
-                "d.name as department_name",
-                "d.code as department_code",
-                'yl.year_level'
-            )
-            ->join('enrolled_students as es','es.student_id','s.id')
-            ->join('colleges as c','es.college_id','c.id')
-            ->join('departments as d','es.department_id','d.id')
-            ->join('semesters as sm','sm.id','es.semester_id')
-            ->join('status as st','st.id','es.payment_status')
-            ->join('year_levels as yl','es.year_level_id','yl.id')
-            ->where('es.college_id','=', $this->user_details->college_id)
-            ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
-            ->where('es.department_id','like',$this->filters['department_id'].'%')
-            ->where('es.semester_id','like',$this->filters['semester_id'].'%')
-            ->where('s.student_code','like',$this->filters['student_code_search'].'%')
-            // ->groupBy('es.student_id')
-            ->paginate(10);
+        $enrolled_students_data = [];
+        if($this->filters['search_by'] == 'Student code' ){
+            $enrolled_students_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "s.student_code",
+                    "s.first_name",
+                    "s.middle_name",
+                    "s.last_name",
+                    "s.email",
+                    'sm.semester',
+                    'sm.id as semester_id',
+                    "st.name as payment_status",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    'yl.year_level'
+                )
+                ->join('enrolled_students as es','es.student_id','s.id')
+                ->join('colleges as c','es.college_id','c.id')
+                ->join('departments as d','es.department_id','d.id')
+                ->join('semesters as sm','sm.id','es.semester_id')
+                ->join('status as st','st.id','es.payment_status')
+                ->join('year_levels as yl','es.year_level_id','yl.id')
+                ->where('es.college_id','=', $this->user_details->college_id)
+                ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
+                ->where('es.department_id','like',$this->filters['department_id'].'%')
+                ->where('es.semester_id','like',$this->filters['semester_id'].'%')
+                ->where('s.student_code','like',$this->filters['search'].'%')
+                ->paginate(10);
+        }elseif($this->filters['search_by'] == 'Student name' ){
+            $enrolled_students_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "s.student_code",
+                    "s.first_name",
+                    "s.middle_name",
+                    "s.last_name",
+                    "s.email",
+                    'sm.semester',
+                    'sm.id as semester_id',
+                    "st.name as payment_status",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    'yl.year_level'
+                )
+                ->join('enrolled_students as es','es.student_id','s.id')
+                ->join('colleges as c','es.college_id','c.id')
+                ->join('departments as d','es.department_id','d.id')
+                ->join('semesters as sm','sm.id','es.semester_id')
+                ->join('status as st','st.id','es.payment_status')
+                ->join('year_levels as yl','es.year_level_id','yl.id')
+                ->where('es.college_id','=', $this->user_details->college_id)
+                ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
+                ->where('es.department_id','like',$this->filters['department_id'].'%')
+                ->where('es.semester_id','like',$this->filters['semester_id'].'%')
+                ->where(DB::raw("CONCAT(s.first_name,' ',s.middle_name,' ',s.last_name)"),'like',$this->filters['search'] .'%')
+                ->paginate(10);
+        }elseif($this->filters['search_by'] == 'Student email' ){
+            $enrolled_students_data = DB::table('students as s')
+                ->select(
+                    "s.id",
+                    "s.student_code",
+                    "s.first_name",
+                    "s.middle_name",
+                    "s.last_name",
+                    "s.email",
+                    'sm.semester',
+                    'sm.id as semester_id',
+                    "st.name as payment_status",
+                    "c.code as college_code",
+                    "c.name as college_name",
+                    "d.name as department_name",
+                    "d.code as department_code",
+                    'yl.year_level'
+                )
+                ->join('enrolled_students as es','es.student_id','s.id')
+                ->join('colleges as c','es.college_id','c.id')
+                ->join('departments as d','es.department_id','d.id')
+                ->join('semesters as sm','sm.id','es.semester_id')
+                ->join('status as st','st.id','es.payment_status')
+                ->join('year_levels as yl','es.year_level_id','yl.id')
+                ->where('es.college_id','=', $this->user_details->college_id)
+                ->where('es.year_level_id','like',$this->filters['year_level_id'].'%')
+                ->where('es.department_id','like',$this->filters['department_id'].'%')
+                ->where('es.semester_id','like',$this->filters['semester_id'].'%')
+                ->where('s.email','like',$this->filters['search'].'%')
+                ->paginate(10);
+        }
         $page_info = DB::table('users as u')
         ->select(
             'c.name as college_name',

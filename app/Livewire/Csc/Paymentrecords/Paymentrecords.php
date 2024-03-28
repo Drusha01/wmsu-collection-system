@@ -21,11 +21,11 @@ class Paymentrecords extends Component
         'fee_id' => NULL,
         'search'=> NULL,
         'search_by' => 'Student code',
+        'prev_search'=> NULL,
         'prevdepartment_id'=>NULL,
         'prevsemester_id' => NULL,
         'prevyear_level_id' => NULL,
         'prevcollege_id' => NULL,
-        'prev_search'=> NULL,
         'prev_school_year_id'=> NULL,
         'prev_fee_id' => NULL,
         
@@ -63,6 +63,7 @@ class Paymentrecords extends Component
     public function updateSearchDefault(){
         $this->filters['search'] = NULL;
         $this->filters['prev_search'] = NULL;
+        $this->resetPage();
     }
     public function render()
     {

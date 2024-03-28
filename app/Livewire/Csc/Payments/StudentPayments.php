@@ -72,7 +72,7 @@ class StudentPayments extends Component
         11=>['month_name'=> 'December','month_number'=>12,'max_date'=>31],
 
     ];
-    public function mount(Request $request,$student_id,$semester = 0){
+    public function mount(Request $request,$student_id,$semester = 1){
         $session = $request->session()->all();
         $user_id = $session['id'];
         if(isset($session['id']) && $user_details = DB::table('users as u')
