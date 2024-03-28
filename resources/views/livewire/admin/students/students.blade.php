@@ -733,7 +733,7 @@
 
 
                         <div id="addcsv-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto p-4 md:p-5 overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center md:inset-0">
-                            <div class="relative p-2 w-full max-w-full max-h-full p-4 md:p-5">
+                            <div class="relative w-9/11 max-w-full max-h-full p-4 md:p-5">
                                 <!-- Modal content -->
                                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                     <!-- Modal header -->
@@ -750,13 +750,13 @@
                                     </div>
                                     <!-- Modal body -->
                                     <div class="p-4 md:p-5">
-                                        <div class="flex justify-end px-5">
-                                            <button type="button" class="text-white inline-flex items-center bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800">
+                                        <div class="flex justify-end py-2 px-2">
+                                            <button type="button" class="text-white inline-flex items-center bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-3 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800">
                                                     Download Template
                                             </button>
                                         </div>
                                     <form id="csv-upload-form" class="p-7 md:p-5" method="POST" enctype="multipart/form-data">
-                                        <div class="grid gap-4 mb-12 grid-cols-1">
+                                        <div class="grid gap-4 mb-5 grid-cols-1">
                                             <div class="flex items-center justify-center w-full">
                                                 <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -764,16 +764,19 @@
                                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                                                         </svg>
                                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                                        <p class="text-xs text-gray-500 dark:text-gray-400">CSV files only</p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400" >CSV files only</p>
                                                     </div>
                                                     <input id="dropzone-file" type="file" class="hidden" accept=".csv" />
                                                 </label>
                                             </div>
                                         </div>
-                                            <p class="text-bold text-red-500 dark:text-red-400">CSV files only</p>
-                                            <p class="text-bold text-red-500 dark:text-red-400">All columns should be filled. Do not modify or remove column headers.</p>
-                                        <div class="flex justify-end gap-2">
-                                            <button type="button" onclick="readCSV()" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                        <div class="flex justify-center flex-col items-center">
+                                            <p class="text-bold text-lg text-red-500 dark:text-red-400">All required (*) columns should be filled. Do not modify or remove column headers.</p>
+                                        </div>
+
+                                        <div class="flex justify-end gap-2 mt-6">
+                                            <button type="button" data-modal-toggle="addcsv-modal" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-5 rounded"> Back </button> 
+                                            <button type="button" onclick="readCSV()" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> 
                                                 Add CSV
                                             </button>
                                         </div>
