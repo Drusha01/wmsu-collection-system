@@ -1,4 +1,5 @@
-<div>
+<div>    
+    <x-loading-indicator/>
     <main class="p-9 sm:ml-64 pt-20 sm:pt-8 h-auto">
         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-1">
 

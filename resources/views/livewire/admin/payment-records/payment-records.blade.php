@@ -1,11 +1,11 @@
 <div>
+    <x-loading-indicator/>
     <main class="p-9 sm:ml-64 pt-20 sm:pt-8 h-auto">
         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-1">
-
-
             <div class="mx-5 px-3 ">
                 <!-- Start coding here -->
                 <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+              
                     <!-- Breadcrumb -->
                     <nav class="flex px-5 py-3 text-gray-700" aria-label="Breadcrumb">
                         <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -29,6 +29,7 @@
                     </nav>
 
                     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                        
                         <div class="w-full md:w-3/4 flex ">
                             <div class="flex items-center">
                                 <label for="simple-search" class="sr-only">Search</label>
@@ -65,15 +66,15 @@
                                 </select>
                             </div>  
                             <div class="flex items-center space-x-3 w-full md:w-auto">
-                                    <select id="filterFee" name="filterFee" wire:model.live="filters.fee_id"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                        <option selected value="" >Filter Fees</option>
-                                        @foreach($fees as $key =>$value)
-                                            <option  value="{{$value->id}}" >{{$value->name}}</option>
-                                        @endforeach
+                                <select id="filterFee" name="filterFee" wire:model.live="filters.fee_id"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option selected value="" >Filter Fees</option>
+                                    @foreach($fees as $key =>$value)
+                                        <option  value="{{$value->id}}" >{{$value->name}}</option>
+                                    @endforeach
 
-                                    </select>
-                                </div>  
+                                </select>
+                            </div>  
                         </div>
                     </div>
 

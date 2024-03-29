@@ -7,10 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
+use App\Http\Controllers\export\export as ExporterController;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Livewire\WithFileUploads;
 
 class Students extends Component
 {
     use WithPagination;
+    use WithFileUploads;
     public $title = "Students";
     public $student = [
         'id' => NULL,
@@ -42,6 +47,11 @@ class Students extends Component
         0=>'Student code',
         1=>'Student name',
         2=>'Student email',
+    ];
+    public $import = [
+        'file'=>NULL,
+        'header'=>NULL,
+        'content'=>NULL,
     ];
     public function boot(Request $request ){
         $session = $request->session()->all();
@@ -595,5 +605,28 @@ class Students extends Component
             ]);
             $this->dispatch('closeModal',$modal_id);
         }
+    }
+    public function downloadTemplate(){
+        $file_name = 'StudentImportTemplate';
+        $header = [];
+        $content = [];
+        array_push($content, [
+            'Student Code (*)',
+            'Student Firstname (*)',
+            'Student Middlename',
+            'Student Lastname (*)',
+            'Email (*)',
+            'Muslim? (*)',
+            'College code (*)',
+            'Department Code (*)'
+        ]);
+        $export = new ExporterController([
+            $header,
+            $content
+        ]);
+        return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+    }
+    public function importStudentCSV($modal_id){
+        dd($this->import);
     }
 }

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
+use App\Http\Controllers\export\export as ExporterController;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Students extends Component
 {
@@ -199,5 +201,6 @@ class Students extends Component
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
     }
+   
     
 }

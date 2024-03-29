@@ -37,6 +37,7 @@ class StudentPayments extends Component
         2=>['name'=>'PDF'],
 
     ];
+    public $payment_fees = [];
     public $export_selected = 'EXCEL';
     public $student_id;
     public $semesters;
@@ -53,6 +54,7 @@ class StudentPayments extends Component
     public $partial = [
         'promisory_note' => NULL,
         'amount'=>NULL,
+        'max_amount'=>NULL,
     ];
     public $void = [
         'amount'=>NULL,
@@ -295,7 +297,9 @@ class StudentPayments extends Component
                     }
                 }
 
+                $this->payment_fees = [];
                 foreach ($fees as $key => $value) {
+                    array_push($this->payment_fees,['content'=>$value,'order'=>NULL,'is_selected'=>NULL]);
                     $this->total['total_amount'] = $this->total['total_amount']+$value->amount;
                     $this->total['total_amount_paid'] = $this->total['total_amount_paid']+$value->paid_amount;
                     $this->total['total_balance'] = $this->total['total_balance']+($value->amount - $value->paid_amount);
@@ -319,10 +323,19 @@ class StudentPayments extends Component
         
         return view('livewire.csc.payments.student-payments',[
             'fees'=>$fees,
-            'page_info'=>$page_info
+            'page_info'=>$page_info,
         ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
+    }
+    public function updatePaymentOrder($key){
+        $order = 0;
+        foreach ($this->payment_fees as $key => $value) {
+            if( $value['is_selected']){
+                $order+=1;
+            }
+        }
+        // $this->payment_fees[$key]['order'] = $order;
     }
     public function updateSemester(){
         $this->filters['semester_id'] = $this->filters['semester_id'];
@@ -479,7 +492,7 @@ class StudentPayments extends Component
                     'school_year_id'=>$payment['school_year_id'],
                     'created_by' =>$this->user_details->id,
                     'college_id'=>$this->user_details->college_id,
-                    'log_details' =>'has collected an amount of ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                    'log_details' =>'has collected an amount of ('.number_format($payment['amount'], 2, '.', ',').') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
                     'link' =>route('admin-paymentrecords'),
                 ]);
             }
@@ -515,6 +528,7 @@ class StudentPayments extends Component
         $this->partial = [
             'promisory_note' => NULL,
             'amount'=>NULL,
+            'max_amount'=>NULL,
         ];
         $this->dispatch('openModal',$modal_id);
     }
@@ -697,7 +711,7 @@ class StudentPayments extends Component
                     'school_year_id'=>$payment['school_year_id'],
                     'created_by' =>$this->user_details->id,
                     'college_id'=>$this->user_details->college_id,
-                    'log_details' =>'has collected a partial payment of ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                    'log_details' =>'has collected a partial payment of ('.number_format($payment['amount'], 2, '.', ',').') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
                     'link' =>route('admin-paymentrecords'),
                 ]);
             }
@@ -917,7 +931,7 @@ class StudentPayments extends Component
                     'school_year_id'=>$payment['school_year_id'],
                     'created_by' =>$this->user_details->id,
                     'college_id'=>$this->user_details->college_id,
-                    'log_details' =>'has voided a payment of  ('.$payment['amount'].') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                    'log_details' =>'has voided a payment of  ('.number_format($payment['amount'], 2, '.', ',').') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
                     'link' =>route('admin-paymentrecords'),
                 ]);
             }

@@ -1,4 +1,5 @@
 <div>
+    <x-loading-indicator/>
     <main class="p-9 sm:ml-64 pt-20 sm:pt-8 h-auto">
         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-1">
 
@@ -317,6 +318,7 @@
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" class="px-4 py-3"></th>
+                                            <th scope="col" class="px-4 py-3">Order</th>
                                             <th scope="col" class="px-4 py-3">#</th>
                                             <th scope="col" class="px-4 py-3">Fee Type</th>
                                             <th scope="col" class="px-4 py-3">Fee Name</th>
@@ -325,50 +327,29 @@
 
                                         </tr>
                                     </thead>
-                                    <tbody>         
-                                            <tr class="border-b dark:border-gray-700">
-                                                <td scope="col" class="px-4 py-3">
+                                    <tbody> 
+                                    @foreach($payment_fees as $key =>$value)
+                                        <tr class="border-b dark:border-gray-700">
+                                            <td scope="col" class="px-4 py-3">
 
-                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                    
-                                                </td>
-                                                <td scope="col" class="px-4 py-3">1</td>
-                                                <td scope="col" class="px-4 py-3">Local Fee</td>
-                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
-                                                <td scope="col" class="px-4 py-3">300</td>
-                                                <td scope="col" class="px-4 py-3">250</td>
+                                                <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                @if($value['content']->amount - $value['content']->paid_amount<= 0) disabled @endif 
+                                                wire:model.live="payment_fees.{{$key}}.is_selected"  
+                                                wire:change="updatePaymentOrder({{$key}})"  
+                                                >
+                                                <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                
+                                            </td>
+                                            <th scope="col" class="px-4 py-3">{{$value['order']}}</th>
+                                            <td scope="col" class="px-4 py-3"> {{$key+1}}</td>
+                                            <td scope="col" class="px-4 py-3">{{$value['content']->fee_type_name}}</td>
+                                            <td scope="col" class="px-4 py-3">{{$value['content']->fee_name}}</td>
+                                            <td scope="col" class="px-4 py-3">{{number_format($value['content']->amount, 2, '.', ',')}}</td>
+                                            <td scope="col" class="px-4 py-3">{{number_format($value['content']->amount - $value['content']->paid_amount, 2, '.', ',')}}</td>
 
-                                            </tr>
-                                            <tr class="border-b dark:border-gray-700">
-                                                <td scope="col" class="px-4 py-3">
-
-                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                    
-                                                </td>
-                                                <td scope="col" class="px-4 py-3">2</td>
-                                                <td scope="col" class="px-4 py-3">Local Fee</td>
-                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
-                                                <td scope="col" class="px-4 py-3">300</td>
-                                                <td scope="col" class="px-4 py-3">250</td>
-
-                                            </tr>
-                                            <tr class="border-b dark:border-gray-700">
-                                                <td scope="col" class="px-4 py-3">
-
-                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                    
-                                                </td>
-                                                <td scope="col" class="px-4 py-3">3</td>
-                                                <td scope="col" class="px-4 py-3">Local Fee</td>
-                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
-                                                <td scope="col" class="px-4 py-3">300</td>
-                                                <td scope="col" class="px-4 py-3">250</td>
-
-                                            </tr>
-
+                                        </tr>
+                                   
+                                    @endforeach        
                                     </tbody>
                                 </table>
 
@@ -377,6 +358,10 @@
                                     <div class="flex flex-col mb-4 mr-4">
                                         <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Amount</h3>
                                         <input required max="{{$total['total_balance']}}" wire:model.defer="partial.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-full md:w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                    </div>
+                                    <div class="flex flex-col mb-4 mr-4">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Max Amount</h3>
+                                        <input required max="{{$total['total_balance']}}" disabled wire:model.defer="partial.max_amount" type="number" step="0.01" placeholder="Enter Amount" class="w-full md:w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                     </div>
                                     <div class="flex flex-col mb-4">
                                         <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Promissory Note</h3>
@@ -427,48 +412,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>         
-                                            <tr class="border-b dark:border-gray-700">
-                                                <td scope="col" class="px-4 py-3">
-
-                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                    
-                                                </td>
-                                                <td scope="col" class="px-4 py-3">1</td>
-                                                <td scope="col" class="px-4 py-3">Local Fee</td>
-                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
-                                                <td scope="col" class="px-4 py-3">300</td>
-                                                <td scope="col" class="px-4 py-3">250</td>
-
-                                            </tr>
-                                            <tr class="border-b dark:border-gray-700">
-                                                <td scope="col" class="px-4 py-3">
-
-                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                    
-                                                </td>
-                                                <td scope="col" class="px-4 py-3">2</td>
-                                                <td scope="col" class="px-4 py-3">Local Fee</td>
-                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
-                                                <td scope="col" class="px-4 py-3">300</td>
-                                                <td scope="col" class="px-4 py-3">250</td>
-
-                                            </tr>
-                                            <tr class="border-b dark:border-gray-700">
-                                                <td scope="col" class="px-4 py-3">
-
-                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
-                    
-                                                </td>
-                                                <td scope="col" class="px-4 py-3">3</td>
-                                                <td scope="col" class="px-4 py-3">Local Fee</td>
-                                                <td scope="col" class="px-4 py-3">Mars Fee</td>
-                                                <td scope="col" class="px-4 py-3">300</td>
-                                                <td scope="col" class="px-4 py-3">250</td>
-
-                                            </tr>
+                                      
 
                                     </tbody>
                                 </table>

@@ -35,6 +35,7 @@ use App\Livewire\Admin\Settings\Overview\Overview as AdminOverview;
 use App\Livewire\Admin\Settings\UserManagement\UserManagement as AdminUserManagement;
 use App\Livewire\Admin\Students\Students as AdminStudents;
 use App\Livewire\Admin\SystemLogs\SystemLogs as AdminSystemLogs;
+use App\Livewire\Admin\Departments\Departments as AdminDepartments;
 
 
 use App\Livewire\Usc\Dashboard\Dashboard as UscDashboard;
@@ -95,6 +96,8 @@ Route::middleware([AccountisValid::class,isAdmin::class])->group(function () {
         Route::get('/enrolledstudents', AdminEnrolledStudents::class)->name('admin-enrolledstudents');
         Route::get('/students', AdminStudents::class)->name('admin-students');
         Route::get('/colleges', AdminColleges::class)->name('admin-colleges');
+        Route::get('/departments/{college_id}', AdminDepartments::class)->name('admin-departments');
+        
         Route::get('/auditlogs', AdminAuditLogs::class)->name('admin-auditlogs');
         Route::get('/systemlogs', AdminSystemLogs::class)->name('admin-systemlogs');
        

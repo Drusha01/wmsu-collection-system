@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
+use App\Http\Controllers\import\importController as ImportController;
 
 class Enrolledstudents extends Component
 {
