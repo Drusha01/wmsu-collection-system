@@ -146,6 +146,8 @@
         </main>
     </div>
         <script>
+            // script for hiding and showing the firstname, middlename, and lastname for demo
+            
             const firstNameDiv = document.querySelector('#fname').parentNode;
             const middleNameDiv = document.querySelector('#mname').parentNode;
             const lastNameDiv = document.querySelector('#lname').parentNode;
@@ -171,6 +173,9 @@
                 
                 showNameFields();
                 
+            const modal = document.querySelector('#name-modal');
+            modal.classList.add('hidden'); // Hide the modal
+            modal.setAttribute('aria-hidden', 'true'); // Update aria-hidden attribute
 
             });
         </script>
