@@ -160,6 +160,115 @@ class StudentPayments extends Component
         }else{
             return redirect()->route('csc-payments');
         }
+      
+    }
+    public function paymentFees(){
+        $fees = [];
+        if($this->enrolled_student){
+            $university_fees =DB::table('enrolled_students as es')
+                ->select(
+                    'f.id',
+                    'f.name as fee_name',
+                    'f.code as fee_code',
+                    'ft.name as fee_type_name',
+                    'f.fee_type_id',
+                    'f.for_muslim',
+                    'f.department_id',
+                    'f.amount',
+                    DB::raw('sum(pi.amount) as paid_amount'),
+                )
+                ->join('students as s','es.student_id','s.id')
+                ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+                ->join('fee_types as ft','f.fee_type_id','ft.id')
+                ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+                ->where('s.id','=',$this->student_id)
+                ->where('f.college_id','=',0)
+                ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
+                ->groupBy('f.id')
+                ->get()
+                ->toArray();
+
+            $local_fees =DB::table('enrolled_students as es')
+                ->select(
+                    'f.id',
+                    'f.name as fee_name',
+                    'f.code as fee_code',
+                    'ft.name as fee_type_name',
+                    'f.fee_type_id',
+                    'f.for_muslim',
+                    'f.department_id',
+                    'f.amount',
+                    DB::raw('sum(pi.amount) as paid_amount'),
+                )
+                ->join('students as s','es.student_id','s.id')
+                ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+                ->join('fee_types as ft','f.fee_type_id','ft.id')
+                ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+                ->where('s.id','=',$this->student_id)
+                ->where('f.college_id','=',$this->user_details->college_id)
+                ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
+                ->where('f.semester_id','=',$this->filters['semester_id'])
+                ->groupBy('f.id')
+                ->get()
+                ->toArray();
+            
+            // preprocess
+            if($university_fees || $local_fees){
+                $fees = [];
+                $university_fee_type_id = DB::table('fee_types')
+                    ->select('id')
+                    ->where('name','=','University Fee')
+                    ->first()->id;
+                $local_fee_type_id = DB::table('fee_types')
+                    ->select('id')
+                    ->where('name','=','Local Fee')
+                    ->first()->id;
+                foreach ($university_fees as $key => $value) {
+                    if($value->fee_type_id == $university_fee_type_id ){
+                        // for muslim only
+                        if($value->for_muslim == 1){
+                            if($this->student['is_muslim'] == 1){
+                                array_push($fees,$value);
+                            }
+                        }else{
+                            // for everyone
+                            array_push($fees,$value);
+                        }
+                    }elseif( $value->fee_type_id == $local_fee_type_id ){
+                        if(intval($value->department_id) > 0 && $value->department_id == $this->current_enrolled_student->department_id){
+                            array_push($fees,$value);
+                        }elseif(intval($value->department_id) == 0){
+                            array_push($fees,$value);
+                        } 
+                    }
+                }
+                foreach ($local_fees as $key => $value) {
+                    if($value->fee_type_id == $university_fee_type_id ){
+                        // for muslim only
+                        if($value->for_muslim == 1){
+                            if($this->student['is_muslim'] == 1){
+                                array_push($fees,$value);
+                            }
+                        }else{
+                            // for everyone
+                            array_push($fees,$value);
+                        }
+                    }elseif( $value->fee_type_id == $local_fee_type_id ){
+                        if(intval($value->department_id) > 0 && $value->department_id == $this->current_enrolled_student->department_id){
+                            array_push($fees,$value);
+                        }elseif(intval($value->department_id) == 0){
+                            array_push($fees,$value);
+                        } 
+                    }
+                }
+
+                $this->payment_fees = [];
+                foreach ($fees as $key => $value) {
+                    array_push($this->payment_fees,['content'=>$value,'order'=>NULL,'is_selected'=>NULL]);
+                }
+            }
+        }
     }
     public function boot(Request $request ){
 
@@ -190,6 +299,7 @@ class StudentPayments extends Component
             return redirect()->route('login');
         }
     }
+    
     
     public function render(){
         $fees = [];
@@ -297,9 +407,7 @@ class StudentPayments extends Component
                     }
                 }
 
-                $this->payment_fees = [];
                 foreach ($fees as $key => $value) {
-                    array_push($this->payment_fees,['content'=>$value,'order'=>NULL,'is_selected'=>NULL]);
                     $this->total['total_amount'] = $this->total['total_amount']+$value->amount;
                     $this->total['total_amount_paid'] = $this->total['total_amount_paid']+$value->paid_amount;
                     $this->total['total_balance'] = $this->total['total_balance']+($value->amount - $value->paid_amount);
@@ -328,14 +436,41 @@ class StudentPayments extends Component
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
     }
-    public function updatePaymentOrder($key){
+    public function ResetOrder(){
+        foreach ($this->payment_fees as $key => $value) {
+            $this->payment_fees[$key]['order'] = NULL;
+            $this->payment_fees[$key]['is_selected'] = false;
+        }
+    }
+    public function updatePartialPaymentOrder($index){
         $order = 0;
+        $this->partial['max_amount'] = 0;
         foreach ($this->payment_fees as $key => $value) {
             if( $value['is_selected']){
                 $order+=1;
+                $this->partial['max_amount']+=  floatval($this->payment_fees[$key]['content']->amount) -  floatval($this->payment_fees[$key]['content']->paid_amount) ;
             }
         }
-        // $this->payment_fees[$key]['order'] = $order;
+        if($order > 0){
+            $this->payment_fees[$index]['order'] = $order;
+        }else{
+            $this->payment_fees[$index]['order'] = NULL;
+        }
+    }
+    public function updateVoidPaymentOrder($index){
+        $order = 0;
+        $this->partial['max_amount'] = 0;
+        foreach ($this->payment_fees as $key => $value) {
+            if( $value['is_selected']){
+                $order+=1;
+                $this->partial['max_amount'] += floatval($this->payment_fees[$key]['content']->paid_amount) ;
+            }
+        }
+        if($order > 0){
+            $this->payment_fees[$index]['order'] = $order;
+        }else{
+            $this->payment_fees[$index]['order'] = NULL;
+        }
     }
     public function updateSemester(){
         $this->filters['semester_id'] = $this->filters['semester_id'];
@@ -525,6 +660,7 @@ class StudentPayments extends Component
         $this->dispatch('closeModal',$modal_id);
     }
     public function confirmPartialDefault($modal_id){
+        self::paymentFees();
         $this->partial = [
             'promisory_note' => NULL,
             'amount'=>NULL,
@@ -533,6 +669,7 @@ class StudentPayments extends Component
         $this->dispatch('openModal',$modal_id);
     }
     public function confirmVoidDefault($modal_id){
+        self::paymentFees();
         $this->void = [
             'amount'=> NULL,
         ];
@@ -541,7 +678,39 @@ class StudentPayments extends Component
     public function confirmPaymentDefault($modal_id){
         $this->dispatch('openModal',$modal_id);
     }
-    
+
+    public function array_sort($array, $on, $order=SORT_ASC){
+        $new_array = array();
+        $sortable_array = array();
+
+        if (count($array) > 0) {
+            foreach ($array as $k => $v) {
+                if (is_array($v)) {
+                    foreach ($v as $k2 => $v2) {
+                        if ($k2 == $on) {
+                            $sortable_array[$k] = $v2;
+                        }
+                    }
+                } else {
+                    $sortable_array[$k] = $v;
+                }
+            }
+
+            switch ($order) {
+                case SORT_ASC:
+                    asort($sortable_array);
+                break;
+                case SORT_DESC:
+                    arsort($sortable_array);
+                break;
+            }
+
+            foreach ($sortable_array as $k => $v) {
+                $new_array[$k] = $array[$k];
+            }
+        }
+        return $new_array;
+    }
     public function confirmPartial($modal_id){
         $total = [
             'total_amount'=>0,
@@ -549,225 +718,243 @@ class StudentPayments extends Component
             'total_balance'=>0,
         ];
         $university_fees =DB::table('enrolled_students as es')
-                ->select(
-                    'f.id',
-                    'f.name as fee_name',
-                    'f.code as fee_code',
-                    'ft.name as fee_type_name',
-                    'f.fee_type_id',
-                    'f.for_muslim',
-                    'f.department_id',
-                    'f.amount',
-                    DB::raw('sum(pi.amount) as paid_amount'),
-                )
-                ->join('students as s','es.student_id','s.id')
-                ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
-                ->join('fee_types as ft','f.fee_type_id','ft.id')
-                ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
-                ->where('s.id','=',$this->student_id)
-                ->where('f.college_id','=',0)
-                ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->filters['semester_id'])
-                ->groupBy('f.id')
-                ->get()
-                ->toArray();
+            ->select(
+                'f.id',
+                'f.name as fee_name',
+                'f.code as fee_code',
+                'ft.name as fee_type_name',
+                'f.fee_type_id',
+                'f.for_muslim',
+                'f.department_id',
+                'f.amount',
+                DB::raw('sum(pi.amount) as paid_amount'),
+            )
+            ->join('students as s','es.student_id','s.id')
+            ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+            ->join('fee_types as ft','f.fee_type_id','ft.id')
+            ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+            ->where('s.id','=',$this->student_id)
+            ->where('f.college_id','=',0)
+            ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
+            ->where('f.semester_id','=',$this->filters['semester_id'])
+            ->groupBy('f.id')
+            ->get()
+            ->toArray();
 
-            $local_fees =DB::table('enrolled_students as es')
-                ->select(
-                    'f.id',
-                    'f.name as fee_name',
-                    'f.code as fee_code',
-                    'ft.name as fee_type_name',
-                    'f.fee_type_id',
-                    'f.for_muslim',
-                    'f.department_id',
-                    'f.amount',
-                    DB::raw('sum(pi.amount) as paid_amount'),
-                )
-                ->join('students as s','es.student_id','s.id')
-                ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
-                ->join('fee_types as ft','f.fee_type_id','ft.id')
-                ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
-                ->where('s.id','=',$this->student_id)
-                ->where('f.college_id','=',$this->user_details->college_id)
-                ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
-                ->where('f.semester_id','=',$this->filters['semester_id'])
-                ->groupBy('f.id')
-                ->get()
-                ->toArray();
+        $local_fees =DB::table('enrolled_students as es')
+            ->select(
+                'f.id',
+                'f.name as fee_name',
+                'f.code as fee_code',
+                'ft.name as fee_type_name',
+                'f.fee_type_id',
+                'f.for_muslim',
+                'f.department_id',
+                'f.amount',
+                DB::raw('sum(pi.amount) as paid_amount'),
+            )
+            ->join('students as s','es.student_id','s.id')
+            ->join('fees as f','f.school_year_id',DB::raw('es.school_year_id and f.semester_id=es.semester_id'))
+            ->join('fee_types as ft','f.fee_type_id','ft.id')
+            ->leftjoin('payment_items as pi','pi.student_id',DB::raw('s.id and pi.fee_id=f.id '))
+            ->where('s.id','=',$this->student_id)
+            ->where('f.college_id','=',$this->user_details->college_id)
+            ->where('f.school_year_id','=',$this->current_enrolled_student->school_year_id)
+            ->where('f.semester_id','=',$this->filters['semester_id'])
+            ->groupBy('f.id')
+            ->get()
+            ->toArray();
             
             // preprocess
-            if($university_fees || $local_fees){
-                $fees = [];
-                $university_fee_type_id = DB::table('fee_types')
-                    ->select('id')
-                    ->where('name','=','University Fee')
-                    ->first()->id;
-                $local_fee_type_id = DB::table('fee_types')
-                    ->select('id')
-                    ->where('name','=','Local Fee')
-                    ->first()->id;
-                foreach ($university_fees as $key => $value) {
-                    if($value->fee_type_id == $university_fee_type_id ){
-                        // for muslim only
-                        if($value->for_muslim == 1){
-                            if($this->student['is_muslim'] == 1){
-                                array_push($fees,$value);
-                            }
-                        }else{
-                            // for everyone
+        if($university_fees || $local_fees){
+            $fees = [];
+            $university_fee_type_id = DB::table('fee_types')
+                ->select('id')
+                ->where('name','=','University Fee')
+                ->first()->id;
+            $local_fee_type_id = DB::table('fee_types')
+                ->select('id')
+                ->where('name','=','Local Fee')
+                ->first()->id;
+            foreach ($university_fees as $key => $value) {
+                if($value->fee_type_id == $university_fee_type_id ){
+                    // for muslim only
+                    if($value->for_muslim == 1){
+                        if($this->student['is_muslim'] == 1){
                             array_push($fees,$value);
                         }
-                    }elseif( $value->fee_type_id == $local_fee_type_id ){
-                        if(intval($value->department_id) > 0 && $value->department_id == $this->current_enrolled_student->department_id){
-                            array_push($fees,$value);
-                        }elseif(intval($value->department_id) == 0){
-                            array_push($fees,$value);
-                        } 
+                    }else{
+                        // for everyone
+                        array_push($fees,$value);
                     }
+                }elseif( $value->fee_type_id == $local_fee_type_id ){
+                    if(intval($value->department_id) > 0 && $value->department_id == $this->current_enrolled_student->department_id){
+                        array_push($fees,$value);
+                    }elseif(intval($value->department_id) == 0){
+                        array_push($fees,$value);
+                    } 
                 }
-                foreach ($local_fees as $key => $value) {
-                    if($value->fee_type_id == $university_fee_type_id ){
-                        // for muslim only
-                        if($value->for_muslim == 1){
-                            if($this->student['is_muslim'] == 1){
-                                array_push($fees,$value);
-                            }
-                        }else{
-                            // for everyone
+            }
+            foreach ($local_fees as $key => $value) {
+                if($value->fee_type_id == $university_fee_type_id ){
+                    // for muslim only
+                    if($value->for_muslim == 1){
+                        if($this->student['is_muslim'] == 1){
                             array_push($fees,$value);
                         }
-                    }elseif( $value->fee_type_id == $local_fee_type_id ){
-                        if(intval($value->department_id) > 0 && $value->department_id == $this->current_enrolled_student->department_id){
-                            array_push($fees,$value);
-                        }elseif(intval($value->department_id) == 0){
-                            array_push($fees,$value);
-                        } 
+                    }else{
+                        // for everyone
+                        array_push($fees,$value);
                     }
+                }elseif( $value->fee_type_id == $local_fee_type_id ){
+                    if(intval($value->department_id) > 0 && $value->department_id == $this->current_enrolled_student->department_id){
+                        array_push($fees,$value);
+                    }elseif(intval($value->department_id) == 0){
+                        array_push($fees,$value);
+                    } 
                 }
+            }
 
-                foreach ($fees as $key => $value) {
-                    $total['total_amount'] = $total['total_amount']+$value->amount;
-                    $total['total_amount_paid'] = $total['total_amount_paid']+$value->paid_amount;
-                    $total['total_balance'] = $total['total_balance']+($value->amount - $value->paid_amount);
-                }
-            }
-            $partial['promisory_note'] = NULL;
-            if( $total['total_balance'] > 0 &&( $this->partial['amount'] > $total['total_balance']) ){
-                $this->dispatch('swal:redirect',
-                    position         									: 'center',
-                    icon              									: 'warning',
-                    title             									: 'Partial amount exceeded the balance! ('. number_format($total['total_balance'], 2).')',
-                    showConfirmButton 									: 'true',
-                    timer             									: '1000',
-                    link              									: '#'
-                );
-                return;
-            }elseif(floatval($this->partial['amount']) > 0 && $total['total_balance'] > 0 && ( $this->partial['amount'] <= $total['total_balance'])){
-                if($this->partial['promisory_note']){
-                    $partial['promisory_note'] = self::save_image($this->partial['promisory_note'],'promisory_note','payments','promisory_note');
-                    if($partial['promisory_note'] == 0){
-                        return;
-                    }
-                }
-             
-            }
-            $payment = [  
-                'id' => NULL,
-                'student_id' => $this->student['id'],
-                'school_year_id' => $this->current_enrolled_student->school_year_id,
-                'semester_id' => $this->filters['semester_id'],
-                'amount' => $this->partial['amount']  ,
-                'promisory_note'=> $partial['promisory_note'],
-                'collected_by' =>$this->user_details->id
-            ];
-            DB::table('payments')
-                ->insert([
-                    'id' => NULL,
-                    'student_id' => $payment['student_id'],
-                    'semester_id' => $payment['semester_id'],
-                    'school_year_id' => $payment['school_year_id'],
-                    'amount' => $payment['amount'],
-                    'collected_by'=> $payment['collected_by'],
-                    'promisory_note' => $payment['promisory_note'],
-                ]);
-            $payment_id = DB::table('payments as p')
-                ->select('p.id')
-                ->where('p.student_id','=',$payment['student_id'])
-                ->where('p.semester_id','=',$payment['semester_id'])
-                ->where('p.school_year_id','=',$payment['school_year_id'])
-                ->where('p.amount','=',$payment['amount'])
-                ->orderBy('p.id','desc')
-                ->first();
-            $student_info = DB::table('students')
-                ->where('id','=',$this->student['id'])
-                ->get()
-                ->first();
-            if($student_info){
-                DB::table('logs')
-                ->insert([
-                    'id' =>NULL,
-                    'log_type_id' =>2,
-                    'school_year_id'=>$payment['school_year_id'],
-                    'created_by' =>$this->user_details->id,
-                    'college_id'=>$this->user_details->college_id,
-                    'log_details' =>'has collected a partial payment of ('.number_format($payment['amount'], 2, '.', ',').') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
-                    'link' =>route('admin-paymentrecords'),
-                ]);
-            }
-            if($payment_id){
-                $payment_id = $payment_id->id;
-            }
-                       
             foreach ($fees as $key => $value) {
-                if($payment['amount'] > 0){
-                    if( floatval($value->amount) - floatval($value->paid_amount) > 0){
-                        $amount = floatval($value->amount) - floatval($value->paid_amount);
-                        if($payment['amount'] >= $amount ){
-                            DB::table('payment_items')
-                            ->insert([
-                                'id' => NULL,
-                                'payment_id' => $payment_id,
-                                'fee_id' => $value->id,
-                                'student_id' => $payment['student_id'],
-                                'amount' => floatval($value->amount) - floatval($value->paid_amount) ,
-                                'collected_by' => $payment['collected_by'],
-                            ]);
-                        }else{
-                            DB::table('payment_items')
-                            ->insert([
-                                'id' => NULL,
-                                'payment_id' => $payment_id,
-                                'fee_id' => $value->id,
-                                'student_id' => $payment['student_id'],
-                                'amount' => $payment['amount'] ,
-                                'collected_by' => $payment['collected_by'],
-                            ]);
-                        }
-                        $payment['amount'] = $payment['amount'] - $amount;
-                    }
+                $total['total_amount'] = $total['total_amount']+$value->amount;
+                $total['total_amount_paid'] = $total['total_amount_paid']+$value->paid_amount;
+                $total['total_balance'] = $total['total_balance']+($value->amount - $value->paid_amount);
+            }
+        }
+        $partial['promisory_note'] = NULL;
+        $order = [];
+        foreach ($this->payment_fees as $key => $value) {
+            if(intval($value['order'])>0){
+                array_push($order,$value['order']);
+            }
+        }
+        if(!$order){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please check at least 1 of the fees',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if( $total['total_balance'] > 0 &&( $this->partial['amount'] > $total['total_balance']) ){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Partial amount exceeded the balance! ('. number_format($total['total_balance'], 2).')',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }elseif(floatval($this->partial['amount']) > 0 && $total['total_balance'] > 0 && ( $this->partial['amount'] <= $total['total_balance'])){
+            if($this->partial['promisory_note']){
+                $partial['promisory_note'] = self::save_image($this->partial['promisory_note'],'promisory_note','payments','promisory_note');
+                if($partial['promisory_note'] == 0){
+                    return;
                 }
             }
-            if( $this->partial['amount'] == $total['total_amount']){
-                $payment_status = DB::table('status')
-                    ->where('name','=','Paid')
-                    ->first();
-            }elseif($this->partial['amount'] < $total['total_amount']){
-                $payment_status = DB::table('status')
-                    ->where('name','=','Partial')
-                    ->first();
-            }
-           
-           
-            DB::table('enrolled_students as es')
-                ->where('es.student_id','=',$this->student_id)
-                ->where('es.school_year_id','=',$this->user_details->school_year_id)
-                ->where('es.college_id','=',$this->user_details->college_id)
-                ->where('es.semester_id','=',$payment['semester_id'])
-                ->update([
-                    'payment_status' => $payment_status->id
-                ]);
             
+        }
+        $payment = [  
+            'id' => NULL,
+            'student_id' => $this->student['id'],
+            'school_year_id' => $this->current_enrolled_student->school_year_id,
+            'semester_id' => $this->filters['semester_id'],
+            'amount' => $this->partial['amount']  ,
+            'promisory_note'=> $partial['promisory_note'],
+            'collected_by' =>$this->user_details->id
+        ];
+        DB::table('payments')
+            ->insert([
+                'id' => NULL,
+                'student_id' => $payment['student_id'],
+                'semester_id' => $payment['semester_id'],
+                'school_year_id' => $payment['school_year_id'],
+                'amount' => $payment['amount'],
+                'collected_by'=> $payment['collected_by'],
+                'promisory_note' => $payment['promisory_note'],
+            ]);
+        $payment_id = DB::table('payments as p')
+            ->select('p.id')
+            ->where('p.student_id','=',$payment['student_id'])
+            ->where('p.semester_id','=',$payment['semester_id'])
+            ->where('p.school_year_id','=',$payment['school_year_id'])
+            ->where('p.amount','=',$payment['amount'])
+            ->orderBy('p.id','desc')
+            ->first();
+        $student_info = DB::table('students')
+            ->where('id','=',$this->student['id'])
+            ->get()
+            ->first();
+        if($student_info){
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>2,
+                'school_year_id'=>$payment['school_year_id'],
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has collected a partial payment of ('.number_format($payment['amount'], 2, '.', ',').') from ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                'link' =>route('admin-paymentrecords'),
+            ]);
+        }
+        if($payment_id){
+            $payment_id = $payment_id->id;
+        }
+               
+        $fees = self::array_sort($this->payment_fees,'order',SORT_ASC);
+        foreach ($fees as $key => $value) {
+            if($payment['amount'] > 0){
+                if( floatval($value['content']->amount) - floatval($value['content']->paid_amount) > 0){
+                    $amount = floatval($value['content']->amount) - floatval($value['content']->paid_amount);
+                    if($payment['amount'] >= $amount ){
+                        DB::table('payment_items')
+                        ->insert([
+                            'id' => NULL,
+                            'payment_id' => $payment_id,
+                            'fee_id' => $value['content']->id,
+                            'student_id' => $payment['student_id'],
+                            'amount' => floatval($value['content']->amount) - floatval($value['content']->paid_amount) ,
+                            'collected_by' => $payment['collected_by'],
+                        ]);
+                    }else{
+                        DB::table('payment_items')
+                        ->insert([
+                            'id' => NULL,
+                            'payment_id' => $payment_id,
+                            'fee_id' => $value['content']->id,
+                            'student_id' => $payment['student_id'],
+                            'amount' => $payment['amount'] ,
+                            'collected_by' => $payment['collected_by'],
+                        ]);
+                    }
+                    $payment['amount'] = $payment['amount'] - $amount;
+                }
+            }
+        }
+        if( $this->partial['amount'] == $total['total_amount']){
+            $payment_status = DB::table('status')
+                ->where('name','=','Paid')
+                ->first();
+        }elseif($this->partial['amount'] < $total['total_amount']){
+            $payment_status = DB::table('status')
+                ->where('name','=','Partial')
+                ->first();
+        }
+           
+           
+        DB::table('enrolled_students as es')
+            ->where('es.student_id','=',$this->student_id)
+            ->where('es.school_year_id','=',$this->user_details->school_year_id)
+            ->where('es.college_id','=',$this->user_details->college_id)
+            ->where('es.semester_id','=',$payment['semester_id'])
+            ->update([
+                'payment_status' => $payment_status->id
+            ]);
+        
         $this->dispatch('closeModal',$modal_id);
     }
 
@@ -938,18 +1125,18 @@ class StudentPayments extends Component
         if($payment_id){
             $payment_id = $payment_id->id;
         }
-                    
+        $fees = self::array_sort($this->payment_fees,'order',SORT_ASC);   
         foreach ($fees as $key => $value) {
             if($payment['amount'] < 0){
-                if(floatval($value->paid_amount) > 0){
-                    if($payment['amount']  < (-(floatval($value->paid_amount) )) ){
+                if(floatval($value['content']->paid_amount) > 0){
+                    if($payment['amount']  < (-(floatval($value['content']->paid_amount) )) ){
                         DB::table('payment_items')
                         ->insert([
                             'id' => NULL,
                             'payment_id' => $payment_id,
-                            'fee_id' => $value->id,
+                            'fee_id' => $value['content']->id,
                             'student_id' => $payment['student_id'],
-                            'amount' =>-(floatval($value->paid_amount)),
+                            'amount' =>-(floatval($value['content']->paid_amount)),
                             'collected_by' => $payment['collected_by'],
                         ]);
                     }else{
@@ -957,13 +1144,13 @@ class StudentPayments extends Component
                         ->insert([
                             'id' => NULL,
                             'payment_id' => $payment_id,
-                            'fee_id' => $value->id,
+                            'fee_id' => $value['content']->id,
                             'student_id' => $payment['student_id'],
                             'amount' => $payment['amount'] ,
                             'collected_by' => $payment['collected_by'],
                         ]);
                     }
-                    $payment['amount'] = $payment['amount'] + $value->paid_amount;
+                    $payment['amount'] = $payment['amount'] + $value['content']->paid_amount;
                 }
             }
         }

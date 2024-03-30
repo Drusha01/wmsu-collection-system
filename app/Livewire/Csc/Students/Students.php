@@ -121,6 +121,7 @@ class Students extends Component
             ->where('s.department_id','like',$this->filters['department_id'].'%')
             ->where('s.student_code','like',$this->filters['search'].'%')
             ->where('s.college_id','=',$this->user_details->college_id)
+            ->orderBy('id','desc')
             ->paginate(10);
         }elseif($this->filters['search_by'] == 'Student name'){
             $student_data = DB::table('students as s')
@@ -147,6 +148,7 @@ class Students extends Component
             ->where('s.department_id','like',$this->filters['department_id'].'%')
             ->where(DB::raw("CONCAT(s.first_name,' ',s.middle_name,' ',s.last_name)"),'like',$this->filters['search'] .'%')
             ->where('s.college_id','=',$this->user_details->college_id)
+            ->orderBy('id','desc')
             ->paginate(10);
         }elseif($this->filters['search_by'] == 'Student email'){
             $student_data = DB::table('students as s')
@@ -173,6 +175,7 @@ class Students extends Component
             ->where('s.department_id','like',$this->filters['department_id'].'%')
             ->where('s.email','like',$this->filters['search'].'%')
             ->where('s.college_id','=',$this->user_details->college_id)
+            ->orderBy('id','desc')
             ->paginate(10);
         }
        

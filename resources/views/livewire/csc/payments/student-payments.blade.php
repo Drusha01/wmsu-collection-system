@@ -314,6 +314,11 @@
                                     </h3>
                                 </div>
                                 <h3 class="mb-4 mt-4 font-semibold text-gray-900 dark:text-white">Choose fee to pay</h3>
+                                <div class="flex justify-end py-2 px-2">
+                                    <button type="button" wire:click="ResetOrder()"class="text-white inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-3 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800">
+                                            Reset Order
+                                    </button>
+                                </div>
                                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
@@ -333,9 +338,12 @@
                                             <td scope="col" class="px-4 py-3">
 
                                                 <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                                @if($value['content']->amount - $value['content']->paid_amount<= 0) disabled @endif 
+                                                @if($value['content']->amount - $value['content']->paid_amount <= 0) disabled @endif 
                                                 wire:model.live="payment_fees.{{$key}}.is_selected"  
-                                                wire:change="updatePaymentOrder({{$key}})"  
+                                                wire:change="updatePartialPaymentOrder({{$key}})"  
+                                                @if(intval($value['order'])>0)
+                                                    disabled
+                                                @endif
                                                 >
                                                 <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
                 
@@ -357,11 +365,11 @@
                                 <div class="flex flex-wrap mt-6">
                                     <div class="flex flex-col mb-4 mr-4">
                                         <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Amount</h3>
-                                        <input required max="{{$total['total_balance']}}" wire:model.defer="partial.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-full md:w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        <input required max="{{$partial['max_amount']}}" wire:model.defer="partial.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-full md:w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                     </div>
                                     <div class="flex flex-col mb-4 mr-4">
                                         <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Max Amount</h3>
-                                        <input required max="{{$total['total_balance']}}" disabled wire:model.defer="partial.max_amount" type="number" step="0.01" placeholder="Enter Amount" class="w-full md:w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        <input disabled wire:model.defer="partial.max_amount" type="number" step="0.01" placeholder="Enter Amount" class="w-full md:w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                     </div>
                                     <div class="flex flex-col mb-4">
                                         <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Promissory Note</h3>
@@ -399,25 +407,61 @@
                                 </div>
 
                                 <h3 class="mb-4 mt-4 font-semibold text-gray-900 dark:text-white">Choose fee to void</h3>
+                                <div class="flex justify-end py-2 px-2">
+                                    <button type="button" wire:click="ResetOrder()"class="text-white inline-flex items-center bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-3 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800">
+                                            Reset Order
+                                    </button>
+                                </div>
                                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" class="px-4 py-3"></th>
+                                            <th scope="col" class="px-4 py-3">Order</th>
                                             <th scope="col" class="px-4 py-3">#</th>
                                             <th scope="col" class="px-4 py-3">Fee Type</th>
                                             <th scope="col" class="px-4 py-3">Fee Name</th>
                                             <th scope="col" class="px-4 py-3">Amount</th>
-                                            <th scope="col" class="px-4 py-3">Balance</th>
+                                            <th scope="col" class="px-4 py-3">Paid Amount</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>         
-                                      
+                                        @foreach($payment_fees as $key =>$value)
+                                            <tr class="border-b dark:border-gray-700">
+                                                <td scope="col" class="px-4 py-3">
+                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                                    @if($value['content']->paid_amount == 0) disabled @endif 
+                                                    wire:model.live="payment_fees.{{$key}}.is_selected"  
+                                                    wire:change="updateVoidPaymentOrder({{$key}})"  
+                                                    @if(intval($value['order'])>0)
+                                                        disabled
+                                                    @endif
+                                                    >
+                                                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"></label>
+                    
+                                                </td>
+                                                <th scope="col" class="px-4 py-3">{{$value['order']}}</th>
+                                                <td scope="col" class="px-4 py-3"> {{$key+1}}</td>
+                                                <td scope="col" class="px-4 py-3">{{$value['content']->fee_type_name}}</td>
+                                                <td scope="col" class="px-4 py-3">{{$value['content']->fee_name}}</td>
+                                                <td scope="col" class="px-4 py-3">{{number_format($value['content']->amount, 2, '.', ',')}}</td>
+                                                <td scope="col" class="px-4 py-3">{{number_format($value['content']->paid_amount, 2, '.', ',')}}</td>
+
+                                            </tr>
+                                        @endforeach        
 
                                     </tbody>
                                 </table>
-                                <label class="block mt-5 mb-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size">Amount</label>
-                                <input required max="{{$total['total_amount_paid']}}" wire:model.defer="void.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                <div class="flex flex-wrap mt-6">
+                                    <div class="flex flex-col mb-4 mr-4">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Amount</h3>
+                                        <input required max="{{$total['total_amount_paid']}}" wire:model.defer="void.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                    </div>
+                                    <div class="flex flex-col mb-4 mr-4">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Max Amount</h3>
+                                        <input disabled wire:model.defer="partial.max_amount" type="number" step="0.01" placeholder="Enter Amount" class="w-full md:w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                    </div>
+                                </div>
                                 
                                 <div class="flex justify-center mt-10">
                                     <button type="submit" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
