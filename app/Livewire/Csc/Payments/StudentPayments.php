@@ -867,6 +867,24 @@ class StudentPayments extends Component
             'promisory_note'=> $partial['promisory_note'],
             'collected_by' =>$this->user_details->id
         ];
+        $fees = self::array_sort($this->payment_fees,'order',SORT_ASC);
+        $max_amount = 0;
+        foreach ($fees as $key => $value) {
+            if($value['is_selected']){
+                $max_amount+=floatval($value['content']->amount) - floatval($value['content']->paid_amount) ;
+            }
+        } 
+        if($payment['amount'] > $max_amount){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Void amount exceeded the selected total amount! ('. number_format($max_amount, 2).')',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
         DB::table('payments')
             ->insert([
                 'id' => NULL,
@@ -905,7 +923,7 @@ class StudentPayments extends Component
             $payment_id = $payment_id->id;
         }
                
-        $fees = self::array_sort($this->payment_fees,'order',SORT_ASC);
+       
         foreach ($fees as $key => $value) {
             if($value['is_selected']){
                 if($payment['amount'] > 0){
@@ -1107,6 +1125,24 @@ class StudentPayments extends Component
             'promisory_note'=> NULL,
             'collected_by' =>$this->user_details->id
         ];
+        $fees = self::array_sort($this->payment_fees,'order',SORT_ASC);  
+        $max_amount = 0;
+        foreach ($fees as $key => $value) {
+            if($value['is_selected']){
+                $max_amount+=floatval($value['content']->paid_amount);
+            }
+        } 
+        if($payment['amount'] > $max_amount){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Void amount exceeded the selected total amount! ('. number_format($max_amount, 2).')',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
         DB::table('payments')
             ->insert([
                 'id' => NULL,
@@ -1144,7 +1180,7 @@ class StudentPayments extends Component
         if($payment_id){
             $payment_id = $payment_id->id;
         }
-        $fees = self::array_sort($this->payment_fees,'order',SORT_ASC);   
+        
         foreach ($fees as $key => $value) {
             if($value['is_selected']){
                 if($payment['amount'] < 0){
