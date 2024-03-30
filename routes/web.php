@@ -111,7 +111,8 @@ Route::middleware([AccountisValid::class,isAdmin::class])->group(function () {
         Route::get('/usermanagement', AdminUserManagement::class)->name('admin-usermanagement');
         Route::get('/profile', AdminProfile::class)->name('admin-profile');
 
-        Route::post('/upload', [AdminUploadCSV::class,'upload_student_csv'])->name('admin-upload');
+        Route::post('/upload/students', [AdminUploadCSV::class,'upload_student_csv'])->name('admin-upload-students');
+        Route::post('/upload/enrolledstudents', [AdminUploadCSV::class,'upload_enrolledstudent_csv'])->name('admin-upload-enrolledstudents');
 
     });
 });
@@ -144,6 +145,8 @@ Route::middleware([AccountisValid::class,isCsc::class,isCollector::class,checkTe
       
         Route::get('/fees', CscFees::class)->name('csc-fees');
         Route::get('/profile', CscProfile::class)->name('csc-profile');
+        Route::post('/upload/enrolledstudents', [AdminUploadCSV::class,'csc_upload_enrolledstudent_csv'])->name('csc-upload-enrolledstudents');
+
 
     });
 });

@@ -71,6 +71,7 @@
                         </div>
 
                         <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 p-1">
+                            <button style="display:none" id="addcsv-modalToggler" data-modal-target="addcsv-modal" data-modal-toggle="addcsv-modal">asdf</button>
                             <button style="display:none" id="activateEnrolledStudentModalToggler" data-modal-target="activateEnrolledStudentModal" data-modal-toggle="activateEnrolledStudentModal">asdf</button>
                             <button style="display:none" id="deleteEnrolledStudentModalToggler" data-modal-target="deleteEnrolledStudentModal" data-modal-toggle="deleteEnrolledStudentModal">asdf</button>
                             <button style="display:none" id="viewEnrolledStudentModalToggler" data-modal-target="viewEnrolledStudentModal" data-modal-toggle="viewEnrolledStudentModal">asdf</button>
@@ -90,7 +91,7 @@
                             </div>
                             <div
                                 class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                                <button data-modal-target="addcsv-modal" data-modal-toggle="addcsv-modal"
+                                <button wire:click="ImportEnrolledStudents('addcsv-modalToggler')"
                                     class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                     <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -606,6 +607,118 @@
                                             </button>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div wire:ignore.self id="addcsv-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto p-4 md:p-5 overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center md:inset-0">
+                            <div class="relative w-9/11 max-w-full max-h-full p-4 md:p-5">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <!-- Modal header -->
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Import Enrolled Students CSV
+                                        </h3>
+                                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="addcsv-modal">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    
+                                    <!-- Table for CSV content -->
+                                    @if($enrolledstudents_csv['content'])
+                                    <div class="p-4 md:p-5">
+                                        <div class="flex justify-end py-2 px-2">
+                                                <button type="button" wire:click="downloadTemplate()"class="text-white inline-flex items-center bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-3 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800">
+                                                        Download Template
+                                                </button>
+                                            </div>
+                                        <table class="w-full border-collapse border border-gray-200 dark:border-gray-600">
+                                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                <tr>
+                                                    <th scope="col" class="px-4 py-3">#</th>
+                                                    @foreach ($enrolledstudents_csv['default_header'] as $item_key => $item_value) 
+                                                        <th scope="col" class="px-4 py-3">{{$item_value}}</th>
+                                                    @endforeach
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                @foreach($enrolledstudents_csv['content'] as $key => $value)
+                                                <tr class="border-b dark:border-gray-700">
+                                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{$key+1}}</th>
+                                                    @foreach ($value as $item_key => $item_value) 
+                                                    <td class="px-4 py-3">{{$item_value}}</td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <div class="flex justify-end gap-2 mt-6">
+                                            <button type="button" data-modal-toggle="addcsv-modal" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-5 rounded"> Back </button> 
+                                            <button type="submit" wire:click="importEnrolledStudentCSV('addcsv-modal')" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> 
+                                                Import
+                                            </button>
+                                        </div>
+                                    </div>
+                                    @else
+                                        <div class="p-4 md:p-5">
+                                            <div class="flex justify-end py-2 px-2">
+                                                <button type="button" wire:click="downloadTemplate()"class="text-white inline-flex items-center bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-3 py-3 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800">
+                                                        Download Template
+                                                </button>
+                                            </div>
+                                            <form  class="p-7 md:p-5" wire:submit.prevent="importStudentCSV('addcsv-modal')">
+                                                <div class="grid gap-4 mb-5 grid-cols-1">
+                                                    <div class="flex items-center justify-center w-full">
+                                                        <label for="importCSV" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                                </svg>
+                                                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                                                <p class="text-xs text-gray-500 dark:text-gray-400" >CSV files only</p>
+                                                            </div>
+                                                            <input id="importCSV" type="file" class="hidden" accept="" required wire:change="checkUpload()" />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <!-- <input id="csv" type="file" accept="" required wire:model.defer="import.file" /> -->
+                                                <div class="flex justify-center flex-col ">
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">1. All required (*) columns should be filled. Do not modify or remove column headers.</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">2. Student Code must be the student code inserted in the {Students Module}.</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">4. Year Level must be 1 - 5 only, it refers to 1st year - 5th year</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">5. Semester must be 1 - 2 only, it refers to 1st semester - 2nd semester</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">6. College code must be from the college module.</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">7. Department code must be from the department module.</p>
+                                                </div>
+                                                <div class="flex justify-end gap-2 mt-6">
+                                                    <button type="button" data-modal-toggle="addcsv-modal" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-5 rounded"> Back </button> 
+                                                </div>
+                                            </form>
+                                            <script>
+                                                $('#importCSV').on("change", function(){ 
+                                                    var formData = new FormData();
+                                                    formData.append("file", document.getElementById("importCSV").files[0]);
+                                                    console.log( formData)
+                                                    $.ajax({
+                                                        url: '/csc/upload/enrolledstudents',
+                                                        type: 'POST',
+                                                        data: formData ,
+                                                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                                                        contentType: false, 
+                                                        processData: false,
+                                                        success: function(data){
+                                                        }
+                                                    });
+                                                
+                                                    
+                                                });
+                                            </script>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

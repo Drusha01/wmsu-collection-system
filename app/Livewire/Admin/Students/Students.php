@@ -31,6 +31,7 @@ class Students extends Component
         'department_id' => NULL,
     ];
     public $students_csv =[
+        'input_id' => NULL,
         'csv_path' => NULL,
         'default_header'=>NULL,
         'header' => NULL,
@@ -142,6 +143,7 @@ class Students extends Component
                 ->join('departments as d','s.department_id','d.id')
                 ->where('c.id','=',$this->filters['college_id'])
                 ->where('s.student_code','like',$this->filters['search'].'%')
+                ->orderBy('id','desc')
                 ->paginate(10);
             }else{
                 $student_data = DB::table('students as s')
@@ -166,6 +168,7 @@ class Students extends Component
                 ->join('colleges as c','s.college_id','c.id')
                 ->join('departments as d','s.department_id','d.id')
                 ->where('s.student_code','like',$this->filters['search'].'%')
+                ->orderBy('id','desc')
                 ->paginate(10);
             }
         }elseif($this->filters['search_by'] == 'Student name'){
@@ -193,6 +196,7 @@ class Students extends Component
                 ->join('departments as d','s.department_id','d.id')
                 ->where('c.id','=',$this->filters['college_id'])
                 ->where(DB::raw("CONCAT(s.first_name,' ',s.middle_name,' ',s.last_name)"),'like',$this->filters['search'] .'%')
+                ->orderBy('id','desc')
                 ->paginate(10);
             }else{
                 $student_data = DB::table('students as s')
@@ -217,6 +221,7 @@ class Students extends Component
                 ->join('colleges as c','s.college_id','c.id')
                 ->join('departments as d','s.department_id','d.id')
                 ->where(DB::raw("CONCAT(s.first_name,' ',s.middle_name,' ',s.last_name)"),'like',$this->filters['search'] .'%')
+                ->orderBy('id','desc')
                 ->paginate(10);
             }
         }elseif($this->filters['search_by'] == 'Student email'){
@@ -244,6 +249,7 @@ class Students extends Component
                 ->join('departments as d','s.department_id','d.id')
                 ->where('c.id','=',$this->filters['college_id'])
                 ->where('s.email','like',$this->filters['search'].'%')
+                ->orderBy('id','desc')
                 ->paginate(10);
             }else{
                 $student_data = DB::table('students as s')
@@ -268,6 +274,7 @@ class Students extends Component
                 ->join('colleges as c','s.college_id','c.id')
                 ->join('departments as d','s.department_id','d.id')
                 ->where('s.email','like',$this->filters['search'].'%')
+                ->orderBy('id','desc')
                 ->paginate(10);
             }
         }
@@ -641,6 +648,7 @@ class Students extends Component
                     timer             									: '1000',
                     link              									: '#'
                 );
+                $this->students_csv['content'] = NULL;
                 return;
             }
         }
@@ -659,6 +667,7 @@ class Students extends Component
                         timer             									: '2500',
                         link              									: '#'
                     );
+                    $this->students_csv['content'] = NULL;
                     return;
                 }
             }
@@ -676,6 +685,7 @@ class Students extends Component
                                 timer             									: '2500',
                                 link              									: '#'
                             );
+                            $this->students_csv['content'] = NULL;
                             return;
                         }
                         if(isset($value[$header_key]) && strlen($value[$header_key])<=0){
@@ -687,6 +697,7 @@ class Students extends Component
                                 timer             									: '2500',
                                 link              									: '#'
                             );
+                            $this->students_csv['content'] = NULL;
                             return;
                         }
                     }
@@ -695,6 +706,7 @@ class Students extends Component
             foreach ($this->students_csv['content'] as $key => $value) {
                 foreach ($this->students_csv['default_header'] as $header_key => $header_value) {
                     if($header_value  == 'Student Code (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
                         if(DB::table('students')
                         ->where('student_code','=',$value[$header_key])
                         ->first()){
@@ -706,6 +718,7 @@ class Students extends Component
                                 timer             									: '3000',
                                 link              									: '#'
                             );
+                            $this->students_csv['content'] = NULL;
                             return;
                         }
                     }elseif($header_value  == 'Student Firstname (*)'){
@@ -721,6 +734,7 @@ class Students extends Component
                                 timer             									: '3000',
                                 link              									: '#'
                             );
+                            $this->students_csv['content'] = NULL;
                             return;
                         }
                         if(DB::table('students')
@@ -734,9 +748,11 @@ class Students extends Component
                                 timer             									: '3000',
                                 link              									: '#'
                             );
+                            $this->students_csv['content'] = NULL;
                             return;
                         }
                     }elseif($header_value  == 'Muslim?'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
                         if(isset($value[$header_key]) && (($value[$header_key] == 'Yes' || $value[$header_key] == 'No'||  $value[$header_key] == '')) ){
 
                         }else{
@@ -748,6 +764,7 @@ class Students extends Component
                                 timer             									: '3000',
                                 link              									: '#'
                             );
+                            $this->students_csv['content'] = NULL;
                         return;
                         }
                     }elseif($header_value  == 'College code (*)'){
@@ -764,6 +781,7 @@ class Students extends Component
                                 timer             									: '3000',
                                 link              									: '#'
                             );
+                            $this->students_csv['content'] = NULL;
                             return;
                         }
                     }elseif($header_value  == 'Department Code (*)'){
@@ -780,6 +798,7 @@ class Students extends Component
                                 timer             									: '3000',
                                 link              									: '#'
                             );
+                            $this->students_csv['content'] = NULL;
                             return;
                         }
                     }
@@ -795,6 +814,7 @@ class Students extends Component
                 timer             									: '2500',
                 link              									: '#'
             );
+            $this->students_csv['content'] = NULL;
             return;
         }
     }
@@ -818,6 +838,7 @@ class Students extends Component
             }
         }
         $this->students_csv = [
+            'input_id' => rand(),
             'csv_path' => $path,
             'default_header'=> $this->default_header,
             'header' => $header,
@@ -892,6 +913,7 @@ class Students extends Component
             foreach ($this->students_csv['content'] as $key => $value) {
                 foreach ($this->students_csv['default_header'] as $header_key => $header_value) {
                     if($header_value  == 'Student Code (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
                         if(DB::table('students')
                         ->where('student_code','=',$value[$header_key])
                         ->first()){
@@ -934,6 +956,7 @@ class Students extends Component
                             return;
                         }
                     }elseif($header_value  == 'Muslim?'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
                         if(isset($value[$header_key]) && (($value[$header_key] == 'Yes' || $value[$header_key] == 'No'||  $value[$header_key] == '')) ){
                             if($value[$header_key] == 'Yes'){
                                 $this->students_csv['content'][$key][$header_key] = 1;
@@ -951,9 +974,10 @@ class Students extends Component
                                 timer             									: '3000',
                                 link              									: '#'
                             );
-                        return;
+                            return;
                         }
                     }elseif($header_value  == 'College code (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
                         if(! ($college = DB::table('colleges')
                         ->where('code','=',$value[$header_key])
                         ->where('is_active','=',1)
@@ -971,6 +995,7 @@ class Students extends Component
                         }
                         $this->students_csv['content'][$key][$header_key] = $college->id;
                     }elseif($header_value  == 'Department Code (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
                         if($college && isset($value[$header_key]) &&  !($department = DB::table('departments')
                         ->where('code','=',$value[$header_key])
                         ->where('college_id','=',$college->id)
@@ -1013,6 +1038,14 @@ class Students extends Component
                 'is_muslim' =>  $value[5],
                 'college_id' => $value[6],
                 'department_id' => $value[7],
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has added a new student ('.$value[0].') '.$value[1].' '.$value[2].' '.$value[3],
+                'link' =>route('admin-usermanagement'),
             ]);
         }
         $this->students_csv =[

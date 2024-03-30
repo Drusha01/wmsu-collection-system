@@ -115,7 +115,7 @@
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-4 py-3">#</th>
-                                    <th scope="col" class="px-4 py-3">Student ID</th>
+                                    <th scope="col" class="px-4 py-3">Student Code</th>
                                     <th scope="col" class="px-4 py-3">Student Name</th>
                                     <th scope="col" class="px-4 py-3">College</th>
                                     <th scope="col" class="px-4 py-3">Course</th>
@@ -222,12 +222,12 @@
                                         <div class="grid gap-4 mb-12 grid-cols-2">
                                             <div class="col-span-6">
                                                 <label for="snumber"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student ID</label>
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student Code</label>
                                                 <input type="text" wire:model.defer="student.student_code" name="snumber" id="snumber"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                    placeholder="Student ID" required="" value="{{ old('snumber') }}">
+                                                    placeholder="Student Code" required="" value="{{ old('snumber') }}">
                                                 @error('snumber')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
                                                 @enderror
@@ -369,12 +369,12 @@
                                         <div class="grid gap-4 mb-12 grid-cols-2">
                                             <div class="col-span-6">
                                                 <label for="snumber"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student ID</label>
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student Code</label>
                                                 <input disabled type="text" wire:model.defer="student.student_code" name="snumber" id="snumber"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                    placeholder="Student ID" required="" value="{{ old('snumber') }}">
+                                                    placeholder="Student Code" required="" value="{{ old('snumber') }}">
                                                 @error('snumber')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
                                                 @enderror
@@ -516,12 +516,12 @@
                                         <div class="grid gap-4 mb-12 grid-cols-2">
                                             <div class="col-span-6">
                                                 <label for="snumber"
-                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student ID</label>
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Student Code</label>
                                                 <input type="text" wire:model.defer="student.student_code" name="snumber" id="snumber"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
                                                 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400
                                                 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                    placeholder="Student ID" required="" value="{{ old('snumber') }}">
+                                                    placeholder="Student Code" required="" value="{{ old('snumber') }}">
                                                 @error('snumber')
                                                     <p class="mt-2 text-sm text-red-600 dark:text-red-500">{{ $message }}</p>
                                                 @enderror
@@ -812,12 +812,12 @@
                                                 </div>
                                                 <!-- <input id="csv" type="file" accept="" required wire:model.defer="import.file" /> -->
                                                 <div class="flex justify-center flex-col ">
-                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">All required (*) columns should be filled. Do not modify or remove column headers.</p>
-                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">Student Code must be unique.</p>
-                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">Student email must be unique.</p>
-                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">For Muslim column you can put 'Yes' to identify the student is a muslim, 'No' or no value to identify the student is NOT a muslim</p>
-                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">College code must be from the college module.</p>
-                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">Department code must be from the college module.</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">1. All required (*) columns should be filled. Do not modify or remove column headers.</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">2. Student Code must be unique.</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">3. Student email must be unique.</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">4. For Muslim column you can put 'Yes' to identify the student is a muslim, 'No' or no value to identify the student is NOT a muslim</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">5. College code must be from the college module.</p>
+                                                    <p class="text-bold text-lg text-red-500 dark:text-red-400">6. Department code must be from the department module.</p>
                                                 </div>
                                                 <div class="flex justify-end gap-2 mt-6">
                                                     <button type="button" data-modal-toggle="addcsv-modal" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-5 rounded"> Back </button> 
@@ -829,7 +829,7 @@
                                                     formData.append("file", document.getElementById("importCSV").files[0]);
                                                     console.log( formData)
                                                     $.ajax({
-                                                        url: 'upload',
+                                                        url: '/admin/upload/students',
                                                         type: 'POST',
                                                         data: formData ,
                                                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},

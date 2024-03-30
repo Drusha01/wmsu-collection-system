@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
+use App\Http\Controllers\export\export as ExporterController;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Livewire\WithFileUploads;
+use Livewire\Attributes\Validate;
 
 class EnrolledStudents extends Component
 {
@@ -17,6 +22,20 @@ class EnrolledStudents extends Component
     public $student_id_search;
     public $prevstudent_id_search;
     public $department_data =[];
+    public $enrolledstudents_csv = [
+        'csv_path' => NULL,
+        'default_header'=>NULL,
+        'header' => NULL,
+        'content' => NULL,
+    ];
+    public $default_header =  [
+        'Student Code (*)',
+        'School Year (*)',
+        'Year Level (*)',
+        'Semester (*)',
+        'College code (*)',
+        'Department Code (*)'
+    ];
     public $filters = [
         'department_id'=>NULL,
         'semester_id' => NULL,
@@ -521,7 +540,7 @@ class EnrolledStudents extends Component
                     'log_type_id' =>1,
                     'created_by' =>$this->user_details->id,
                     'log_details' =>'has added an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
-                    'link' => route('admin-fees'),
+                    'link' => route('admin-enrolledstudents'),
                 ]);
             $this->dispatch('closeModal',$modal_id);
             return;
@@ -669,7 +688,7 @@ class EnrolledStudents extends Component
             'log_type_id' =>1,
             'created_by' =>$this->user_details->id,
             'log_details' =>'has updated an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
-            'link' => route('admin-fees'),
+            'link' => route('admin-enrolledstudents'),
         ]);
         $this->dispatch('swal:redirect',
             position         									: 'center',
@@ -699,10 +718,481 @@ class EnrolledStudents extends Component
                         'log_type_id' =>1,
                         'created_by' =>$this->user_details->id,
                         'log_details' =>'has deleted an enrolled student ('.$this->enrolledStudent['student_code'].') '.$this->enrolledStudent['student_name'],
-                        'link' => route('admin-fees'),
+                        'link' => route('admin-enrolledstudents'),
                     ]);
                 $this->dispatch('closeModal',$modal_id);
                 return;
             }
+    }
+    public function downloadTemplate(){
+        $file_name = 'EnrolledStudentImportTemplate';
+        $header = [];
+        $content = [];
+        array_push($content, $this->default_header);
+        $export = new ExporterController([
+            $header,
+            $content
+        ]);
+        return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+    }
+    public function ImportEnrolledStudents($modal_id){
+        $this->enrolledstudents_csv =[
+            'csv_path' => NULL,
+            'default_header'=>NULL,
+            'header' => NULL,
+            'content' => NULL,
+        ];
+        $this->dispatch('openModal',$modal_id);
+    }
+    public function checkUpload(){
+        $csv_path = storage_path().'\\app\\import\\enrolledstudents\\'.$this->user_details->id.'\\enrolledstudents.csv';
+        $delay_count = 0;
+        while(!file_exists($csv_path)){
+            sleep(1);
+            if($delay_count>=10){
+                if(file_exists($csv_path)){
+                    unlink( $csv_path);
+                }
+                $this->dispatch('swal:redirect',
+                    position         									: 'center',
+                    icon              									: 'success',
+                    title             									: 'Unsuccessfully upload!',
+                    showConfirmButton 									: 'true',
+                    timer             									: '1000',
+                    link              									: '#'
+                );
+                $this->enrolledstudents_csv['content'] = NULL;
+                return;
+            }
+        }
+        self::validate_enrolled_student_csv($csv_path);
+        if(file_exists($csv_path)){
+            unlink( $csv_path);
+        }
+        if($this->enrolledstudents_csv['header']){
+            foreach ($this->enrolledstudents_csv['header'] as $key => $value) {
+                if($this->enrolledstudents_csv['default_header'][$key] != $this->enrolledstudents_csv['header'][$key]){
+                    $this->dispatch('swal:redirect',
+                        position         									: 'center',
+                        icon              									: 'warning',
+                        title             									: 'Invalid header at column '.($key+1). ' column name ('.$this->enrolledstudents_csv['header'][$key].'). Please download the right template!',
+                        showConfirmButton 									: 'true',
+                        timer             									: '2500',
+                        link              									: '#'
+                    );
+                    $this->enrolledstudents_csv['content'] = NULL;
+                    return;
+                }
+            }
+        }
+        if($this->enrolledstudents_csv['content']){
+            foreach ($this->enrolledstudents_csv['content'] as $key => $value) {
+                foreach ($this->enrolledstudents_csv['default_header'] as $header_key => $header_value) {
+                    if(substr($header_value,strlen($header_value)-3) == '(*)'){
+                        if(!isset($value[$header_key])){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: 'No student info at row '.($key+1). ' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '2500',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                        if(isset($value[$header_key]) && strlen($value[$header_key])<=0){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: 'Invalid student info at row '.($key+1). ' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '2500',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }
+                }
+            }
+            foreach ($this->enrolledstudents_csv['content'] as $key => $value) {
+                foreach ($this->enrolledstudents_csv['default_header'] as $header_key => $header_value) {
+                    if($header_value  == 'Student Code (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
+                        if(!($student = DB::table('students')
+                        ->where('student_code','=',$value[$header_key])
+                        ->first())){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: 'Student code doesn\'t exist at Students Module at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }elseif($header_value  == 'School Year (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
+                        $year_start = intval(substr($value[$header_key],0,4));
+                        $year_end = intval(substr($value[$header_key],5,4));
+                        if($year_start>=$year_end){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' is invalid school year , it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                        if(!($school_year = DB::table('school_years')
+                            ->where('year_start','=',$year_start)
+                            ->where('year_end','=',$year_end)
+                            ->first())){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' is invalid school year , it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }elseif($header_value  == 'Year Level (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
+                        if(intval($value[$header_key]) >= 1 && intval($value[$header_key]) <= 2 ){
+
+                        }else{
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' column be 1 - 2 only, it refers to 1st semester - 2nd semester, it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }elseif($header_value  == 'Semester (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
+                        if(intval($value[$header_key]) == 1 || intval($value[$header_key]) == 2 ){
+
+                        }else{
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' Semester must be 1 - 2 only, it refers to 1st semester - 2nd semester, it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }elseif($header_value  == 'College code (*)'){
+                        if(! ($college = DB::table('colleges')
+                        ->where('code','=',$value[$header_key])
+                        ->where('is_active','=',1)
+                        ->get()
+                        ->first())){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' column must be a code from College Module, it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }elseif($header_value  == 'Department Code (*)'){
+                        if($college && isset($value[$header_key]) &&  !($department = DB::table('departments')
+                        ->where('code','=',$value[$header_key])
+                        ->where('college_id','=',$college->id)
+                        ->where('is_active','=',1)
+                        ->first())){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' column must be a code from College Module > Departments, it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }
+                }
+            }
+
+        }else{
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'No students to be imported!',
+                showConfirmButton 									: 'true',
+                timer             									: '2500',
+                link              									: '#'
+            );
+            $this->enrolledstudents_csv['content'] = NULL;
+            return;
+        }
+    }
+    public function validate_enrolled_student_csv($path){
+        $rows = array_map('str_getcsv', file($path));
+        $header =[];
+        $content =[];
+        $item = [];
+        foreach ($rows as $key => $value) {
+            // validate
+            if($key == 0){
+                foreach ($value as $key => $item_value) {
+                    array_push( $header,$item_value);
+                }
+            }else{
+                $item = [];
+                foreach ($value as $key => $item_value) {
+                    array_push( $item,$item_value);
+                }
+                array_push( $content,$item);
+            }
+        }
+        $this->enrolledstudents_csv = [
+            'input_id' => rand(),
+            'csv_path' => $path,
+            'default_header'=> $this->default_header,
+            'header' => $header,
+            'content' => $content,
+        ];
+    }
+    public function importEnrolledStudentCSV($modal_id){
+        if($this->enrolledstudents_csv['header']){
+            foreach ($this->enrolledstudents_csv['header'] as $key => $value) {
+                if($this->enrolledstudents_csv['default_header'][$key] != $this->enrolledstudents_csv['header'][$key]){
+                    $this->dispatch('swal:redirect',
+                        position         									: 'center',
+                        icon              									: 'warning',
+                        title             									: 'Invalid header at column '.($key+1). ' column name ('.$this->enrolledstudents_csv['header'][$key].'). Please download the right template!',
+                        showConfirmButton 									: 'true',
+                        timer             									: '2500',
+                        link              									: '#'
+                    );
+                    $this->enrolledstudents_csv['content'] = NULL;
+                    return;
+                }
+            }
+        }
+        if($this->enrolledstudents_csv['content']){
+            foreach ($this->enrolledstudents_csv['content'] as $key => $value) {
+                foreach ($this->enrolledstudents_csv['default_header'] as $header_key => $header_value) {
+                    if(substr($header_value,strlen($header_value)-3) == '(*)'){
+                        if(!isset($value[$header_key])){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: 'No student info at row '.($key+1). ' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '2500',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                        if(isset($value[$header_key]) && strlen($value[$header_key])<=0){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: 'Invalid student info at row '.($key+1). ' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '2500',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }
+                }
+            }
+            foreach ($this->enrolledstudents_csv['content'] as $key => $value) {
+                foreach ($this->enrolledstudents_csv['default_header'] as $header_key => $header_value) {
+                    if($header_value  == 'Student Code (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
+                        if(!($student = DB::table('students')
+                        ->where('student_code','=',$value[$header_key])
+                        ->first())){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: 'Student code doesn\'t exist at Students Module at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                        $this->enrolledstudents_csv['content'][$key][$header_key] = $student->id;
+                        
+                    }elseif($header_value  == 'School Year (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
+                        $year_start = intval(substr($value[$header_key],0,4));
+                        $year_end = intval(substr($value[$header_key],5,4));
+                        if($year_start>=$year_end){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' is invalid school year , it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                        if(!($school_year = DB::table('school_years')
+                            ->where('year_start','=',$year_start)
+                            ->where('year_end','=',$year_end)
+                            ->first())){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' is invalid school year , it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                        $this->enrolledstudents_csv['content'][$key][$header_key] = $school_year->id;
+                    }elseif($header_value  == 'Year Level (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
+                        if(intval($value[$header_key]) >= 1 && intval($value[$header_key]) <= 2 ){
+
+                        }else{
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' column be 1 - 2 only, it refers to 1st semester - 2nd semester, it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            $this->enrolledstudents_csv['content'] = NULL;
+                            return;
+                        }
+                    }elseif($header_value  == 'Semester (*)'){
+                        $value[$header_key] = str_replace(' ', '', $value[$header_key]);
+                        if(intval($value[$header_key]) == 1 || intval($value[$header_key]) == 2 ){
+
+                        }else{
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' Semester must be 1 - 2 only, it refers to 1st semester - 2nd semester, it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            return;
+                        }
+                    }elseif($header_value  == 'College code (*)'){
+                        if(! ($college = DB::table('colleges')
+                        ->where('code','=',$value[$header_key])
+                        ->where('is_active','=',1)
+                        ->get()
+                        ->first())){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' column must be a code from College Module, it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            return;
+                        }
+                        $this->enrolledstudents_csv['content'][$key][$header_key] = $college->id;
+                    }elseif($header_value  == 'Department Code (*)'){
+                        if($college && isset($value[$header_key]) &&  !($department = DB::table('departments')
+                        ->where('code','=',$value[$header_key])
+                        ->where('college_id','=',$college->id)
+                        ->where('is_active','=',1)
+                        ->first())){
+                            $this->dispatch('swal:redirect',
+                                position         									: 'center',
+                                icon              									: 'warning',
+                                title             									: $header_value.' column must be a code from College Module > Departments, it has a different value at row '.($key+1).' column '.($header_key+1),
+                                showConfirmButton 									: 'true',
+                                timer             									: '3000',
+                                link              									: '#'
+                            );
+                            return;
+                        }
+                        $this->enrolledstudents_csv['content'][$key][$header_key] = $department->id;
+                    }
+                }
+            }
+
+        }else{
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'No students to be imported!',
+                showConfirmButton 									: 'true',
+                timer             									: '2500',
+                link              									: '#'
+            );
+            $this->enrolledstudents_csv['content'] = NULL;
+            return;
+        }
+        foreach ($this->enrolledstudents_csv['content'] as $key => $value) {
+            DB::table('enrolled_students')
+            ->insert([
+                    'student_id' => $value[0],
+                    'school_year_id' => $value[1],
+                    'year_level_id' => $value[2],
+                    'semester_id' => $value[3],
+                    'college_id' => $value[4],
+                    'department_id' => $value[5],
+            ]);
+            $student = DB::table('students')
+            ->where('id','=',$value[0])
+            ->first();
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$this->user_details->id,
+                'log_details' =>'has added an enrolled student ('.$student->student_code.') '.$student->first_name.' '.$student->middle_name.' '.$student->last_name,
+                'link' => route('admin-enrolledstudents'),
+            ]);
+        }
+        $this->enrolledstudents_csv = [
+            'csv_path' => NULL,
+            'default_header'=>NULL,
+            'header' => NULL,
+            'content' => NULL,
+        ];
+        $this->dispatch('swal:redirect',
+            position         									: 'center',
+            icon              									: 'success',
+            title             									: 'Successfully Imported',
+            showConfirmButton 									: 'true',
+            timer             									: '1000',
+            link              									: '#'
+        );
+        $this->dispatch('closeModal',$modal_id);
+        return;
     }
 }
