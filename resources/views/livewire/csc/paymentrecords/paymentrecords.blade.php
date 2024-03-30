@@ -24,6 +24,27 @@
                                     <span class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400">Payment Records</span>
                                 </a>
                             </li>
+
+                    {{-- Di ko sure dito men gicomment ko nlng baka may masira kasi ako --}}
+                    
+                            {{-- <li aria-current="page">
+                                @if ($user_details->role_name == 'csc-admin')
+                                    <a href="{{ route('csc-paymentrecords')}}" class="flex items-center">
+                                        <svg class="rtl:rotate-180 w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                                        </svg>
+                                        <span class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400">Payment Records</span>
+                                    </a>
+                                @elseif ($user_details->role_name == 'collector')
+                                    <a href="{{ route('csc-collector-paymentrecords')}}" class="flex items-center">
+                                        <svg class="rtl:rotate-180 w-3 h-3 mx-1 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                                        </svg>
+                                        <span class="ms-1 text-sm font-medium text-gray-700 md:ms-2 dark:text-gray-400">Payment Records</span>
+                                    </a>
+                                @endif
+                            </li> --}}
+
                         </ol>
                     </nav>
                     <!--End Breadcrumb -->
