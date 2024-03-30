@@ -17,7 +17,7 @@ class Profile extends Component
         'middle_name' => NULL,
         'last_name' => NULL,
         'term' => NULL,
-        'role' => NULL,
+        'role_name' => NULL,
         'college_name' => NULL,
         'position_name' => NULL,
     ];
@@ -54,7 +54,7 @@ class Profile extends Component
                 'middle_name' => NULL,
                 'last_name' => NULL,
                 'term' => NULL,
-                'role' => NULL,
+                'role_name' => NULL,
                 'college_name' => NULL,
                 'position_name' => NULL,
             ];

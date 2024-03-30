@@ -1080,6 +1080,23 @@ class StudentPayments extends Component
             );
             return;
         }
+        $order = [];
+        foreach ($this->payment_fees as $key => $value) {
+            if(intval($value['order'])>0){
+                array_push($order,$value['order']);
+            }
+        }
+        if(!$order){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Please check at least 1 of the fees',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
         
         $payment = [  
             'id' => NULL,
