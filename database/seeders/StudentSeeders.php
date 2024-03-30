@@ -57,7 +57,6 @@ class StudentSeeders extends Seeder
         DB::statement('INSERT INTO students VALUES(NULL,"2030-01289","Jake","Dee","Dog","xt203001289@wmsu.edu.ph",15,2,1,1,NOW(),NOW());');
         DB::statement('INSERT INTO students VALUES(NULL,"2030-02233","Josha","Rojas","Yasil","xt203002233@wmsu.edu.ph",15,2,0,1,NOW(),NOW());');
         DB::statement('INSERT INTO students VALUES(NULL,"2030-00312","Mark","Tempest","Salvador","xt203000312@wmsu.edu.ph",15,2,0,1,NOW(),NOW());');
-        DB::statement('INSERT INTO students VALUES(NULL,"2030-00001","Marjorie","Soo","Meega","xt203000001@wmsu.edu.ph",15,2,1,1,NOW(),NOW());');
         DB::statement('INSERT INTO students VALUES(NULL,"7130-01233","Alrich","Tom","Barkada","xt713001233@wmsu.edu.ph",15,2,0,1,NOW(),NOW());');
         DB::statement('INSERT INTO students VALUES(NULL,"7230-01233","Jomama","Esther","Vac","xt723001233@wmsu.edu.ph",15,2,1,1,NOW(),NOW());');
         DB::statement('INSERT INTO students VALUES(NULL,"3230-01233","Koala","Devon","Aquino","xt323001233@wmsu.edu.ph",15,2,0,1,NOW(),NOW());');

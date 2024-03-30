@@ -196,6 +196,8 @@ class Departments extends Component
 
         if(DB::table('departments')
             ->where('name','=',$this->department['name'])
+            ->where('id','<>',$id)
+
             ->first()){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
@@ -209,6 +211,7 @@ class Departments extends Component
         }
         if(DB::table('departments')
             ->where('code','=',$this->department['code'])
+            ->where('id','<>',$id)
             ->first()){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
