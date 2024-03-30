@@ -37,6 +37,7 @@ use App\Livewire\Admin\Settings\Profile\Profile as AdminProfile;
 use App\Livewire\Admin\Students\Students as AdminStudents;
 use App\Livewire\Admin\SystemLogs\SystemLogs as AdminSystemLogs;
 use App\Livewire\Admin\Departments\Departments as AdminDepartments;
+use App\Http\Controllers\FileUpload as AdminUploadCSV;
 
 
 use App\Livewire\Usc\Dashboard\Dashboard as UscDashboard;
@@ -109,6 +110,8 @@ Route::middleware([AccountisValid::class,isAdmin::class])->group(function () {
         Route::get('/overview', AdminOverview::class)->name('admin-overview');
         Route::get('/usermanagement', AdminUserManagement::class)->name('admin-usermanagement');
         Route::get('/profile', AdminProfile::class)->name('admin-profile');
+
+        Route::post('/upload', [AdminUploadCSV::class,'upload_student_csv'])->name('admin-upload');
 
     });
 });

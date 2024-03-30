@@ -17,14 +17,16 @@ class Logout
     public function handle(Request $request, Closure $next)
     {
         $session = $request->session()->all();
-        DB::table('logs')
-        ->insert([
-            'id' =>NULL,
-            'log_type_id' =>1,
-            'created_by' =>$session['id'],
-            'log_details' =>'has logged out',
-            'link' => '#',
-        ]);
+        if(isset($session['id'])){
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'created_by' =>$session['id'],
+                'log_details' =>'has logged out',
+                'link' => '#',
+            ]);
+        }
         $request->session()->invalidate();
 
         return redirect('/login');
