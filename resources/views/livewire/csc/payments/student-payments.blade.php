@@ -459,7 +459,7 @@
                                 <div class="flex flex-wrap mt-6">
                                     <div class="flex flex-col mb-4 mr-4">
                                         <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Amount</h3>
-                                        <input required max="{{$total['total_amount_paid']}}" wire:model.defer="void.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        <input required max="{{$partial['max_amount']}}" wire:model.defer="void.amount" type="number" step="0.01" placeholder="Enter Amount" class="w-96 border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                     </div>
                                     <div class="flex flex-col mb-4 mr-4">
                                         <h3 class="font-semibold text-gray-900 dark:text-white mt-4 mb-4">Max Amount</h3>
