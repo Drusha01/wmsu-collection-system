@@ -328,6 +328,7 @@
                                             <th scope="col" class="px-4 py-3">Fee Type</th>
                                             <th scope="col" class="px-4 py-3">Fee Name</th>
                                             <th scope="col" class="px-4 py-3">Amount</th>
+                                            <th scope="col" class="px-4 py-3">Paid Amount</th>
                                             <th scope="col" class="px-4 py-3">Balance</th>
 
                                         </tr>
@@ -353,6 +354,7 @@
                                             <td scope="col" class="px-4 py-3">{{$value['content']->fee_type_name}}</td>
                                             <td scope="col" class="px-4 py-3">{{$value['content']->fee_name}}</td>
                                             <td scope="col" class="px-4 py-3">{{number_format($value['content']->amount, 2, '.', ',')}}</td>
+                                            <td scope="col" class="px-4 py-3">{{number_format($value['content']->paid_amount, 2, '.', ',')}}</td>
                                             <td scope="col" class="px-4 py-3">{{number_format($value['content']->amount - $value['content']->paid_amount, 2, '.', ',')}}</td>
 
                                         </tr>
@@ -422,6 +424,7 @@
                                             <th scope="col" class="px-4 py-3">Fee Name</th>
                                             <th scope="col" class="px-4 py-3">Amount</th>
                                             <th scope="col" class="px-4 py-3">Paid Amount</th>
+                                            <th scope="col" class="px-4 py-3">Balance</th>
 
                                         </tr>
                                     </thead>
@@ -446,6 +449,7 @@
                                                 <td scope="col" class="px-4 py-3">{{$value['content']->fee_name}}</td>
                                                 <td scope="col" class="px-4 py-3">{{number_format($value['content']->amount, 2, '.', ',')}}</td>
                                                 <td scope="col" class="px-4 py-3">{{number_format($value['content']->paid_amount, 2, '.', ',')}}</td>
+                                                <td scope="col" class="px-4 py-3">{{number_format($value['content']->amount - $value['content']->paid_amount, 2, '.', ',')}}</td>
 
                                             </tr>
                                         @endforeach        

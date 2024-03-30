@@ -907,31 +907,33 @@ class StudentPayments extends Component
                
         $fees = self::array_sort($this->payment_fees,'order',SORT_ASC);
         foreach ($fees as $key => $value) {
-            if($payment['amount'] > 0){
-                if( floatval($value['content']->amount) - floatval($value['content']->paid_amount) > 0){
-                    $amount = floatval($value['content']->amount) - floatval($value['content']->paid_amount);
-                    if($payment['amount'] >= $amount ){
-                        DB::table('payment_items')
-                        ->insert([
-                            'id' => NULL,
-                            'payment_id' => $payment_id,
-                            'fee_id' => $value['content']->id,
-                            'student_id' => $payment['student_id'],
-                            'amount' => floatval($value['content']->amount) - floatval($value['content']->paid_amount) ,
-                            'collected_by' => $payment['collected_by'],
-                        ]);
-                    }else{
-                        DB::table('payment_items')
-                        ->insert([
-                            'id' => NULL,
-                            'payment_id' => $payment_id,
-                            'fee_id' => $value['content']->id,
-                            'student_id' => $payment['student_id'],
-                            'amount' => $payment['amount'] ,
-                            'collected_by' => $payment['collected_by'],
-                        ]);
+            if($value['is_selected']){
+                if($payment['amount'] > 0){
+                    if( floatval($value['content']->amount) - floatval($value['content']->paid_amount) > 0){
+                        $amount = floatval($value['content']->amount) - floatval($value['content']->paid_amount);
+                        if($payment['amount'] >= $amount ){
+                            DB::table('payment_items')
+                            ->insert([
+                                'id' => NULL,
+                                'payment_id' => $payment_id,
+                                'fee_id' => $value['content']->id,
+                                'student_id' => $payment['student_id'],
+                                'amount' => floatval($value['content']->amount) - floatval($value['content']->paid_amount) ,
+                                'collected_by' => $payment['collected_by'],
+                            ]);
+                        }else{
+                            DB::table('payment_items')
+                            ->insert([
+                                'id' => NULL,
+                                'payment_id' => $payment_id,
+                                'fee_id' => $value['content']->id,
+                                'student_id' => $payment['student_id'],
+                                'amount' => $payment['amount'] ,
+                                'collected_by' => $payment['collected_by'],
+                            ]);
+                        }
+                        $payment['amount'] = $payment['amount'] - $amount;
                     }
-                    $payment['amount'] = $payment['amount'] - $amount;
                 }
             }
         }
@@ -1127,30 +1129,32 @@ class StudentPayments extends Component
         }
         $fees = self::array_sort($this->payment_fees,'order',SORT_ASC);   
         foreach ($fees as $key => $value) {
-            if($payment['amount'] < 0){
-                if(floatval($value['content']->paid_amount) > 0){
-                    if($payment['amount']  < (-(floatval($value['content']->paid_amount) )) ){
-                        DB::table('payment_items')
-                        ->insert([
-                            'id' => NULL,
-                            'payment_id' => $payment_id,
-                            'fee_id' => $value['content']->id,
-                            'student_id' => $payment['student_id'],
-                            'amount' =>-(floatval($value['content']->paid_amount)),
-                            'collected_by' => $payment['collected_by'],
-                        ]);
-                    }else{
-                        DB::table('payment_items')
-                        ->insert([
-                            'id' => NULL,
-                            'payment_id' => $payment_id,
-                            'fee_id' => $value['content']->id,
-                            'student_id' => $payment['student_id'],
-                            'amount' => $payment['amount'] ,
-                            'collected_by' => $payment['collected_by'],
-                        ]);
+            if($value['is_selected']){
+                if($payment['amount'] < 0){
+                    if(floatval($value['content']->paid_amount) > 0){
+                        if($payment['amount']  < (-(floatval($value['content']->paid_amount) )) ){
+                            DB::table('payment_items')
+                            ->insert([
+                                'id' => NULL,
+                                'payment_id' => $payment_id,
+                                'fee_id' => $value['content']->id,
+                                'student_id' => $payment['student_id'],
+                                'amount' =>-(floatval($value['content']->paid_amount)),
+                                'collected_by' => $payment['collected_by'],
+                            ]);
+                        }else{
+                            DB::table('payment_items')
+                            ->insert([
+                                'id' => NULL,
+                                'payment_id' => $payment_id,
+                                'fee_id' => $value['content']->id,
+                                'student_id' => $payment['student_id'],
+                                'amount' => $payment['amount'] ,
+                                'collected_by' => $payment['collected_by'],
+                            ]);
+                        }
+                        $payment['amount'] = $payment['amount'] + $value['content']->paid_amount;
                     }
-                    $payment['amount'] = $payment['amount'] + $value['content']->paid_amount;
                 }
             }
         }
