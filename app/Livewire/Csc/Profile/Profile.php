@@ -28,6 +28,7 @@ class Profile extends Component
         if(isset($session['id']) && $user_details = DB::table('users as u')
             ->select(
                 'u.id',
+                'u.username',
                 'u.first_name',
                 'u.middle_name',
                 'u.last_name',
@@ -37,7 +38,7 @@ class Profile extends Component
                 'u.college_id',
                 'u.school_year_id',
                 'c.name as college_name',
-                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as schoo_year')
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as term')
               )
             ->where('u.id','=',$session['id'])
             ->join('roles as r','r.id','u.role_id')
@@ -49,14 +50,14 @@ class Profile extends Component
             $this->user_details = $user_details;
             
             $this->user_info = [
-                'username' => NULL,
-                'first_name' => NULL,
-                'middle_name' => NULL,
-                'last_name' => NULL,
-                'term' => NULL,
-                'role_name' => NULL,
-                'college_name' => NULL,
-                'position_name' => NULL,
+                'username' => $user_details->username,
+                'first_name' => $user_details->first_name,
+                'middle_name' => $user_details->middle_name,
+                'last_name' => $user_details->last_name,
+                'term' => $user_details->term,
+                'role_name' => $user_details->role_name,
+                'college_name' => $user_details->college_name,
+                'position_name' => $user_details->position_name,
             ];
         }else{
             return redirect()->route('login');
@@ -67,5 +68,46 @@ class Profile extends Component
         return view('livewire.csc.profile.profile')
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
+    }
+    public function updateProfile($modal_id){
+        if(strlen( $this->user_info['first_name'])<=0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid Firstname',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(strlen( $this->user_info['last_name'])<=0){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'warning',
+                title             									: 'Invalid Lastname',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            return;
+        }
+        if(DB::table('users')
+            ->where('id','=',$this->user_details->id)
+            ->update([
+                'first_name' => $this->user_info['first_name'],
+                'middle_name' => $this->user_info['middle_name'],
+                'last_name' => $this->user_info['last_name'],
+            ])){
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Profile Updated',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+            $this->dispatch('closeModal',$modal_id);
+        }
     }
 }

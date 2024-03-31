@@ -26,6 +26,8 @@ class Payments extends Component
         'search'=> NULL,
         'search_by' => 'Student code',
         'prev_search'=> NULL,
+        'status_search'=> NULL,
+        'prev_status_search'=> NULL,
     ];
     public $search_by = [
         0=>'Student code',
@@ -88,8 +90,27 @@ class Payments extends Component
     }
     public function render()
     {
+        $status = DB::table('status')
+            ->get()
+            ->toArray();
         if($this->filters['search'] != $this->filters['prev_search']){
             $this->filters['prev_search'] =$this->filters['search'];
+            $this->resetPage();
+        }
+        if($this->filters['year_level_id'] != $this->filters['prevyear_level_id']){
+            $this->filters['prevyear_level_id'] =$this->filters['year_level_id'];
+            $this->resetPage();
+        }
+        if($this->filters['department_id'] != $this->filters['prevdepartment_id']){
+            $this->filters['prevdepartment_id'] =$this->filters['department_id'];
+            $this->resetPage();
+        }
+        if($this->filters['semester_id'] != $this->filters['prevsemester_id']){
+            $this->filters['prevsemester_id'] =$this->filters['semester_id'];
+            $this->resetPage();
+        }
+        if($this->filters['status_search'] != $this->filters['prev_status_search']){
+            $this->filters['prev_status_search'] =$this->filters['status_search'];
             $this->resetPage();
         }
         $this->semesters = DB::table('semesters')
@@ -137,6 +158,7 @@ class Payments extends Component
                 ->where('es.department_id','like',$this->filters['department_id'].'%')
                 ->where('es.semester_id','like',$this->filters['semester_id'].'%')
                 ->where('s.student_code','like',$this->filters['search'].'%')
+                ->where('st.id','like',$this->filters['status_search'].'%')
                 ->paginate(10);
         }elseif($this->filters['search_by'] == 'Student name' ){
             $enrolled_students_data = DB::table('students as s')
@@ -167,6 +189,7 @@ class Payments extends Component
                 ->where('es.department_id','like',$this->filters['department_id'].'%')
                 ->where('es.semester_id','like',$this->filters['semester_id'].'%')
                 ->where(DB::raw("CONCAT(s.first_name,' ',s.middle_name,' ',s.last_name)"),'like',$this->filters['search'] .'%')
+                ->where('st.id','like',$this->filters['status_search'].'%')
                 ->paginate(10);
         }elseif($this->filters['search_by'] == 'Student email' ){
             $enrolled_students_data = DB::table('students as s')
@@ -197,6 +220,7 @@ class Payments extends Component
                 ->where('es.department_id','like',$this->filters['department_id'].'%')
                 ->where('es.semester_id','like',$this->filters['semester_id'].'%')
                 ->where('s.email','like',$this->filters['search'].'%')
+                ->where('st.id','like',$this->filters['status_search'].'%')
                 ->paginate(10);
         }
         $page_info = DB::table('users as u')
@@ -211,7 +235,8 @@ class Payments extends Component
         ->first();
         return view('livewire.csc.payments.payments',[
             'enrolled_students_data'=>$enrolled_students_data,
-            'page_info'=>$page_info
+            'page_info'=>$page_info,
+            'status'=>$status
         ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);

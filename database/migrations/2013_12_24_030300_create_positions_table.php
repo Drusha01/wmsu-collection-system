@@ -91,7 +91,7 @@ return new class extends Migration
             NULL,
             "Collector",
             3,
-            1,
+            5,
             NOW(),
             NOW()
         );');
