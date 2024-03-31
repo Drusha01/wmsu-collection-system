@@ -197,7 +197,7 @@
                                         </div>
                                         <!-- Save Fees Button - Bottom Section -->
                                         <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
-                                            <button data-modal-toggle="AddRemitModal" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                            <button data-modal-toggle="AddRemitModal" type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
                                                 Back
                                             </button>
                                             <button type="submit"
@@ -240,7 +240,7 @@
                                         </div>
                                         <!-- Save Fees Button - Bottom Section -->
                                         <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
-                                            <button data-modal-toggle="DeleteRemitModal" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                            <button data-modal-toggle="DeleteRemitModal"type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
                                                 Back
                                             </button>
                                             <button type="submit"

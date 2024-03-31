@@ -327,7 +327,7 @@ class Remittance extends Component
             );
             return;
         }
-        if(floatval($this->remit['amount']) > ((floatval($total['total_university_fees'])) *0.3) - floatval($total['total_remitted'])){
+        if((($total['total_university_fees']) *0.3) - ($total['total_remitted']) - ($this->remit['amount']) + floatval(0.01) < 0){
             $this->dispatch('swal:redirect',
                 position         									: 'center',
                 icon              									: 'warning',
