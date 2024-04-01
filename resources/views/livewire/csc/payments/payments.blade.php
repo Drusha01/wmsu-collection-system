@@ -204,12 +204,7 @@
                                 </h3>
                             </div>
                         </div>
-
                         
-
-
-
-
                         <div class="grid gap-6 mb-6 md:grid-cols-1 w-full">
                         <div class="flex items-center space-x-3 w-full md:w-auto">
                             <select id="course" name="course" wire:model.live="filters.status_search"
