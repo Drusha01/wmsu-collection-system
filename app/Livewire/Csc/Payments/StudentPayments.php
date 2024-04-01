@@ -1522,10 +1522,11 @@ class StudentPayments extends Component
                 'content'=> $content
             ];
             $data = self::convert_from_latin1_to_utf8_recursively($data);
-            $pdf = Pdf::loadView('livewire.csc.export.exportpdf',  array( 
+            $pdf = Pdf::loadView('livewire.csc.export.exportpdftemplate',  array( 
                 'title'=> $file_name,
                 'content'=> $content)
             );
+            
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->setPaper('a4', 'landscape')->stream();
             },  $file_name.'.pdf');
