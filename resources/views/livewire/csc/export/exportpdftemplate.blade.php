@@ -15,18 +15,17 @@
 <body>  
     <div class="col">
         <div class="flex flex-wrap items-center justify-between mt-3 px-4 p-2">
-
+            
             <h4 class="text-start ">Academic Year 2023-2024</h4>
             <h6 class="text-start ">College of Computing Studies</h6>
             <h6 class="text-start ">1st Semester</h6>
             <h6 class="text-start ">1st Year</h6>
             <h6 class="text-start ">Paid</h6>
-            <img src="public\images\ccs-logo.png" class="w-135 h-100" alt="ccs-logo">
             
         </div>
-
- <table class="table table-striped">
-    <thead style="font-size:12px;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;">
+    </div>
+    <table class="table table-striped">
+        <thead style="font-size:12px;margin:0px 0px 0px 0px;padding:0px 0px 0px 0px;">
             <th scope="col" class="flex justify-start">#</th>
             <th scope="col" class="flex justify-start">Student ID</th>
             <th scope="col" class="flex justify-start">Student Name</th>

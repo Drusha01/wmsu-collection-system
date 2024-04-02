@@ -1433,12 +1433,33 @@ class StudentPayments extends Component
             ->join('school_years as sy','sy.id','u.school_year_id')
             ->get()
             ->first();
+        $enrolled_student_info = DB::table('enrolled_students as es')
+            ->select(
+                'year_level',
+                's.name as status_name'
+                )
+            ->join('year_levels as yl','yl.id','es.year_level_id')
+            ->join('status as s','s.id','es.payment_status')
+            ->where('es.student_id','=',$this->student_id)
+            ->where('es.school_year_id','=',$this->user_details->school_year_id)
+            ->where('es.college_id','=',$this->user_details->college_id)
+            ->where('es.semester_id','=',$this->filters['semester_id'])
+            ->first();
         $file_name = $student_info->student_code.' - '.$student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name.' ('.$page_info->school_year.' '.$student_semester->semester.')';
         $this->payment_history = [
             'payment_history'=> $payment_history,
         ];
         $type = $this->export_selected;
-        $header = [];
+        $header = [
+            ['Title'=> $student_info->student_code.' - '.$student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name],
+            ['Academic Year'=>  'Academic Year '.$page_info->school_year ],
+            ['content'=> $page_info->college_name],
+            ['content'=> $student_semester->semester],
+            ['content'=>  $enrolled_student_info->year_level],
+            ['content'=>  $enrolled_student_info->status_name],
+            ['content'=>NULL],
+            ['content'=>NULL]
+        ];
         $content = [];
         array_push($content,['Summaries']);
         array_push($content,[
@@ -1509,24 +1530,48 @@ class StudentPayments extends Component
                 $header,
                 $content
             ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=> $this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'receipt of ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                'link' =>'#',
+            ]);
             return Excel::download($export, $file_name.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
         }elseif($type == 'CSV'){
             $export = new ExporterController([
                 $header,
                 $content
             ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'receipt of ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                'link' =>'#',
+            ]);
             return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
         }elseif($type == 'PDF'){
-            $data = [
-                'title'=>$file_name,
-                'content'=> $content
-            ];
-            $data = self::convert_from_latin1_to_utf8_recursively($data);
-            $pdf = Pdf::loadView('livewire.csc.export.exportpdftemplate',  array( 
-                'title'=> $file_name,
+            $pdf = Pdf::loadView('livewire.csc.export.exportpdf',  array( 
+                'header'=>$header,
                 'content'=> $content)
             );
-            
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'receipt of ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                'link' =>'#',
+            ]);
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->setPaper('a4', 'landscape')->stream();
             },  $file_name.'.pdf');
@@ -1534,6 +1579,16 @@ class StudentPayments extends Component
             $export = new ExporterController([
                 $header,
                 $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.' receipt of ('.$student_info->student_code.') '. $student_info->first_name.' '.$student_info->middle_name.' '.$student_info->last_name ,
+                'link' =>'#',
             ]);
             return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
         }
