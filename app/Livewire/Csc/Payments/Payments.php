@@ -378,7 +378,7 @@ class Payments extends Component
             $content_item = [];          
             array_push($content_item,$key+1);
             array_push($content_item,$value->student_code);
-            array_push($content_item,$value->middle_name. ' ' .$value->middle_name.' ' .$value->middle_name );
+            array_push($content_item,$value->first_name. ' ' .$value->middle_name.' ' .$value->last_name );
             array_push($content_item,$value->email);
             array_push($content_item,$value->department_code);
             array_push($content_item,$value->semester);
