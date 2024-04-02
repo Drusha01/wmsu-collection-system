@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 use App\Http\Controllers\export\export as ExporterController;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Students extends Component
 {
@@ -28,6 +29,14 @@ class Students extends Component
         'search'=> NULL,
         'search_by' => 'Student code',
         'prev_search'=> NULL,
+    ];
+    public $export_selected = 'PDF';
+    public $downloadfilters = NULL;
+    public $export_types = [
+        0=>['name'=>'EXCEL'],
+        1=>['name'=>'CSV'],
+        2=>['name'=>'PDF'],
+
     ];
     public $colleges_data = [];
     public $departments;
@@ -85,8 +94,12 @@ class Students extends Component
         $this->filters['prev_search'] = NULL;
         $this->resetPage();
     }
+    public function mount(){
+        $this->downloadfilters = $this->filters;
+    }
     public function render()
     {
+        
         if($this->filters['search'] != $this->filters['prev_search']){
             $this->filters['prev_search'] = $this->filters['search'];
             $this->resetPage();
@@ -204,6 +217,186 @@ class Students extends Component
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
     }
-   
+    public function downloadExportDefault($modal_id){
+        $this->downloadfilters = $this->filters;
+        $this->dispatch('openModal',$modal_id);
+    }
+    public function downloadExport($modal_id){
+        if($this->downloadfilters['department_id']){
+            $student_data = DB::table('students as s')
+            ->select(
+                "s.id",
+                "student_code",
+                "first_name",
+                "middle_name",
+                "last_name",
+                "email",
+                "s.college_id",
+                "s.department_id",
+                "s.date_created",
+                "s.date_updated",
+                "c.code as college_code",
+                "c.name as college_name",
+                "d.name as department_name",
+                "d.code as department_code",
+                's.is_muslim',
+                's.is_active'
+            )
+            ->join('colleges as c','s.college_id','c.id')
+            ->join('departments as d','s.department_id','d.id')
+            ->where('s.department_id','=',$this->downloadfilters['department_id'])
+            ->where('s.college_id','=',$this->user_details->college_id)
+            ->orderBy('id','desc')
+            ->get()
+            ->toArray();
+        }else{
+            $student_data = DB::table('students as s')
+            ->select(
+                "s.id",
+                "student_code",
+                "first_name",
+                "middle_name",
+                "last_name",
+                "email",
+                "s.college_id",
+                "s.department_id",
+                "s.date_created",
+                "s.date_updated",
+                "c.code as college_code",
+                "c.name as college_name",
+                "d.name as department_name",
+                "d.code as department_code",
+                's.is_muslim',
+                's.is_active'
+            )
+            ->join('colleges as c','s.college_id','c.id')
+            ->join('departments as d','s.department_id','d.id')
+            ->where('s.college_id','=',$this->user_details->college_id)
+            ->orderBy('id','desc')
+            ->get()
+            ->toArray();
+        }
+
+       
+
+       
+        $page_info = DB::table('users as u')
+            ->select(
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+            )
+            ->where('u.id','=',$this->user_details->id)
+            ->join('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first();
+      
+        
+        
+        $file_name = 'Students';
+        $type = $this->export_selected;
+        $header = [
+            ['Title'=>  'Students'],
+            ['Academic Year'=>  'Academic Year '.$page_info->school_year ],
+            ['content'=> $page_info->college_name],
+            ['content'=>NULL],
+            ['content'=>NULL]
+        ];
+        $content = [];
+        array_push($content,[
+            '#',
+            'Student Code',
+            'Student Name',
+            'College',
+            'Course',
+            'Email',
+            'Is active',
+            'Is muslim',
+        ]);
+        foreach ($student_data as $key =>$value){
+            $content_item = [];          
+            array_push($content_item,$key+1);
+            array_push($content_item,$value->student_code);
+            array_push($content_item,$value->first_name. ' ' .$value->middle_name.' ' .$value->last_name );
+            array_push($content_item,$value->college_code );
+            array_push($content_item,$value->department_code);
+            array_push($content_item,$value->email);
+            
+            array_push($content_item,$value->is_active ==  1  ? "Yes": "No");
+            array_push($content_item,$value->is_muslim ==  1  ? "Yes": "No");
+            array_push($content,$content_item);
+        }
+
+       
+        array_push($content,[]);
+        array_push($content,[]);
+       
+        if($type == 'EXCEL'){
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=> $this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'payment recods' ,
+                'link' =>'#',
+            ]);
+            return Excel::download($export, $file_name.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        }elseif($type == 'CSV'){
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'link' =>'#',
+            ]);
+            return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+        }elseif($type == 'PDF'){
+            $pdf = Pdf::loadView('livewire.csc.export.exportpdf',  array( 
+                'header'=>$header,
+                'content'=> $content)
+            );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'link' =>'#',
+            ]);
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->setPaper('a4', 'landscape')->stream();
+            },  $file_name.'.pdf');
+        }else{
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'payments' ,
+            ]);
+            return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+        }
+    }
     
 }

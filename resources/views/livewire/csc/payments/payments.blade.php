@@ -35,14 +35,14 @@
                             <h6 class="font-bold text-base text-gray-700 uppercase">Academic Year {{$page_info->school_year}}</h6>
                             <button style="display:none" id="downloadExportModalToggler" data-modal-toggle="downloadExportModal" data-modal-target="downloadExportModal">asdf</button>
                             <button type="button" 
-                            wire:click="downloadExportDefault('downloadExportModalToggler')"
-                            class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none
-                             focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                             <svg class="w-6 h-6 mr-2 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                <path fill-rule="evenodd" d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v9.293l-2-2a1 1 0 0 0-1.414 1.414l.293.293h-6.586a1 1 0 1 0 0 2h6.586l-.293.293A1 1 0 0 0 18 16.707l2-2V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z" clip-rule="evenodd"/>
-                              </svg>                              
-                            Download Export
-                        </button>
+                                wire:click="downloadExportDefault('downloadExportModalToggler')"
+                                class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none
+                                focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                <svg class="w-6 h-6 mr-2 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M9 7V2.221a2 2 0 0 0-.5.365L4.586 6.5a2 2 0 0 0-.365.5H9Zm2 0V2h7a2 2 0 0 1 2 2v9.293l-2-2a1 1 0 0 0-1.414 1.414l.293.293h-6.586a1 1 0 1 0 0 2h6.586l-.293.293A1 1 0 0 0 18 16.707l2-2V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9h5a2 2 0 0 0 2-2Z" clip-rule="evenodd"/>
+                                </svg>                              
+                                Download Export
+                            </button>
 
                         </div>
                         <div class=" flex flex-wrap items-center justify-start px-4">
@@ -208,67 +208,66 @@
                         </div>
                         
                         <div class="grid gap-6 mb-6 md:grid-cols-1 w-full">
-                        <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <select id="course" name="course" wire:model.live="filters.status_search"
+                            <div class="flex items-center space-x-3 w-full md:w-auto">
+                                <select id="course" name="course" wire:model.live="filters.status_search"
+                                    class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option selected value="" >Filter Status</option>
+                                    @foreach($status as $key =>$value)
+                                        <option value="{{$value->id}}">{{$value->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>  
+                            <div class="flex items-center space-x-3 w-full md:w-auto">
+                                <select id="course" name="course" wire:model.live="downloadfilters.year_level_id"
+                                    class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option selected value="" >Filter Year</option>
+                                    @foreach($year_levels as $key =>$value)
+                                            <option value="{{$value->id}}">{{$value->year_level}}</option>
+                                    @endforeach
+                                </select>
+                            </div>    
+                            <div class="flex items-center space-x-3 w-full md:w-auto">
+                                <select id="course" name="course" wire:model.live="downloadfilters.department_id"
+                                    class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option selected value="" >Filter course</option>
+                                    @foreach ( $department_data as $department)
+                                        <option value="{{ $department->id }}">{{ $department->code }}</option>
+                                    @endforeach
+                                </select>
+                            </div>    
+                            <div class="flex items-center space-x-3 w-full md:w-auto">
+                                <select id="course" name="course" wire:model.live="downloadfilters.semester_id"
+                                    class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option selected value="" >Select semester</option>
+                                    @foreach($semesters as $key =>$value)
+                                            <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
+                                    @endforeach
+                                </select>
+                            </div>  
+                            <div class="flex items-center space-x-3 w-full md:w-auto">
+                                <select id="course" name="course" wire:model="export_selected"
                                 class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option selected value="" >Filter Status</option>
-                                @foreach($status as $key =>$value)
-                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                @foreach($export_types as $key =>$value)
+                                    @if($key == 0)
+                                        <option  value="{{$value['name']}}">EXPORT {{$value['name']}}</option>
+                                    @else 
+                                        <option value="{{$value['name']}}">EXPORT {{$value['name']}}</option>
+                                    @endif
                                 @endforeach
-                            </select>
-                        </div>  
-                        <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <select id="course" name="course" wire:model.live="downloadfilters.year_level_id"
-                                class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option selected value="" >Filter Year</option>
-                                @foreach($year_levels as $key =>$value)
-                                        <option value="{{$value->id}}">{{$value->year_level}}</option>
-                                @endforeach
-                            </select>
-                        </div>    
-                        <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <select id="course" name="course" wire:model.live="downloadfilters.department_id"
-                                class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option selected value="" >Filter course</option>
-                                @foreach ( $department_data as $department)
-                                    <option value="{{ $department->id }}">{{ $department->code }}</option>
-                                @endforeach
-                            </select>
-                        </div>    
-                        <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <select id="course" name="course" wire:model.live="downloadfilters.semester_id"
-                                class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option selected value="" >Select semester</option>
-                                @foreach($semesters as $key =>$value)
-                                        <option value="{{$value->id}}">{{$value->semester.'  ('.$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date.' - '.$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date.')'}}</option>
-                                @endforeach
-                            </select>
-                        </div>  
-                        <div class="flex items-center space-x-3 w-full md:w-auto">
-                            <select id="course" name="course" wire:model="export_selected"
-                            class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                            @foreach($export_types as $key =>$value)
-                                @if($key == 0)
-                                    <option  value="{{$value['name']}}">EXPORT {{$value['name']}}</option>
-                                @else 
-                                    <option value="{{$value['name']}}">EXPORT {{$value['name']}}</option>
-                                @endif
-                            @endforeach
-                        
-                        </select>
-                    </div>
+                                </select>
+                            </div>
                     
-                    <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2 m-5 pb-3">
-                        <button type="button" data-modal-toggle="downloadExportModal" class="text-dark-700 hover:text-dark border border-dark-700
-                             hover:bg-dark-800 font-bold py-2 px-3 rounded">
-                          Back
-                         </button>
+                        <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2 m-5 pb-3">
+                            <button type="button" data-modal-toggle="downloadExportModal" class="text-dark-700 hover:text-dark border border-dark-700
+                                hover:bg-dark-800 font-bold py-2 px-3 rounded">
+                            Back
+                            </button>
 
-                        <button type="submit" wire:click="downloadExport('downloadExportModal')" class=" mx-2 text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                            Download
-                        </button>
+                            <button type="submit" wire:click="downloadExport('downloadExportModal')" class=" mx-2 text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                Download
+                            </button>
+                        </div>
                     </div>
-                    
                 </div>
             </div>
         </section>
