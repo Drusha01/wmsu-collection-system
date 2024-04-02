@@ -209,7 +209,7 @@
                         
                         <div class="grid gap-6 mb-6 md:grid-cols-1 w-full">
                             <div class="flex items-center space-x-3 w-full md:w-auto">
-                                <select id="course" name="course" wire:model.live="filters.status_search"
+                                <select id="course" name="course" wire:model.live="downloadfilters.status_search"
                                     class="mx-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     <option selected value="" >Filter Status</option>
                                     @foreach($status as $key =>$value)
