@@ -7,12 +7,39 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
+use App\Http\Controllers\export\export as ExporterController;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Payments extends Component
 {
     use WithPagination;
     public $title = "Payments";
     public $filters = [
+        'department_id'=>NULL,
+        'semester_id' => NULL,
+        'year_level_id' => NULL,
+        'college_id' => NULL,
+        'student_code_search'=> NULL,
+        'prevdepartment_id'=>NULL,
+        'prevsemester_id' => NULL,
+        'prevyear_level_id' => NULL,
+        'prevcollege_id' => NULL,
+        'prevstudent_code_search'=> NULL,
+        'search'=> NULL,
+        'search_by' => 'Student code',
+        'prev_search'=> NULL,
+        'status_search'=> NULL,
+        'prev_status_search'=> NULL,
+    ];
+    public $export_types = [
+        0=>['name'=>'EXCEL'],
+        1=>['name'=>'CSV'],
+        2=>['name'=>'PDF'],
+
+    ];
+    public $export_selected = 'PDF';
+    public $downloadfilters = [
         'department_id'=>NULL,
         'semester_id' => NULL,
         'year_level_id' => NULL,
@@ -240,5 +267,195 @@ class Payments extends Component
         ])
         ->layout('components.layouts.admin',[
             'title'=>$this->title]);
+    }
+    public function downloadExportDefault($modal_id){
+        $this->downloadfilters = $this->filters;
+        $this->dispatch('openModal',$modal_id);
+    }
+    public function downloadExport($modal_id){
+        if($this->downloadfilters['department_id']){
+            $enrolled_students_data = DB::table('students as s')
+            ->select(
+                "s.id",
+                "s.student_code",
+                "s.first_name",
+                "s.middle_name",
+                "s.last_name",
+                "s.email",
+                'sm.semester',
+                'sm.id as semester_id',
+                "st.name as payment_status",
+                "c.code as college_code",
+                "c.name as college_name",
+                "d.name as department_name",
+                "d.code as department_code",
+                'yl.year_level'
+            )
+            ->join('enrolled_students as es','es.student_id','s.id')
+            ->join('colleges as c','es.college_id','c.id')
+            ->join('departments as d','es.department_id','d.id')
+            ->join('semesters as sm','sm.id','es.semester_id')
+            ->join('status as st','st.id','es.payment_status')
+            ->join('year_levels as yl','es.year_level_id','yl.id')
+            ->where('es.college_id','=', $this->user_details->college_id)
+            ->where('es.year_level_id','like',$this->downloadfilters['year_level_id'].'%')
+            ->where('es.department_id','like',$this->downloadfilters['department_id'].'%')
+            ->where('es.semester_id','like',$this->downloadfilters['semester_id'].'%')
+            ->where('st.id','like',$this->downloadfilters['status_search'].'%')
+            ->get()
+            ->toArray();
+        }else{
+            $enrolled_students_data = DB::table('students as s')
+            ->select(
+                "s.id",
+                "s.student_code",
+                "s.first_name",
+                "s.middle_name",
+                "s.last_name",
+                "s.email",
+                'sm.semester',
+                'sm.id as semester_id',
+                "st.name as payment_status",
+                "c.code as college_code",
+                "c.name as college_name",
+                "d.name as department_name",
+                "d.code as department_code",
+                'yl.year_level'
+            )
+            ->join('enrolled_students as es','es.student_id','s.id')
+            ->join('colleges as c','es.college_id','c.id')
+            ->join('departments as d','es.department_id','d.id')
+            ->join('semesters as sm','sm.id','es.semester_id')
+            ->join('status as st','st.id','es.payment_status')
+            ->join('year_levels as yl','es.year_level_id','yl.id')
+            ->where('es.college_id','=', $this->user_details->college_id)
+            ->where('es.year_level_id','like',$this->downloadfilters['year_level_id'].'%')
+            ->where('es.semester_id','like',$this->downloadfilters['semester_id'].'%')
+            ->where('st.id','like',$this->downloadfilters['status_search'].'%')
+            ->get()
+            ->toArray();
+        }
+        $page_info = DB::table('users as u')
+            ->select(
+                'c.name as college_name',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+            )
+            ->where('u.id','=',$this->user_details->id)
+            ->join('colleges as c','c.id','u.college_id')
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first();
+        $current_semester = DB::table('semesters')
+            ->where('id','=',$this->downloadfilters['semester_id'])
+            ->first();
+        $semester = NULL;
+        if($current_semester){
+            $semester = $current_semester->semester;
+        }
+        
+        $file_name = 'Payments';
+        $type = $this->export_selected;
+        $header = [
+            ['Title'=>  'Payments'],
+            ['Academic Year'=>  'Academic Year '.$page_info->school_year ],
+            ['content'=> $page_info->college_name],
+            ['content'=> $semester],
+            ['content'=>NULL],
+            ['content'=>NULL]
+        ];
+        $content = [];
+        array_push($content,[
+            '#',
+            'Student Code',
+            'Student Name',
+            'Student Email',
+            'Department',
+            'Semester',
+            'Yr. Level',
+            'Payment Status',
+        ]);
+        foreach ($enrolled_students_data as $key =>$value){
+            $content_item = [];          
+            array_push($content_item,$key+1);
+            array_push($content_item,$value->student_code);
+            array_push($content_item,$value->first_name. ' ' .$value->middle_name.' ' .$value->last_name );
+            array_push($content_item,$value->email);
+            array_push($content_item,$value->department_code);
+            array_push($content_item,$value->semester);
+            array_push($content_item,$value->year_level);
+            array_push($content_item,$value->payment_status);
+            array_push($content,$content_item);
+        }
+
+       
+        array_push($content,[]);
+        array_push($content,[]);
+       
+        if($type == 'EXCEL'){
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=> $this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'link' =>'#',
+            ]);
+            return Excel::download($export, $file_name.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        }elseif($type == 'CSV'){
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'link' =>'#',
+            ]);
+            return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+        }elseif($type == 'PDF'){
+            $pdf = Pdf::loadView('livewire.csc.export.exportpdf',  array( 
+                'header'=>$header,
+                'content'=> $content)
+            );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'link' =>'#',
+            ]);
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->setPaper('a4', 'landscape')->stream();
+            },  $file_name.'.pdf');
+        }else{
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a '.$type.'payments' ,
+            ]);
+            return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+        }
     }
 }
