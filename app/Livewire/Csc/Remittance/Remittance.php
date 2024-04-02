@@ -559,7 +559,6 @@ class Remittance extends Component
             ->leftjoin('users as u','u.id','r.appoved_by')
             ->where('r.school_year_id','=',$this->user_details->school_year_id)
             ->where('r.college_id','=',$this->user_details->college_id)
-            ->where(DB::raw("CONCAT(rbyu.first_name,' ',rbyu.middle_name,' ',rbyu.last_name)"),'like',$this->downloadfilters['search'] .'%')
             ->orderby('r.date_created','desc')
             ->get()
             ->toArray();
