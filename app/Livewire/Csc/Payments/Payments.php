@@ -403,7 +403,7 @@ class Payments extends Component
                 'school_year_id'=> $this->user_details->school_year_id,
                 'created_by' =>$this->user_details->id,
                 'college_id'=>$this->user_details->college_id,
-                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'log_details' =>'has downloaded a Payments '.$type ,
                 'link' =>'#',
             ]);
             return Excel::download($export, $file_name.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
@@ -419,7 +419,7 @@ class Payments extends Component
                 'school_year_id'=>$this->user_details->school_year_id,
                 'created_by' =>$this->user_details->id,
                 'college_id'=>$this->user_details->college_id,
-                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'log_details' =>'has downloaded a Payments '.$type ,
                 'link' =>'#',
             ]);
             return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
@@ -435,7 +435,7 @@ class Payments extends Component
                 'school_year_id'=>$this->user_details->school_year_id,
                 'created_by' =>$this->user_details->id,
                 'college_id'=>$this->user_details->college_id,
-                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'log_details' =>'has downloaded a Payments '.$type ,
                 'link' =>'#',
             ]);
             return response()->streamDownload(function () use ($pdf) {
@@ -453,7 +453,7 @@ class Payments extends Component
                 'school_year_id'=>$this->user_details->school_year_id,
                 'created_by' =>$this->user_details->id,
                 'college_id'=>$this->user_details->college_id,
-                'log_details' =>'has downloaded a '.$type.'payments' ,
+                'log_details' =>'has downloaded a Payments '.$type ,
             ]);
             return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
         }

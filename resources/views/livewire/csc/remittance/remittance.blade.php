@@ -300,16 +300,16 @@
                                 </select>
                             </div>
                         
-                        <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2 m-5 pb-3">
-                            <button type="button" data-modal-toggle="downloadExportModal" class="text-dark-700 hover:text-dark border border-dark-700
-                                    hover:bg-dark-800 font-bold py-2 px-3 rounded">
-                                Back
+                            <div class="mt-auto flex items-center justify-end dark:border-gray-600 p-2 m-5 pb-3">
+                                <button type="button" data-modal-toggle="downloadExportModal" class="text-dark-700 hover:text-dark border border-dark-700
+                                        hover:bg-dark-800 font-bold py-2 px-3 rounded">
+                                    Back
+                                    </button>
+        
+                                <button type="submit" wire:click="downloadExport('downloadExportModal')" class=" mx-2 text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                    Download 
                                 </button>
-    
-                            <button type="submit" wire:click="downloadExport('downloadExportModal')" class=" mx-2 text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                Download 
-                            </button>
-                        </div>
+                            </div>
                         
                     </div>
                 </div>

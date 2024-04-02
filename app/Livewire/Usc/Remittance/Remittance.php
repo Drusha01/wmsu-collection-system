@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use Validator;
+use App\Http\Controllers\export\export as ExporterController;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Remittance extends Component
 {
@@ -50,6 +52,14 @@ class Remittance extends Component
         'remit_photo' => NULL,
         'remit_photo_id'=>NULL,
     ];
+    public $export_selected = 'PDF';
+    public $downloadfilters =NULL;
+    public $export_types = [
+        0=>['name'=>'EXCEL'],
+        1=>['name'=>'CSV'],
+        2=>['name'=>'PDF'],
+
+    ];
     public $search_by = [
         0=>'Username',
         1=>'Remitter name',
@@ -83,6 +93,7 @@ class Remittance extends Component
         $this->college_data = DB::table('colleges')
             ->get()
             ->toArray();
+        $this->downloadfilters = $this->filters;
     }
     public function updateSearchDefault(){
         $this->filters['search'] = NULL;
@@ -362,6 +373,205 @@ class Remittance extends Component
                 ]);
                 $this->dispatch('closeModal',$modal_id);
             }
+        }
+    }
+    public function downloadExportDefault($modal_id){
+        $this->downloadfilters = $this->filters;
+        $this->dispatch('openModal',$modal_id);
+    }
+    public function downloadExport($modal_id){
+        if($this->downloadfilters['college_id']){
+            $remittance_data = DB::table('remits as r')
+            ->select(
+                'r.id',
+                'u.username as approved_by_username',
+                'u.first_name as approved_by_first_name',
+                'u.middle_name as approved_by_middle_name',
+                'u.last_name as approved_by_last_name',
+                'rbyu.username as remitted_by_username',
+                'rbyu.first_name as remitted_by_first_name',
+                'rbyu.middle_name as remitted_by_middle_name',
+                'rbyu.last_name as remitted_by_last_name',
+                'r.remitted_date',
+                'r.approved_date' ,
+                'r.remit_photo',
+                'r.amount',
+                'sy.year_start',
+                'sy.year_end',
+                's.semester',
+                'r.appoved_by',
+                'c.name as college_name'
+            )
+            ->join('users as rbyu','rbyu.id','r.remitted_by')
+            ->leftjoin('colleges as c','c.id','rbyu.college_id')
+            ->join('school_years as sy','sy.id','r.school_year_id')
+            ->join('semesters as s','s.id','r.semester_id')
+            ->leftjoin('users as u','u.id','r.appoved_by')
+            ->where('r.school_year_id','=',$this->user_details->school_year_id)
+            ->where('r.college_id','=',$this->downloadfilters['college_id'])
+            ->orderby('r.date_created','desc')
+            ->get()
+            ->toArray();
+        }else{
+            $remittance_data = DB::table('remits as r')
+            ->select(
+                'r.id',
+                'u.username as approved_by_username',
+                'u.first_name as approved_by_first_name',
+                'u.middle_name as approved_by_middle_name',
+                'u.last_name as approved_by_last_name',
+                'rbyu.username as remitted_by_username',
+                'rbyu.first_name as remitted_by_first_name',
+                'rbyu.middle_name as remitted_by_middle_name',
+                'rbyu.last_name as remitted_by_last_name',
+                'r.remitted_date',
+                'r.approved_date' ,
+                'r.remit_photo',
+                'r.amount',
+                'sy.year_start',
+                'sy.year_end',
+                's.semester',
+                'r.appoved_by',
+                'c.name as college_name'
+            )
+            ->join('users as rbyu','rbyu.id','r.remitted_by')
+            ->leftjoin('colleges as c','c.id','rbyu.college_id')
+            ->join('school_years as sy','sy.id','r.school_year_id')
+            ->join('semesters as s','s.id','r.semester_id')
+            ->leftjoin('users as u','u.id','r.appoved_by')
+            ->where('r.school_year_id','=',$this->user_details->school_year_id)
+            ->orderby('r.date_created','desc')
+            ->get()
+            ->toArray();
+        }
+
+        $college_name_filter = DB::table('colleges')
+            ->where('id','=',$this->downloadfilters['college_id'])
+            ->first();
+        $college_name = NULL;
+        if($college_name_filter){
+            $college_name = $college_name_filter->name;
+        }
+
+        $page_info = DB::table('users as u')
+            ->select(
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year')
+            )
+            ->where('u.id','=',$this->user_details->id)
+            ->join('school_years as sy','sy.id','u.school_year_id')
+            ->get()
+            ->first();
+
+        
+        
+        $file_name = 'Remittance Records';
+        $type = $this->export_selected;
+        $header = [
+            ['Title'=>  'Remittance Records'],
+            ['Academic Year'=>  'Academic Year '.$page_info->school_year ],
+            ['content'=> $college_name],
+            ['content'=>NULL],
+            ['content'=>NULL]
+        ];
+        $content = [];
+        array_push($content,[
+            '#',
+            'Remitted By Username',
+            'Remitted By',
+            'College',
+            'School Year',
+            'Semester',
+            'Date',
+            'Approval Status',
+            'Approved By',
+            'Amount',
+            'Proof',
+        ]);
+        foreach ($remittance_data as $key =>$value){
+            $content_item = [];          
+            array_push($content_item,$key+1);
+            array_push($content_item,$value->remitted_by_username);
+            array_push($content_item,$value->remitted_by_first_name. ' ' .$value->remitted_by_middle_name.' ' .$value->remitted_by_last_name);
+            array_push($content_item,$value->year_start.' - '.$value->year_end);
+            array_push($content_item,$value->semester);
+            array_push($content_item,date_format(date_create($value->remitted_date),"M d, Y"));
+            
+            array_push($content_item,($value->appoved_by) > 0  ?"Approved":"Pending");
+            array_push($content_item,($value->appoved_by) > 0  ? $value->approved_by_first_name. ' ' .$value->approved_by_middle_name.' ' .$value->approved_by_last_name:"Pending");
+            array_push($content_item,number_format($value->amount, 2, '.', ','));
+            array_push($content,$content_item);
+
+        }
+
+       
+        array_push($content,[]);
+        array_push($content,[]);
+       
+        if($type == 'EXCEL'){
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=> $this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a Remittance Records'.$type,
+                'link' =>'#',
+            ]);
+            return Excel::download($export, $file_name.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        }elseif($type == 'CSV'){
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a Remittance Records'.$type,
+                'link' =>'#',
+            ]);
+            return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
+        }elseif($type == 'PDF'){
+            $pdf = Pdf::loadView('livewire.csc.export.exportpdf',  array( 
+                'header'=>$header,
+                'content'=> $content)
+            );
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a Remittance Records'.$type,
+                'link' =>'#',
+            ]);
+            return response()->streamDownload(function () use ($pdf) {
+                echo $pdf->setPaper('a4', 'landscape')->stream();
+            },  $file_name.'.pdf');
+        }else{
+            $export = new ExporterController([
+                $header,
+                $content
+            ]);
+            DB::table('logs')
+            ->insert([
+                'id' =>NULL,
+                'log_type_id' =>1,
+                'school_year_id'=>$this->user_details->school_year_id,
+                'created_by' =>$this->user_details->id,
+                'college_id'=>$this->user_details->college_id,
+                'log_details' =>'has downloaded a Remittance Records'.$type,
+            ]);
+            return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
         }
     }
     
