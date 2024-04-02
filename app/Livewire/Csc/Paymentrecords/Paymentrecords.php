@@ -322,7 +322,7 @@ class Paymentrecords extends Component
                 'school_year_id'=> $this->user_details->school_year_id,
                 'created_by' =>$this->user_details->id,
                 'college_id'=>$this->user_details->college_id,
-                'log_details' =>'has downloaded a Payment Records'.$type ,
+                'log_details' =>'has downloaded a Payment Records '.$type ,
                 'link' =>'#',
             ]);
             return Excel::download($export, $file_name.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
@@ -338,7 +338,7 @@ class Paymentrecords extends Component
                 'school_year_id'=>$this->user_details->school_year_id,
                 'created_by' =>$this->user_details->id,
                 'college_id'=>$this->user_details->college_id,
-                'log_details' =>'has downloaded a Payment Records'.$type ,
+                'log_details' =>'has downloaded a Payment Records '.$type ,
                 'link' =>'#',
             ]);
             return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
@@ -354,7 +354,7 @@ class Paymentrecords extends Component
                 'school_year_id'=>$this->user_details->school_year_id,
                 'created_by' =>$this->user_details->id,
                 'college_id'=>$this->user_details->college_id,
-                'log_details' =>'has downloaded a Payment Records'.$type ,
+                'log_details' =>'has downloaded a Payment Records '.$type ,
                 'link' =>'#',
             ]);
             return response()->streamDownload(function () use ($pdf) {
@@ -372,7 +372,7 @@ class Paymentrecords extends Component
                 'school_year_id'=>$this->user_details->school_year_id,
                 'created_by' =>$this->user_details->id,
                 'college_id'=>$this->user_details->college_id,
-                'log_details' =>'has downloaded a Payment Records'.$type ,
+                'log_details' =>'has downloaded a Payment Records '.$type ,
             ]);
             return Excel::download($export, $file_name.'.csv', \Maatwebsite\Excel\Excel::CSV);
         }
