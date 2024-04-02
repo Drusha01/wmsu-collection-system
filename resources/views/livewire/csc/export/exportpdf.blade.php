@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>  
-    <h6 class="text-center">{{$header[0]['Title']}}</h6>
+    <h2 class="text-center">{{$header[0]['Title']}}</h2>
     <div class="col">
         <div class="flex flex-wrap items-center justify-between mt-3 px-4 p-2">
-            <h4 class="text-start ">{{$header[1]['Academic Year']}}</h4>
+            <h5 class="text-start ">{{$header[1]['Academic Year']}}</h5>
             @foreach($header as $key=> $value)
                 @if($key > 1)
                     <h6 class="text-start ">{{$value['content']}}</h6>
