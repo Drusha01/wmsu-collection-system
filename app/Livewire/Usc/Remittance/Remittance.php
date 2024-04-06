@@ -299,11 +299,15 @@ class Remittance extends Component
             if($this->filters['college_id']){
                 $remittance_data = DB::table('remits as r')
                 ->select(
-                   'r.id',
+                    'r.id',
                     'u.username as approved_by_username',
-                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as approved_by_fullname'),
+                    'u.first_name as approved_by_first_name',
+                    'u.middle_name as approved_by_middle_name',
+                    'u.last_name as approved_by_last_name',
                     'rbyu.username as remitted_by_username',
-                    DB::raw('CONCAT(rbyu.first_name," ",rbyu.middle_name," ",rbyu.last_name) as remitted_by_fullname'),
+                    'rbyu.first_name as remitted_by_first_name',
+                    'rbyu.middle_name as remitted_by_middle_name',
+                    'rbyu.last_name as remitted_by_last_name',
                     'r.remitted_date',
                     'r.approved_date' ,
                     'r.remit_photo',
@@ -328,9 +332,13 @@ class Remittance extends Component
                 ->select(
                     'r.id',
                     'u.username as approved_by_username',
-                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as approved_by_fullname'),
+                    'u.first_name as approved_by_first_name',
+                    'u.middle_name as approved_by_middle_name',
+                    'u.last_name as approved_by_last_name',
                     'rbyu.username as remitted_by_username',
-                    DB::raw('CONCAT(rbyu.first_name," ",rbyu.middle_name," ",rbyu.last_name) as remitted_by_fullname'),
+                    'rbyu.first_name as remitted_by_first_name',
+                    'rbyu.middle_name as remitted_by_middle_name',
+                    'rbyu.last_name as remitted_by_last_name',
                     'r.remitted_date',
                     'r.approved_date' ,
                     'r.remit_photo',
@@ -356,9 +364,13 @@ class Remittance extends Component
                 ->select(
                    'r.id',
                     'u.username as approved_by_username',
-                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as approved_by_fullname'),
+                    'u.first_name as approved_by_first_name',
+                    'u.middle_name as approved_by_middle_name',
+                    'u.last_name as approved_by_last_name',
                     'rbyu.username as remitted_by_username',
-                    DB::raw('CONCAT(rbyu.first_name," ",rbyu.middle_name," ",rbyu.last_name) as remitted_by_fullname'),
+                    'rbyu.first_name as remitted_by_first_name',
+                    'rbyu.middle_name as remitted_by_middle_name',
+                    'rbyu.last_name as remitted_by_last_name',
                     'r.remitted_date',
                     'r.approved_date' ,
                     'r.remit_photo',
@@ -406,7 +418,6 @@ class Remittance extends Component
                 ->paginate(10);
             }
         }
-       dd( $remittance_data);
         return view('livewire.usc.remittance.remittance',[
             'page_info'=>$page_info,
             'semesters'=>$semesters,

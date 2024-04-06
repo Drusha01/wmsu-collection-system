@@ -130,6 +130,10 @@
                                                     <td scope="col" class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
                                                 @elseif($filter_value['column'] == 'Collected at')
                                                     <td scope="col" class="px-4 py-3">{{date_format(date_create($value->date_created),"M d, Y h:i a")}}</td>
+                                                @elseif($filter_value['column'] == 'Student Name')
+                                                    <td class="px-4 py-3">{{ $value->student_first_name. ' ' .$value->student_middle_name.' ' .$value->student_last_name }}</td>
+                                                @elseif($filter_value['column'] == 'Collected By')
+                                                    <td class="px-4 py-3">{{ $value->collector_first_name. ' ' .$value->collector_middle_name.' ' .$value->collector_last_name }}</td>
                                                 @else
                                                     <td scope="col" class="px-4 py-3">{{ $value->{$filter_value['column_name']} }}</td>
                                                 @endif

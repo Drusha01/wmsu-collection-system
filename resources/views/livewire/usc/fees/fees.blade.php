@@ -349,6 +349,8 @@
                                                     <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
                                                 @elseif($filter_value['column'] == 'Amount')
                                                     <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
+                                                @elseif($filter_value['column'] == 'Created By')
+                                                    <td class="px-4 py-3">{{$value->first_name.' '.$value->middle_name.' '.$value->last_name}}</td>
                                                 @elseif($filter_value['column'] == 'Action')
                                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         <div class="flex justify-center items-center space-x-4">

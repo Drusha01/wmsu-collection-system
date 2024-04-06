@@ -286,7 +286,9 @@ class Fees extends Component
                 's.date_start_date',
                 's.date_end_month',
                 's.date_end_date',
-                DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as created_by_fullname'),
+                'u.first_name',
+                'u.last_name',
+                'u.middle_name',
                 'u.id as user_id',
                 'f.for_muslim'
             )

@@ -117,6 +117,10 @@
                                         @if($filter_value['active'])
                                             @if($filter_value['column'] == '#')
                                                 <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($remittance_data->currentPage()-1)*$remittance_data->perPage()+$key+1 }}</th>
+                                            @elseif($filter_value['column'] == 'Remitted By')
+                                                <td class="px-4 py-3">{{ $value->remitted_by_first_name. ' ' .$value->remitted_by_middle_name.' ' .$value->remitted_by_last_name }}</td>
+                                            @elseif($filter_value['column'] == 'Approved By')
+                                                <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) {{ $value->approved_by_first_name. ' ' .$value->approved_by_middle_name.' ' .$value->approved_by_last_name }} @else Pending @endif</td>
                                             @elseif($filter_value['column'] == 'Date')
                                                 <td class="px-4 py-3">{{date_format(date_create( $value->{$filter_value['column_name']}),"M d, Y")}}</td>
                                             @elseif($filter_value['column'] == 'Date')
