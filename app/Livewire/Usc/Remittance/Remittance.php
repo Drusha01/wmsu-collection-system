@@ -154,7 +154,7 @@ class Remittance extends Component
                 [
                     'column'=> 'Remitted By Username',
                     'active'=> true,
-                    'column_name'=>'approved_by_username',
+                    'column_name'=>'remitted_by_username',
                     'class'=>NULL,
                     'style'=>NULL],
                 [
