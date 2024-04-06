@@ -126,6 +126,7 @@ class Fees extends Component
                 }
                 $this->table_filters = [
                     'id' => $table_filters->id,
+                    'table_max_display' => $table->table_max_display,
                     'table_id' => $table->id,
                     'user_id' => $this->user_details->id,
                     'filter_content' => $filter_content,
@@ -232,6 +233,7 @@ class Fees extends Component
                 $this->table_filters = [
                     'id' => $table_filters->id,
                     'table_id' => $table->id,
+                    'table_max_display' => $table->table_max_display,
                     'user_id' => $this->user_details->id,
                     'filter_content' => $filter_content,
                 ];
@@ -257,6 +259,24 @@ class Fees extends Component
             link              									: '#'
         );
         $this->dispatch('closeModal',$modal_id);
+    }
+    public function updateTableMaxDisplay(){
+        if(DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-PaymentRecords')
+            ->update([
+                'table_max_display'=>$this->table_filters['table_max_display']
+            ])){
+            $this->resetPage();
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Successfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+        }
     }
 
     public function render(){
@@ -299,7 +319,7 @@ class Fees extends Component
             ->where('f.school_year_id','=',$this->user_details->school_year_id)
             ->where('f.fee_type_id','=',$fee_type->id)
             ->where('f.name','like',$this->filters['fee_name'] .'%')
-            ->paginate(10);
+            ->paginate($this->table_filters['table_max_display']);
         $page_info = DB::table('users as u')
             ->select(
                 'c.name as college_name',

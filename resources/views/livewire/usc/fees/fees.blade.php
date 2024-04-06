@@ -64,6 +64,15 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="flex items-center space-x-3 mx-4 ">
+                                <select id="course" name="course" wire:model="table_filters.table_max_display" wire:change="updateTableMaxDisplay()"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option value="5" >5 rows </option>
+                                    <option value="10" >10 rows </option>
+                                    <option value="30" >30 rows </option>
+                                    <option value="50" >30 rows </option>
+                                </select>
+                            </div>   
                         </div>
                       
                         <button  type="button" data-modal-target="DeleteUniversityFeeModal" data-modal-toggle="DeleteUniversityFeeModal" id="DeleteFeeToggle" style="display:none;" ></button>

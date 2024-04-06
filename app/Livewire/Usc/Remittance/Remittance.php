@@ -138,6 +138,7 @@ class Remittance extends Component
                 }
                 $this->table_filters = [
                     'id' => $table_filters->id,
+                    'table_max_display' => $table->table_max_display,
                     'table_id' => $table->id,
                     'user_id' => $this->user_details->id,
                     'filter_content' => $filter_content,
@@ -243,6 +244,7 @@ class Remittance extends Component
                 }
                 $this->table_filters = [
                     'id' => $table_filters->id,
+                    'table_max_display' => $table->table_max_display,
                     'table_id' => $table->id,
                     'user_id' => $this->user_details->id,
                     'filter_content' => $filter_content,
@@ -269,6 +271,24 @@ class Remittance extends Component
             link              									: '#'
         );
         $this->dispatch('closeModal',$modal_id);
+    }
+    public function updateTableMaxDisplay(){
+        if(DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-PaymentRecords')
+            ->update([
+                'table_max_display'=>$this->table_filters['table_max_display']
+            ])){
+            $this->resetPage();
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Successfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+        }
     }
     public function updateSearchDefault(){
         $this->filters['search'] = NULL;
@@ -326,7 +346,7 @@ class Remittance extends Component
                 ->where('r.college_id','=',$this->filters['college_id'])
                 ->where('rbyu.username','like',$this->filters['search'].'%')
                 ->orderby('r.date_created','desc')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }else{
                 $remittance_data = DB::table('remits as r')
                 ->select(
@@ -356,7 +376,7 @@ class Remittance extends Component
                 ->where('r.school_year_id','=',$this->user_details->school_year_id)
                 ->where('rbyu.username','like',$this->filters['search'].'%')
                 ->orderby('r.date_created','desc')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }
         }elseif($this->filters['search_by'] == 'Remitter name'){
             if($this->filters['college_id']){
@@ -389,7 +409,7 @@ class Remittance extends Component
                 ->where('r.college_id','=',$this->filters['college_id'])
                 ->where(DB::raw("CONCAT(rbyu.first_name,' ',rbyu.middle_name,' ',rbyu.last_name)"),'like',$this->filters['search'] .'%')
                 ->orderby('r.date_created','desc')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }else{
                 $remittance_data = DB::table('remits as r')
                 ->select(
@@ -415,7 +435,7 @@ class Remittance extends Component
                 ->where('r.school_year_id','=',$this->user_details->school_year_id)
                 ->where(DB::raw("CONCAT(rbyu.first_name,' ',rbyu.middle_name,' ',rbyu.last_name)"),'like',$this->filters['search'] .'%')
                 ->orderby('r.date_created','desc')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }
         }
         return view('livewire.usc.remittance.remittance',[

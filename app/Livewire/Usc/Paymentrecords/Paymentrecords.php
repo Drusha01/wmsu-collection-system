@@ -121,6 +121,7 @@ class Paymentrecords extends Component
                 }
                 $this->table_filters = [
                     'id' => $table_filters->id,
+                    'table_max_display' => $table->table_max_display,
                     'table_id' => $table->id,
                     'user_id' => $this->user_details->id,
                     'filter_content' => $filter_content,
@@ -208,6 +209,7 @@ class Paymentrecords extends Component
                 }
                 $this->table_filters = [
                     'id' => $table_filters->id,
+                    'table_max_display' => $table->table_max_display,
                     'table_id' => $table->id,
                     'user_id' => $this->user_details->id,
                     'filter_content' => $filter_content,
@@ -234,6 +236,24 @@ class Paymentrecords extends Component
             link              									: '#'
         );
         $this->dispatch('closeModal',$modal_id);
+    }
+    public function updateTableMaxDisplay(){
+        if(DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-PaymentRecords')
+            ->update([
+                'table_max_display'=>$this->table_filters['table_max_display']
+            ])){
+            $this->resetPage();
+            $this->dispatch('swal:redirect',
+                position         									: 'center',
+                icon              									: 'success',
+                title             									: 'Successfully updated!',
+                showConfirmButton 									: 'true',
+                timer             									: '1000',
+                link              									: '#'
+            );
+        }
     }
     public function updateSearchDefault(){
         $this->filters['search'] = "";
@@ -281,7 +301,7 @@ class Paymentrecords extends Component
                 ->where('s.student_code','like',$this->filters['search'] .'%')
                 ->orderBy('pi.id','desc')
                 ->groupBy('pi.id')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }else{
                 $payment_records_data = DB::table('payment_items as pi')
                 ->select(
@@ -315,7 +335,7 @@ class Paymentrecords extends Component
                 ->where('s.student_code','like',$this->filters['search'] .'%')
                 ->orderBy('pi.id','desc')
                 ->groupBy('pi.id')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }
             
         }elseif($this->filters['search_by'] == 'Student name'){
@@ -353,7 +373,7 @@ class Paymentrecords extends Component
                 ->where('s.college_id','=',$this->filters['college_id'])
                 ->orderBy('pi.id','desc')
                 ->groupBy('pi.id')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }else{
                 $payment_records_data = DB::table('payment_items as pi')
                 ->select(
@@ -387,7 +407,7 @@ class Paymentrecords extends Component
                 ->where(DB::raw("CONCAT(s.first_name,' ',s.last_name)"),'like',$this->filters['search'] .'%')
                 ->orderBy('pi.id','desc')
                 ->groupBy('pi.id')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }
         }elseif($this->filters['search_by'] == 'Collector name'){
             if($this->filters['college_id']){
@@ -424,7 +444,7 @@ class Paymentrecords extends Component
                 ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"),'like',$this->filters['search'] .'%')
                 ->orderBy('pi.id','desc')
                 ->groupBy('pi.id')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }else{
                 $payment_records_data = DB::table('payment_items as pi')
                 ->select(
@@ -458,7 +478,7 @@ class Paymentrecords extends Component
                 ->where(DB::raw("CONCAT(u.first_name,' ',u.last_name)"),'like',$this->filters['search'] .'%')
                 ->orderBy('pi.id','desc')
                 ->groupBy('pi.id')
-                ->paginate(10);
+                ->paginate($this->table_filters['table_max_display']);
             }
            
         }
