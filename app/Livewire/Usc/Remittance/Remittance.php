@@ -314,10 +314,10 @@ class Remittance extends Component
                     'c.name as college_name'
                 )
                 ->join('users as rbyu','rbyu.id','r.remitted_by')
-                ->leftjoin('colleges as c','c.id','rbyu.college_id')
                 ->join('school_years as sy','sy.id','r.school_year_id')
                 ->join('semesters as s','s.id','r.semester_id')
                 ->leftjoin('users as u','u.id','r.appoved_by')
+                ->leftjoin('colleges as c','c.id','rbyu.college_id')
                 ->where('r.school_year_id','=',$this->user_details->school_year_id)
                 ->where('r.college_id','=',$this->filters['college_id'])
                 ->where('rbyu.username','like',$this->filters['search'].'%')
@@ -341,10 +341,10 @@ class Remittance extends Component
                     'c.name as college_name'
                 )
                 ->join('users as rbyu','rbyu.id','r.remitted_by')
-                ->leftjoin('colleges as c','c.id','rbyu.college_id')
                 ->join('school_years as sy','sy.id','r.school_year_id')
                 ->join('semesters as s','s.id','r.semester_id')
                 ->leftjoin('users as u','u.id','r.appoved_by')
+                ->leftjoin('colleges as c','c.id','rbyu.college_id')
                 ->where('r.school_year_id','=',$this->user_details->school_year_id)
                 ->where('rbyu.username','like',$this->filters['search'].'%')
                 ->orderby('r.date_created','desc')
@@ -369,10 +369,10 @@ class Remittance extends Component
                     'c.name as college_name'
                 )
                 ->join('users as rbyu','rbyu.id','r.remitted_by')
-                ->leftjoin('colleges as c','c.id','rbyu.college_id')
                 ->join('school_years as sy','sy.id','r.school_year_id')
                 ->join('semesters as s','s.id','r.semester_id')
                 ->leftjoin('users as u','u.id','r.appoved_by')
+                ->leftjoin('colleges as c','c.id','rbyu.college_id')
                 ->where('r.school_year_id','=',$this->user_details->school_year_id)
                 ->where('r.college_id','=',$this->filters['college_id'])
                 ->where(DB::raw("CONCAT(rbyu.first_name,' ',rbyu.middle_name,' ',rbyu.last_name)"),'like',$this->filters['search'] .'%')
@@ -396,17 +396,17 @@ class Remittance extends Component
                     'c.name as college_name'
                 )
                 ->join('users as rbyu','rbyu.id','r.remitted_by')
-                ->leftjoin('colleges as c','c.id','rbyu.college_id')
                 ->join('school_years as sy','sy.id','r.school_year_id')
                 ->join('semesters as s','s.id','r.semester_id')
                 ->leftjoin('users as u','u.id','r.appoved_by')
+                ->leftjoin('colleges as c','c.id','rbyu.college_id')
                 ->where('r.school_year_id','=',$this->user_details->school_year_id)
                 ->where(DB::raw("CONCAT(rbyu.first_name,' ',rbyu.middle_name,' ',rbyu.last_name)"),'like',$this->filters['search'] .'%')
                 ->orderby('r.date_created','desc')
                 ->paginate(10);
             }
         }
-       
+       dd( $remittance_data);
         return view('livewire.usc.remittance.remittance',[
             'page_info'=>$page_info,
             'semesters'=>$semesters,
