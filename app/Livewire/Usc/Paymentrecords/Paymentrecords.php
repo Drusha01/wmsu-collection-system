@@ -47,6 +47,7 @@ class Paymentrecords extends Component
         2=>'Collector name',
     ];
     public $college_data;
+    public $table_filters;
     public function boot(Request $request ){
 
         $session = $request->session()->all();
@@ -77,6 +78,162 @@ class Paymentrecords extends Component
             ->get()
             ->toArray();
         $this->downloadfilters = $this->filters;
+        if(!($table = DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-PaymentRecords')
+            ->first())){
+            $table = [
+                'id' => NULL,
+                'user_id' => $this->user_details->id,
+                'table_name' => 'Usc-PaymentRecords',
+                'table_max_display' => 10,
+            ];
+            DB::table('tables')
+                ->insert([
+                    'user_id' => $this->user_details->id,
+                    'table_name' => 'Usc-PaymentRecords',
+                    'table_max_display' => 10,
+            ]);
+
+            $table = DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-PaymentRecords')
+            ->first();
+        }
+    
+        
+        if($table && $table_filters = DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_id','=',$table->id)
+            ->first()){
+            if($table_filters){
+                $filter_content = [];
+                $decoded_table_filters = json_decode($table_filters->filter_content);
+                foreach ($decoded_table_filters as $key => $value) {
+                    $item_content = [
+                        'column'=> $value->column,
+                        'active'=> $value->active,
+                        'column_name'=>$value->column_name,
+                        'class'=>$value->class,
+                        'style'=>$value->style
+                    ];
+                    array_push($filter_content,$item_content);
+                }
+                $this->table_filters = [
+                    'id' => $table_filters->id,
+                    'table_id' => $table->id,
+                    'user_id' => $this->user_details->id,
+                    'filter_content' => $filter_content,
+                ];
+            }
+        }else{
+            $filter_content = [
+                [
+                    'column'=> '#',
+                    'active'=> true,
+                    'column_name'=>NULL,
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Student Code',
+                    'active'=> true,
+                    'column_name'=>'student_code',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Student Name',
+                    'active'=> true,
+                    'column_name'=>'student_fullname',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Fee Type',
+                    'active'=> true,
+                    'column_name'=>'fee_type_name',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Fee Code',
+                    'active'=> true,
+                    'column_name'=>'fee_code',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Fee Name',
+                    'active'=> true,
+                    'column_name'=>'fee_name',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Amount Collected',
+                    'active'=> true,
+                    'column_name'=>'amount',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Collected By',
+                    'active'=> true,
+                    'column_name'=>'collected_by_fullname',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Collected at',
+                    'active'=> true,
+                    'column_name'=>'date_created',
+                    'class'=>NULL,
+                    'style'=>NULL],
+            ];
+            DB::table('table_filters')
+                ->insert([
+                    'table_id' =>$table->id,
+                    'user_id' =>$this->user_details->id,
+                    'filter_content' =>json_encode($filter_content),
+                ]);
+            $table_filters = DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_id','=',$table->id)
+            ->first();
+            if($table_filters){
+                $filter_content = [];
+                $decoded_table_filters = json_decode($table_filters->filter_content);
+                foreach ($decoded_table_filters as $key => $value) {
+                    $item_content = [
+                        'column'=> $value->column,
+                        'active'=> $value->active,
+                        'column_name'=>$value->column_name,
+                        'class'=>$value->class,
+                        'style'=>$value->style
+                    ];
+                    array_push($filter_content,$item_content);
+                }
+                $this->table_filters = [
+                    'id' => $table_filters->id,
+                    'table_id' => $table->id,
+                    'user_id' => $this->user_details->id,
+                    'filter_content' => $filter_content,
+                ];
+            }
+        }
+    }
+    public function tableFilter($modal_id){
+        $this->dispatch('openModal',$modal_id);
+    }
+    public function saveTableFilter($id,$modal_id){
+        DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('id','=',$id)
+            ->update([
+            'filter_content' =>json_encode($this->table_filters['filter_content']),
+        ]);
+        $this->dispatch('swal:redirect',
+            position         									: 'center',
+            icon              									: 'success',
+            title             									: 'Successfully updated!',
+            showConfirmButton 									: 'true',
+            timer             									: '1000',
+            link              									: '#'
+        );
+        $this->dispatch('closeModal',$modal_id);
     }
     public function updateSearchDefault(){
         $this->filters['search'] = "";
@@ -102,15 +259,11 @@ class Paymentrecords extends Component
                 ->select(
                     "pi.id as id",
                     "u.id as user_id",
-                    "u.first_name as collector_first_name",
-                    "u.middle_name as collector_middle_name",
-                    "u.last_name as collector_last_name",
-                    "u.username as collector_username",
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as collected_by_fullname'),
+                    "u.username as colleted_by_username",
                     "s.id as student_id",
                     "s.student_code as student_code",
-                    "s.first_name as student_first_name",
-                    "s.middle_name as student_middle_name",
-                    "s.last_name as student_last_name",
+                    DB::raw('CONCAT(s.first_name," ",s.middle_name," ",s.last_name) as student_fullname'),
                     "f.name as fee_name",
                     "f.code as fee_code",
                     "ft.name as fee_type_name",
@@ -132,17 +285,13 @@ class Paymentrecords extends Component
             }else{
                 $payment_records_data = DB::table('payment_items as pi')
                 ->select(
-                    "pi.id as id",
+                   "pi.id as id",
                     "u.id as user_id",
-                    "u.first_name as collector_first_name",
-                    "u.middle_name as collector_middle_name",
-                    "u.last_name as collector_last_name",
-                    "u.username as collector_username",
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as collected_by_fullname'),
+                    "u.username as colleted_by_username",
                     "s.id as student_id",
                     "s.student_code as student_code",
-                    "s.first_name as student_first_name",
-                    "s.middle_name as student_middle_name",
-                    "s.last_name as student_last_name",
+                    DB::raw('CONCAT(s.first_name," ",s.middle_name," ",s.last_name) as student_fullname'),
                     "f.name as fee_name",
                     "f.code as fee_code",
                     "ft.name as fee_type_name",
@@ -166,17 +315,13 @@ class Paymentrecords extends Component
             if($this->filters['college_id']){
                 $payment_records_data = DB::table('payment_items as pi')
                 ->select(
-                    "pi.id as id",
+                   "pi.id as id",
                     "u.id as user_id",
-                    "u.first_name as collector_first_name",
-                    "u.middle_name as collector_middle_name",
-                    "u.last_name as collector_last_name",
-                    "u.username as collector_username",
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as collected_by_fullname'),
+                    "u.username as colleted_by_username",
                     "s.id as student_id",
                     "s.student_code as student_code",
-                    "s.first_name as student_first_name",
-                    "s.middle_name as student_middle_name",
-                    "s.last_name as student_last_name",
+                    DB::raw('CONCAT(s.first_name," ",s.middle_name," ",s.last_name) as student_fullname'),
                     "f.name as fee_name",
                     "f.code as fee_code",
                     "ft.name as fee_type_name",
@@ -198,17 +343,13 @@ class Paymentrecords extends Component
             }else{
                 $payment_records_data = DB::table('payment_items as pi')
                 ->select(
-                    "pi.id as id",
+                   "pi.id as id",
                     "u.id as user_id",
-                    "u.first_name as collector_first_name",
-                    "u.middle_name as collector_middle_name",
-                    "u.last_name as collector_last_name",
-                    "u.username as collector_username",
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as collected_by_fullname'),
+                    "u.username as colleted_by_username",
                     "s.id as student_id",
                     "s.student_code as student_code",
-                    "s.first_name as student_first_name",
-                    "s.middle_name as student_middle_name",
-                    "s.last_name as student_last_name",
+                    DB::raw('CONCAT(s.first_name," ",s.middle_name," ",s.last_name) as student_fullname'),
                     "f.name as fee_name",
                     "f.code as fee_code",
                     "ft.name as fee_type_name",
@@ -231,17 +372,13 @@ class Paymentrecords extends Component
             if($this->filters['college_id']){
                 $payment_records_data = DB::table('payment_items as pi')
                 ->select(
-                    "pi.id as id",
+                   "pi.id as id",
                     "u.id as user_id",
-                    "u.first_name as collector_first_name",
-                    "u.middle_name as collector_middle_name",
-                    "u.last_name as collector_last_name",
-                    "u.username as collector_username",
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as collected_by_fullname'),
+                    "u.username as colleted_by_username",
                     "s.id as student_id",
                     "s.student_code as student_code",
-                    "s.first_name as student_first_name",
-                    "s.middle_name as student_middle_name",
-                    "s.last_name as student_last_name",
+                    DB::raw('CONCAT(s.first_name," ",s.middle_name," ",s.last_name) as student_fullname'),
                     "f.name as fee_name",
                     "f.code as fee_code",
                     "ft.name as fee_type_name",
@@ -263,17 +400,13 @@ class Paymentrecords extends Component
             }else{
                 $payment_records_data = DB::table('payment_items as pi')
                 ->select(
-                    "pi.id as id",
+                   "pi.id as id",
                     "u.id as user_id",
-                    "u.first_name as collector_first_name",
-                    "u.middle_name as collector_middle_name",
-                    "u.last_name as collector_last_name",
-                    "u.username as collector_username",
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as collected_by_fullname'),
+                    "u.username as colleted_by_username",
                     "s.id as student_id",
                     "s.student_code as student_code",
-                    "s.first_name as student_first_name",
-                    "s.middle_name as student_middle_name",
-                    "s.last_name as student_last_name",
+                    DB::raw('CONCAT(s.first_name," ",s.middle_name," ",s.last_name) as student_fullname'),
                     "f.name as fee_name",
                     "f.code as fee_code",
                     "ft.name as fee_type_name",

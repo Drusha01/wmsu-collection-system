@@ -71,6 +71,15 @@
                                     </select>
                                 </div>
                             </div>
+                            <button style="display:none" id="FilterTableModalToggler" data-modal-toggle="FilterTableModal" data-modal-target="FilterTableModal"></button>
+                            <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 ">
+                                <div class="flex items-center space-x-3 w-full md:w-auto">
+                                    <button type="button" wire:click="tableFilter('FilterTableModalToggler')" class="text-dark-400 hover:text-dark border border-dark-900
+                                        hover:bg-dark-800 font-bold py-2 px-3 rounded">
+                                        Columns
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                             <div class="flex items-center space-x-3 w-full md:w-auto">
@@ -94,57 +103,107 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-4 py-3">#</th>
-                                    <th scope="col" class="px-4 py-3">Remitted By Username</th>
-                                    <th scope="col" class="px-4 py-3">Remitted By</th>
-                                    <th scope="col" class="px-4 py-3">College</th>
-                                    <th scope="col" class="px-4 py-3">School Year</th>
-                                    <th scope="col" class="px-4 py-3">Semester</th>
-                                    <th scope="col" class="px-4 py-3">Date</th>
-                                    <th scope="col" class="px-4 py-3">Approval Status</th>
-                                    <th scope="col" class="px-4 py-3">Approved By</th>
-                                    <th scope="col" class="px-4 py-3">Amount</th>
-                                    <th scope="col" class="px-4 py-3">Proof</th>
-                                    <th scope="col" class="px-4 py-3">Action</th>
-                                    
+                                    @foreach($table_filters['filter_content']  as $key =>$value)
+                                        @if($value['active'])
+                                            <th scope="col" class="px-4 py-3">{{$value['column']}}</th>
+                                        @endif
+                                    @endforeach
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($remittance_data as $key => $value)
                                 <tr class="border-b dark:border-gray-700">
-                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($remittance_data->currentPage()-1)*$remittance_data->perPage()+$key+1 }}</th>
-                                    <td class="px-4 py-3">{{ $value->remitted_by_username}}</td>
-                                    <td class="px-4 py-3">{{ $value->remitted_by_first_name. ' ' .$value->remitted_by_middle_name.' ' .$value->remitted_by_last_name }}</td>
-                                    <td class="px-4 py-3">{{$value->college_name}}</td>
-                                    <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
-                                    <td class="px-4 py-3">{{$value->semester}}</td>
-                                    <td class="px-4 py-3">{{date_format(date_create($value->remitted_date),"M d, Y")}}</td>
-                                    <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) Approved @else Pending @endif</td>
-                                    <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) {{ $value->approved_by_first_name. ' ' .$value->approved_by_middle_name.' ' .$value->approved_by_last_name }} @else Pending @endif</td>
-                                    <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
-                                    <td class="px-4 py-3">
-                                        <a href="{{asset('storage/content/remit_photo/'.$value->remit_photo)}}" target="_blank">
-                                            <button class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 font-bold py-2 px-3 rounded">
-                                                View Proof
-                                            </button>
-                                        </a>
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        @if(strlen($value->appoved_by)>0)
-                                            <button wire:click="editRemit({{$value->id}},'CancelRemitModalToggle')"class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
-                                                Cancel
-                                            </button> 
-                                        @else 
-                                            <button wire:click="editRemit({{$value->id}},'ApproveRemitModalToggle')"class="text-yellow-700 hover:text-white border border-yellow-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
-                                                Approve
-                                            </button> 
+                                    @foreach($table_filters['filter_content']  as $filter_key =>$filter_value)
+                                        @if($filter_value['active'])
+                                            @if($filter_value['column'] == '#')
+                                                <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($remittance_data->currentPage()-1)*$remittance_data->perPage()+$key+1 }}</th>
+                                            @elseif($filter_value['column'] == 'Date')
+                                                <td class="px-4 py-3">{{date_format(date_create( $value->{$filter_value['column_name']}),"M d, Y")}}</td>
+                                            @elseif($filter_value['column'] == 'Date')
+                                                <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) Approved @else Pending @endif</td>
+                                            @elseif($filter_value['column'] == 'Proof')
+                                                <td class="px-4 py-3">
+                                                    <a href="{{asset('storage/content/remit_photo/'.$value->remit_photo)}}" target="_blank">
+                                                        <button class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 font-bold py-2 px-3 rounded">
+                                                            View Proof
+                                                        </button>
+                                                    </a>
+                                                </td>
+                                            @elseif($filter_value['column'] == 'Approval Status')
+                                                <td class="px-4 py-3">@if(strlen($value->appoved_by)>0) Approved @else Pending @endif</td>
+                                            @elseif($filter_value['column'] == 'Action')
+                                                <td class="px-4 py-3">
+                                                    @if(strlen($value->appoved_by)>0)
+                                                        <button wire:click="editRemit({{$value->id}},'CancelRemitModalToggle')"class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                                            Cancel
+                                                        </button> 
+                                                    @else 
+                                                        <button wire:click="editRemit({{$value->id}},'ApproveRemitModalToggle')"class="text-yellow-700 hover:text-white border border-yellow-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                                            Approve
+                                                        </button> 
+                                                    @endif
+                                                </td>
+                                            @else
+                                                <td class="px-4 py-3">{{ $value->{$filter_value['column_name']} }}</td>
+                                            @endif
                                         @endif
-                                    </td>
+                                    @endforeach
+                                    
+                                 
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                      
+
+                        <div wire:ignore.self id="FilterTableModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
+                            <div class="relative w-8/12 max-w-6xl p-8 max-h-screen flex flex-col">
+                                <!-- Modal content -->
+                                <form action="#" wire:submit.prevent="saveTableFilter({{$table_filters['id']}},'FilterTableModal')">
+                                    <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
+                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                Columns
+                                            </h3>
+                                        </div>
+                                        <!-- Close Button - Upper Right Corner -->
+                                        <button type="button"
+                                            class="absolute top-4 right-4 text-gray-400 bg-transparent 
+                                            hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-2 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                            data-modal-toggle="FilterTableModal">
+                                            <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                        <div class="flex flex-row justify-between">
+                                            <div action="#" class="grid gap-6">
+                                                <div class="m-5 ">
+                                                    @foreach($table_filters['filter_content']  as $key =>$value)
+                                                        <div class="flex items-center mb-4">
+                                                            <input wire:model="table_filters.filter_content.{{$key}}.active" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                            <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{$value['column']}}</label>
+                                                        </div>
+                                                    @endforeach 
+                                                </div> 
+                                            </div>
+                                        </div>
+                                        <!-- Save Fees Button - Bottom Section -->
+                                        <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
+                                            <button data-modal-toggle="FilterTableModal" type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                                Back
+                                            </button>
+                                            <button type="submit"
+                                                class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <div wire:ignore.self id="ApproveRemitModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
                             <div class="relative w-8/12 max-w-6xl p-8 max-h-screen flex flex-col">
                                 <!-- Modal content -->

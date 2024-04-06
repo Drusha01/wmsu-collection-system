@@ -56,6 +56,7 @@ class Fees extends Component
 
     ];
     public $semesters = [];
+    public $table_filters;
     public function boot(Request $request ){
 
         $session = $request->session()->all();
@@ -81,6 +82,183 @@ class Fees extends Component
             return redirect()->route('login');
         }
     }
+    public function mount(){
+        if(!($table = DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-Fees')
+            ->first())){
+            $table = [
+                'id' => NULL,
+                'user_id' => $this->user_details->id,
+                'table_name' => 'Usc-Fees',
+                'table_max_display' => 10,
+            ];
+            DB::table('tables')
+                ->insert([
+                    'user_id' => $this->user_details->id,
+                    'table_name' => 'Usc-Fees',
+                    'table_max_display' => 10,
+            ]);
+
+            $table = DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-Fees')
+            ->first();
+        }
+    
+        
+        if($table && $table_filters = DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_id','=',$table->id)
+            ->first()){
+            if($table_filters){
+                $filter_content = [];
+                $decoded_table_filters = json_decode($table_filters->filter_content);
+                foreach ($decoded_table_filters as $key => $value) {
+                    $item_content = [
+                        'column'=> $value->column,
+                        'active'=> $value->active,
+                        'column_name'=>$value->column_name,
+                        'class'=>$value->class,
+                        'style'=>$value->style
+                    ];
+                    array_push($filter_content,$item_content);
+                }
+                $this->table_filters = [
+                    'id' => $table_filters->id,
+                    'table_id' => $table->id,
+                    'user_id' => $this->user_details->id,
+                    'filter_content' => $filter_content,
+                ];
+            }
+        }else{
+            $filter_content = [
+                [
+                    'column'=> '#',
+                    'active'=> true,
+                    'column_name'=>NULL,
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Fee Name',
+                    'active'=> true,
+                    'column_name'=>'fee_name',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Fee Type',
+                    'active'=> true,
+                    'column_name'=>'fee_type_name',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Fee Code',
+                    'active'=> true,
+                    'column_name'=>'fee_code',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'For Muslim?',
+                    'active'=> true,
+                    'column_name'=>NULL,
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'School Year',
+                    'active'=> true,
+                    'column_name'=>'school_year',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Semester',
+                    'active'=> true,
+                    'column_name'=>'semester',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Start Date',
+                    'active'=> true,
+                    'column_name'=>NULL,
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'End Date',
+                    'active'=> true,
+                    'column_name'=>NULL,
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Created By',
+                    'active'=> true,
+                    'column_name'=>'created_by_fullname',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Amount',
+                    'active'=> true,
+                    'column_name'=>'amount',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Action',
+                    'active'=> true,
+                    'column_name'=>NULL,
+                    'class'=>'text-center',
+                    'style'=>NULL],
+            ];
+            DB::table('table_filters')
+                ->insert([
+                    'table_id' =>$table->id,
+                    'user_id' =>$this->user_details->id,
+                    'filter_content' =>json_encode($filter_content),
+                ]);
+            $table_filters = DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_id','=',$table->id)
+            ->first();
+            if($table_filters){
+                $filter_content = [];
+                $decoded_table_filters = json_decode($table_filters->filter_content);
+                foreach ($decoded_table_filters as $key => $value) {
+                    $item_content = [
+                        'column'=> $value->column,
+                        'active'=> $value->active,
+                        'column_name'=>$value->column_name,
+                        'class'=>$value->class,
+                        'style'=>$value->style
+                    ];
+                    array_push($filter_content,$item_content);
+                }
+                $this->table_filters = [
+                    'id' => $table_filters->id,
+                    'table_id' => $table->id,
+                    'user_id' => $this->user_details->id,
+                    'filter_content' => $filter_content,
+                ];
+            }
+        }
+    }
+    public function tableFilter($modal_id){
+        $this->dispatch('openModal',$modal_id);
+    }
+    public function saveTableFilter($id,$modal_id){
+        DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('id','=',$id)
+            ->update([
+            'filter_content' =>json_encode($this->table_filters['filter_content']),
+        ]);
+        $this->dispatch('swal:redirect',
+            position         									: 'center',
+            icon              									: 'success',
+            title             									: 'Successfully updated!',
+            showConfirmButton 									: 'true',
+            timer             									: '1000',
+            link              									: '#'
+        );
+        $this->dispatch('closeModal',$modal_id);
+    }
+
     public function render(){
 
         if($this->filters['fee_name'] != $this->filters['prev_fee_name']){
@@ -98,20 +276,17 @@ class Fees extends Component
         $university_fees_data = DB::table('fees as f')
             ->select(
                 'f.id',
-                'f.name',
-                'f.code',
+                'f.name as fee_name',
+                'f.code as fee_code',
                 'f.amount',
                 'f.name as fee_type_name',
-                'sy.year_start',
-                'sy.year_end',
+                DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year'),
                 's.semester as semester',
                 's.date_start_month',
                 's.date_start_date',
                 's.date_end_month',
                 's.date_end_date',
-                'u.first_name',
-                'u.last_name',
-                'u.middle_name',
+                DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as created_by_fullname'),
                 'u.id as user_id',
                 'f.for_muslim'
             )

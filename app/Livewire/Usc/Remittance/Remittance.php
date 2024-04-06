@@ -64,6 +64,7 @@ class Remittance extends Component
         0=>'Username',
         1=>'Remitter name',
     ];
+    public $table_filters;
     public function boot(Request $request ){
 
         $session = $request->session()->all();
@@ -94,6 +95,180 @@ class Remittance extends Component
             ->get()
             ->toArray();
         $this->downloadfilters = $this->filters;
+        if(!($table = DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-Remittance')
+            ->first())){
+            $table = [
+                'id' => NULL,
+                'user_id' => $this->user_details->id,
+                'table_name' => 'Usc-Remittance',
+                'table_max_display' => 10,
+            ];
+            DB::table('tables')
+                ->insert([
+                    'user_id' => $this->user_details->id,
+                    'table_name' => 'Usc-Remittance',
+                    'table_max_display' => 10,
+            ]);
+
+            $table = DB::table('tables')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_name','=','Usc-Remittance')
+            ->first();
+        }
+      
+        
+        if($table && $table_filters = DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_id','=',$table->id)
+            ->first()){
+            if($table_filters){
+                $filter_content = [];
+                $decoded_table_filters = json_decode($table_filters->filter_content);
+                foreach ($decoded_table_filters as $key => $value) {
+                    $item_content = [
+                        'column'=> $value->column,
+                        'active'=> $value->active,
+                        'column_name'=>$value->column_name,
+                        'class'=>$value->class,
+                        'style'=>$value->style
+                    ];
+                    array_push($filter_content,$item_content);
+                }
+                $this->table_filters = [
+                    'id' => $table_filters->id,
+                    'table_id' => $table->id,
+                    'user_id' => $this->user_details->id,
+                    'filter_content' => $filter_content,
+                ];
+            }
+        }else{
+            $filter_content = [
+                [
+                    'column'=> '#',
+                    'active'=> true,
+                    'column_name'=>NULL,
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Remitted By Username',
+                    'active'=> true,
+                    'column_name'=>'approved_by_username',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Remitted By',
+                    'active'=> true,
+                    'column_name'=>'remitted_by_fullname',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'College',
+                    'active'=> true,
+                    'column_name'=>'college_name',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'School Year',
+                    'active'=> true,
+                    'column_name'=>'school_year',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Semester',
+                    'active'=> true,
+                    'column_name'=>'semester',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Date',
+                    'active'=> true,
+                    'column_name'=>'remitted_date',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Approval Status',
+                    'active'=> true,
+                    'column_name'=>'appoved_by',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Approved By',
+                    'active'=> true,
+                    'column_name'=>'approved_by_fullname',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Amount',
+                    'active'=> true,
+                    'column_name'=>'amount',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Proof',
+                    'active'=> true,
+                    'column_name'=>'remit_photo',
+                    'class'=>NULL,
+                    'style'=>NULL],
+                [
+                    'column'=> 'Action',
+                    'active'=> true,
+                    'column_name'=>'id',
+                    'class'=>NULL,
+                    'style'=>NULL],
+            ];
+            DB::table('table_filters')
+                ->insert([
+                    'table_id' =>$table->id,
+                    'user_id' =>$this->user_details->id,
+                    'filter_content' =>json_encode($filter_content),
+                ]);
+            $table_filters = DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('table_id','=',$table->id)
+            ->first();
+            if($table_filters){
+                $filter_content = [];
+                $decoded_table_filters = json_decode($table_filters->filter_content);
+                foreach ($decoded_table_filters as $key => $value) {
+                    $item_content = [
+                        'column'=> $value->column,
+                        'active'=> $value->active,
+                        'column_name'=>$value->column_name,
+                        'class'=>$value->class,
+                        'style'=>$value->style
+                    ];
+                    array_push($filter_content,$item_content);
+                }
+                $this->table_filters = [
+                    'id' => $table_filters->id,
+                    'table_id' => $table->id,
+                    'user_id' => $this->user_details->id,
+                    'filter_content' => $filter_content,
+                ];
+            }
+        }
+    }
+    public function tableFilter($modal_id){
+        $this->dispatch('openModal',$modal_id);
+    }
+    public function saveTableFilter($id,$modal_id){
+        DB::table('table_filters')
+            ->where('user_id','=',$this->user_details->id)
+            ->where('id','=',$id)
+            ->update([
+            'filter_content' =>json_encode($this->table_filters['filter_content']),
+        ]);
+        $this->dispatch('swal:redirect',
+            position         									: 'center',
+            icon              									: 'success',
+            title             									: 'Successfully updated!',
+            showConfirmButton 									: 'true',
+            timer             									: '1000',
+            link              									: '#'
+        );
+        $this->dispatch('closeModal',$modal_id);
     }
     public function updateSearchDefault(){
         $this->filters['search'] = NULL;
@@ -124,21 +299,16 @@ class Remittance extends Component
             if($this->filters['college_id']){
                 $remittance_data = DB::table('remits as r')
                 ->select(
-                    'r.id',
+                   'r.id',
                     'u.username as approved_by_username',
-                    'u.first_name as approved_by_first_name',
-                    'u.middle_name as approved_by_middle_name',
-                    'u.last_name as approved_by_last_name',
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as approved_by_fullname'),
                     'rbyu.username as remitted_by_username',
-                    'rbyu.first_name as remitted_by_first_name',
-                    'rbyu.middle_name as remitted_by_middle_name',
-                    'rbyu.last_name as remitted_by_last_name',
+                    DB::raw('CONCAT(rbyu.first_name," ",rbyu.middle_name," ",rbyu.last_name) as remitted_by_fullname'),
                     'r.remitted_date',
                     'r.approved_date' ,
                     'r.remit_photo',
                     'r.amount',
-                    'sy.year_start',
-                    'sy.year_end',
+                    DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year'),
                     's.semester',
                     'r.appoved_by',
                     'c.name as college_name'
@@ -158,19 +328,14 @@ class Remittance extends Component
                 ->select(
                     'r.id',
                     'u.username as approved_by_username',
-                    'u.first_name as approved_by_first_name',
-                    'u.middle_name as approved_by_middle_name',
-                    'u.last_name as approved_by_last_name',
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as approved_by_fullname'),
                     'rbyu.username as remitted_by_username',
-                    'rbyu.first_name as remitted_by_first_name',
-                    'rbyu.middle_name as remitted_by_middle_name',
-                    'rbyu.last_name as remitted_by_last_name',
+                    DB::raw('CONCAT(rbyu.first_name," ",rbyu.middle_name," ",rbyu.last_name) as remitted_by_fullname'),
                     'r.remitted_date',
                     'r.approved_date' ,
                     'r.remit_photo',
                     'r.amount',
-                    'sy.year_start',
-                    'sy.year_end',
+                    DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year'),
                     's.semester',
                     'r.appoved_by',
                     'c.name as college_name'
@@ -189,21 +354,16 @@ class Remittance extends Component
             if($this->filters['college_id']){
                 $remittance_data = DB::table('remits as r')
                 ->select(
-                    'r.id',
+                   'r.id',
                     'u.username as approved_by_username',
-                    'u.first_name as approved_by_first_name',
-                    'u.middle_name as approved_by_middle_name',
-                    'u.last_name as approved_by_last_name',
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as approved_by_fullname'),
                     'rbyu.username as remitted_by_username',
-                    'rbyu.first_name as remitted_by_first_name',
-                    'rbyu.middle_name as remitted_by_middle_name',
-                    'rbyu.last_name as remitted_by_last_name',
+                    DB::raw('CONCAT(rbyu.first_name," ",rbyu.middle_name," ",rbyu.last_name) as remitted_by_fullname'),
                     'r.remitted_date',
                     'r.approved_date' ,
                     'r.remit_photo',
                     'r.amount',
-                    'sy.year_start',
-                    'sy.year_end',
+                    DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year'),
                     's.semester',
                     'r.appoved_by',
                     'c.name as college_name'
@@ -221,21 +381,16 @@ class Remittance extends Component
             }else{
                 $remittance_data = DB::table('remits as r')
                 ->select(
-                    'r.id',
+                   'r.id',
                     'u.username as approved_by_username',
-                    'u.first_name as approved_by_first_name',
-                    'u.middle_name as approved_by_middle_name',
-                    'u.last_name as approved_by_last_name',
+                    DB::raw('CONCAT(u.first_name," ",u.middle_name," ",u.last_name) as approved_by_fullname'),
                     'rbyu.username as remitted_by_username',
-                    'rbyu.first_name as remitted_by_first_name',
-                    'rbyu.middle_name as remitted_by_middle_name',
-                    'rbyu.last_name as remitted_by_last_name',
+                    DB::raw('CONCAT(rbyu.first_name," ",rbyu.middle_name," ",rbyu.last_name) as remitted_by_fullname'),
                     'r.remitted_date',
                     'r.approved_date' ,
                     'r.remit_photo',
                     'r.amount',
-                    'sy.year_start',
-                    'sy.year_end',
+                    DB::raw('CONCAT(sy.year_start," - ",sy.year_end) as school_year'),
                     's.semester',
                     'r.appoved_by',
                     'c.name as college_name'

@@ -40,26 +40,32 @@
                     </div>
                     <!--End Breadcrumb -->
                     <!--Table Header -->
-                    <div
-                        class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-                        <div class="w-full md:w-1/4">
-                            <form class="flex items-center">
+                    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                        <div class="w-full md:w-3/4 flex">
+                            <div class="flex items-center px-4">
                                 <label for="simple-search" class="sr-only">Search</label>
                                 <div class="relative w-full">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                            fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                                clip-rule="evenodd" />
+                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                        <input type="text" id="simple-search" wire:model.live.debounce.250ms="filters.fee_name"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                        placeholder="Search fee name" required="">
+                                    <input type="text" id="simple-search" wire:model.live.debounce.500ms="filters.fee_name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Search fee name" required="">
                                 </div>
-                            </form>
+                            </div>
+                            <button style="display:none" id="FilterTableModalToggler" data-modal-toggle="FilterTableModal" data-modal-target="FilterTableModal"></button>
+                            <div class="flex flex-col md:flex-row items-center justify-end space-y-3 md:space-y-0 md:space-x-4 ">
+                                <div class="flex items-center space-x-3 w-full md:w-auto">
+                                    <button type="button" wire:click="tableFilter('FilterTableModalToggler')" class="text-dark-400 hover:text-dark border border-dark-900
+                                        hover:bg-dark-800 font-bold py-2 px-3 rounded">
+                                        Columns
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                      
                         <button  type="button" data-modal-target="DeleteUniversityFeeModal" data-modal-toggle="DeleteUniversityFeeModal" id="DeleteFeeToggle" style="display:none;" ></button>
                         <button  type="button" data-modal-target="ActivateUniversityFeeModal" data-modal-toggle="ActivateUniversityFeeModal" id="ActivateFeeToggle" style="display:none;" ></button>
                         <button  type="button" data-modal-target="EditUniversityFeeModal" data-modal-toggle="EditUniversityFeeModal" id="EditFeeToggle" style="display:none;" ></button>
@@ -321,66 +327,116 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" class="px-4 py-3">ID</th>
-                                    <th scope="col" class="px-4 py-3">Fee Name</th>
-                                    <th scope="col" class="px-4 py-3">Fee Type</th>
-                                    <th scope="col" class="px-4 py-3">Fee Code</th>
-                                    <th scope="col" class="px-4 py-3">For Muslim?</th>
-                                    <th scope="col" class="px-4 py-3">Academic Year</th>
-                                    <th scope="col" class="px-4 py-3">Semester</th>
-                                    <th scope="col" class="px-4 py-3">Start Date</th>
-                                    <th scope="col" class="px-4 py-3">End Date</th>
-                                    <th scope="col" class="px-4 py-3">Created By</th>
-                                    <th scope="col" class="px-4 py-3">Amount</th>
-                                    <th scope="col" class="text-center px-4 py-3">Actions</th>
+                                    @foreach($table_filters['filter_content']  as $key =>$value)
+                                        @if($value['active'])
+                                            <th scope="col" @if($value['class']) class="{{$value['class']}}"  @else class="px-4 py-3" @endif>{{$value['column']}}</th>
+                                        @endif
+                                    @endforeach
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($university_fees_data as $key =>$value)
                                     <tr class="border-b dark:border-gray-700">
-                                        <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($university_fees_data->currentPage()-1)*$university_fees_data->perPage()+$key+1 }}</th>
-                                        <td class="px-4 py-3">{{$value->name}}</td>
-                                        <td class="px-4 py-3">University Fee</td>
-                                        <td class="px-4 py-3">{{$value->code}}</td>
-                                        <td class="px-4 py-3">@if($value->for_muslim) Yes @else No @endif</td>
-                                        <td class="px-4 py-3">{{$value->year_start.' - '.$value->year_end}}</td>
-                                        <td class="px-4 py-3">{{$value->semester}}</td>
-                                        <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date}}</td>
-                                        <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
-                                        <td class="px-4 py-3">{{$value->first_name.' '.$value->middle_name.' '.$value->last_name}}</td>
-                                        <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
-                                        <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            <div class="flex justify-center items-center space-x-4">
-                                                <button type="button" wire:click="editFees({{$value->id}},'EditFeeToggle')"
-                                                    class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
-                                                        viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path
-                                                            d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                                        <path fill-rule="evenodd"
-                                                            d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                    Edit
-                                                </button>
-                                                <button type="button"  wire:click="editFees({{$value->id}},'DeleteFeeToggle')"
-                                                    class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
-                                                        viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd"
-                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        </td>
+                                        @foreach($table_filters['filter_content']  as $filter_key =>$filter_value)
+                                            @if($filter_value['active'])
+                                                @if($filter_value['column'] == '#')
+                                                    <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{($university_fees_data->currentPage()-1)*$university_fees_data->perPage()+$key+1 }}</th>
+                                                @elseif($filter_value['column'] == 'For Muslim?')
+                                                    <td class="px-4 py-3">@if($value->for_muslim) Yes @else No @endif</td>
+                                                @elseif($filter_value['column'] == 'Start Date')
+                                                    <td class="px-4 py-3">{{$months[$value->date_start_month-1]['month_name'].' '.$value->date_start_date}}</td>
+                                                @elseif($filter_value['column'] == 'End Date')
+                                                    <td class="px-4 py-3">{{$months[$value->date_end_month-1]['month_name'].' '.$value->date_end_date}}</td>
+                                                @elseif($filter_value['column'] == 'Amount')
+                                                    <td class="px-4 py-3">{{number_format($value->amount, 2, '.', ',')}}</td>
+                                                @elseif($filter_value['column'] == 'Action')
+                                                    <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        <div class="flex justify-center items-center space-x-4">
+                                                            <button type="button" wire:click="editFees({{$value->id}},'EditFeeToggle')"
+                                                                class="py-2 px-3 flex items-center text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
+                                                                    viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path
+                                                                        d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                                Edit
+                                                            </button>
+                                                            <button type="button"  wire:click="editFees({{$value->id}},'DeleteFeeToggle')"
+                                                                class="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 -ml-0.5"
+                                                                    viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                                    <path fill-rule="evenodd"
+                                                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                                        clip-rule="evenodd" />
+                                                                </svg>
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                @else 
+                                                    <td scope="col" class="px-4 py-3">{{ $value->{$filter_value['column_name']} }}</td>
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                        
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                     <!--End Table-->
+                    <div wire:ignore.self id="FilterTableModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full h-full">
+                        <div class="relative w-8/12 max-w-6xl p-8 max-h-screen flex flex-col">
+                            <!-- Modal content -->
+                            <form action="#" wire:submit.prevent="saveTableFilter({{$table_filters['id']}},'FilterTableModal')">
+                                <div class="relative p-5 bg-white rounded-lg shadow dark:bg-gray-800 flex-1">
+                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Columns
+                                        </h3>
+                                    </div>
+                                    <!-- Close Button - Upper Right Corner -->
+                                    <button type="button"
+                                        class="absolute top-4 right-4 text-gray-400 bg-transparent 
+                                        hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-2 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                        data-modal-toggle="FilterTableModal">
+                                        <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                    <div class="flex flex-row justify-between">
+                                        <div action="#" class="grid gap-6">
+                                            <div class="m-5 ">
+                                                @foreach($table_filters['filter_content']  as $key =>$value)
+                                                    <div class="flex items-center mb-4">
+                                                        <input wire:model="table_filters.filter_content.{{$key}}.active" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                                        <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{$value['column']}}</label>
+                                                    </div>
+                                                @endforeach 
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <!-- Save Fees Button - Bottom Section -->
+                                    <div class="mt-4 flex items-center justify-end dark:border-gray-600 p-2">
+                                        <button data-modal-toggle="FilterTableModal" type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 font-bold py-2 px-3 rounded">
+                                            Back
+                                        </button>
+                                        <button type="submit"
+                                            class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-bold rounded py-2 px-3 focus:outline-none ml-2">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="row my-2"></div>
                 {{ $university_fees_data->links() }}
